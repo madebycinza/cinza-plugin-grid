@@ -242,12 +242,12 @@ function cgrid_meta_box_skin() {
 					<table>
 						<tr>
 							<td><code>%title%</code></td>
-							<td><code>$post->post_title</code></td>
+							<td><code>get_the_title($post->ID)</code></td>
 							<td><em></em></td>
 						</tr>
 						<tr>
 							<td><code>%url%</code></td>
-							<td><code>get_permalink( $post->ID )</code></td>
+							<td><code>get_permalink($post->ID)</code></td>
 							<td><em></em></td>
 						</tr>
 						<tr>
@@ -259,6 +259,11 @@ function cgrid_meta_box_skin() {
 							<td><code>%date('l F j, Y')%</code></td>
 							<td><code>get_the_date('l F j, Y', $post->ID)</code></td>
 							<td><em>It works with any date format.</em></td>
+						</tr>
+						<tr>
+							<td><code>%meta('field_name')%</code></td>
+							<td><code>get_post_meta($post->ID, 'field_name', true)</code></td>
+							<td><em></em></td>
 						</tr>
 					</table>
 					

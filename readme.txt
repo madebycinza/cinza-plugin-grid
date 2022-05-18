@@ -4,7 +4,7 @@ Tags: grid
 Requires at least: 5.2
 Tested up to: 5.9.3
 Requires PHP: 7.0
-Stable tag: 0.0.1
+Stable tag: 0.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,11 @@ Upload the Cinza Grid plugin to your WordPress site, activate it, and start crea
 2. Slide cell fields
 
 == Changelog ==
+= 0.0.3 =
+*Release Date - 18th May, 2022*
+
+* Added custom skin meta for custom fields and taxonomy
+
 = 0.0.2 =
 *Release Date - 17th May, 2022*
 
