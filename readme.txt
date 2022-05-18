@@ -1,0 +1,27 @@
+=== Cinza Grid ===
+Contributors: madebycinza, razorfrog
+Tags: grid
+Requires at least: 5.2
+Tested up to: 5.8.2
+Requires PHP: 7.0
+Stable tag: 0.0.1
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+A minimal grid plugin built with Isotope.
+
+== Description ==
+Cinza Grid is a minimal grid plugin built with Isotope. It makes lightweight and flexible grids that can be easily customized with CSS.
+
+== Installation ==
+Upload the Cinza Grid plugin to your WordPress site, activate it, and start creating grids.
+
+== Screenshots ==
+1. Global slider settings
+2. Slide cell fields
+
+== Changelog ==
+= 0.0.1 =
+*Release Date - 13th May, 2022*
+
+* First beta release!

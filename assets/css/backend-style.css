@@ -1,0 +1,73 @@
+/* Options */
+
+#cgrid-optionset {
+    padding: 10px 0;
+}
+
+#cgrid-optionset .cgrid-heading p {
+    margin: 15px 0 5px;
+    padding: 15px 0 0;
+    font-weight: bold;
+    border-top: 1px solid #c3c4c7;
+}
+
+#cgrid-optionset .cgrid-options {
+    padding: 10px;
+}
+
+#cgrid-optionset .cgrid-options.col-1 {
+    width: 160px;
+}
+
+#cgrid-optionset .cgrid-options.col-2 {
+    width: 150px;
+}
+
+#cgrid-optionset .cgrid-options.col-3 {
+    width: calc(100% - 160px - 150px);
+}
+
+#cgrid-optionset .cgrid-options input[type="text"],
+#cgrid-optionset .cgrid-options select {
+    width: 100px;
+}
+
+#cgrid-optionset thead {
+    background: #f1f1f1;
+}
+
+#cgrid-optionset thead p {
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+/* Documentation */
+
+#cgrid-documentation .inside {
+    overflow: hidden;
+    padding: 12px;
+    margin: 0;
+}
+
+#cgrid-documentation .button {
+    width: 100%;
+    text-align: center;
+}
+
+/* Others */
+
+.rank-math-seo-score {display: none !important;}
+
+/* Breakpoins */
+
+@media screen and (max-width: 1199px) {
+
+}
+
+@media screen and (max-width: 782px) {
+
+}
+
+@media screen and (max-width: 682px) {
+
+}
