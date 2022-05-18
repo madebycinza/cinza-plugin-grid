@@ -73,25 +73,25 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinza_grid' ) {
 			if(strpos($grid_item, '%date(') !== false){
 				//echo "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
 				
-				$date_meta_start_position = strpos($grid_item, "%date(");
-				//echo "<br /><strong>date_meta_start_position: </strong>" . $date_meta_start_position;
+				$date_start_position = strpos($grid_item, "%date(");
+				//echo "<br /><strong>date_meta_start_position: </strong>" . $date_start_position;
 				
-				$date_meta_open_paranthesis = $date_meta_start_position + 5;
-				//echo "<br /><strong>date_meta_open_paranthesis: </strong>" . $date_meta_open_paranthesis;
+				$date_open_paranthesis = $date_start_position + 5;
+				//echo "<br /><strong>date_meta_open_paranthesis: </strong>" . $date_open_paranthesis;
 				
-				$date_meta_close_paranthesis = $date_meta_start_position + strpos(substr($grid_item, $date_meta_start_position, $date_meta_start_position+50), ")");
-				//echo "<br /><strong>date_meta_close_paranthesis: </strong>" . $date_meta_close_paranthesis;
+				$date_close_paranthesis = $date_start_position + strpos(substr($grid_item, $date_start_position, $date_start_position+50), ")");
+				//echo "<br /><strong>date_meta_close_paranthesis: </strong>" . $date_close_paranthesis;
 				
-				$date_meta = substr($grid_item, $date_meta_start_position+1, $date_meta_close_paranthesis-$date_meta_start_position);
-				//echo "<br /><strong>date_meta: </strong>" . $date_meta;
+				$date_code = substr($grid_item, $date_start_position+1, $date_close_paranthesis-$date_start_position);
+				//echo "<br /><strong>date_meta: </strong>" . $date_code;
 				
-				$date_meta_args = substr($grid_item, $date_meta_open_paranthesis+2, $date_meta_close_paranthesis-$date_meta_open_paranthesis-3);
-				//echo "<br /><strong>date_meta_args: </strong>" . $date_meta_args;
+				$date_code_args = substr($grid_item, $date_open_paranthesis+2, $date_close_paranthesis-$date_open_paranthesis-3);
+				//echo "<br /><strong>date_meta_args: </strong>" . $date_code_args;
 				
-				$date_formatted = get_the_date($date_meta_args, $post->ID);
+				$date_formatted = get_the_date($date_code_args, $post->ID);
 				//echo "<br /><strong>date_formatted: </strong>" . $date_formatted;
 				
-				$grid_item = substr_replace($grid_item, $date_formatted, $date_meta_start_position, $date_meta_close_paranthesis-$date_meta_start_position+2);
+				$grid_item = substr_replace($grid_item, $date_formatted, $date_start_position, $date_close_paranthesis-$date_start_position+2);
 				//echo "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";
 			}
 			
@@ -99,25 +99,25 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinza_grid' ) {
 			if(strpos($grid_item, '%meta') !== false){
 				//echo "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
 				
-				$date_meta_start_position = strpos($grid_item, "%meta(");
-				//echo "<br /><strong>date_meta_start_position: </strong>" . $date_meta_start_position;
+				$meta_start_position = strpos($grid_item, "%meta(");
+				//echo "<br /><strong>meta_meta_start_position: </strong>" . $meta_start_position;
 				
-				$date_meta_open_paranthesis = $date_meta_start_position + 5;
-				//echo "<br /><strong>date_meta_open_paranthesis: </strong>" . $date_meta_open_paranthesis;
+				$meta_open_paranthesis = $meta_start_position + 5;
+				//echo "<br /><strong>meta_meta_open_paranthesis: </strong>" . $meta_open_paranthesis;
 				
-				$date_meta_close_paranthesis = $date_meta_start_position + strpos(substr($grid_item, $date_meta_start_position, $date_meta_start_position+50), ")");
-				//echo "<br /><strong>date_meta_close_paranthesis: </strong>" . $date_meta_close_paranthesis;
+				$meta_close_paranthesis = $meta_start_position + strpos(substr($grid_item, $meta_start_position, $meta_start_position+50), ")");
+				//echo "<br /><strong>meta_meta_close_paranthesis: </strong>" . $meta_close_paranthesis;
 				
-				$date_meta = substr($grid_item, $date_meta_start_position+1, $date_meta_close_paranthesis-$date_meta_start_position);
-				//echo "<br /><strong>date_meta: </strong>" . $date_meta;
+				$meta_code = substr($grid_item, $meta_start_position+1, $meta_close_paranthesis-$meta_start_position);
+				//echo "<br /><strong>meta_meta: </strong>" . $meta_code;
 				
-				$date_meta_args = substr($grid_item, $date_meta_open_paranthesis+1, $date_meta_close_paranthesis-$date_meta_open_paranthesis-1);
-				//echo "<br /><strong>date_meta_args: </strong>" . $date_meta_args;
+				$meta_code_args = substr($grid_item, $meta_open_paranthesis+1, $meta_close_paranthesis-$meta_open_paranthesis-1);
+				//echo "<br /><strong>meta_meta_args: </strong>" . $meta_code_args;
 				
-				$date_formatted = get_post_meta( $post->ID, $date_meta_args, true );
-				//echo "<br /><strong>date_formatted: </strong>" . $date_formatted;
+				$meta_formatted = get_post_meta( $post->ID, $meta_code_args, true );
+				//echo "<br /><strong>meta_formatted: </strong>" . $meta_formatted;
 				
-				$grid_item = substr_replace($grid_item, $date_formatted, $date_meta_start_position, $date_meta_close_paranthesis-$date_meta_start_position+2);
+				$grid_item = substr_replace($grid_item, $meta_formatted, $meta_start_position, $meta_close_paranthesis-$meta_start_position+2);
 				//echo "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";
 			}
 			
@@ -125,32 +125,32 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinza_grid' ) {
 			if(strpos($grid_item, '%tax') !== false){
 				//echo "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
 				
-				$date_meta_start_position = strpos($grid_item, "%tax(");
-				//echo "<br /><strong>date_meta_start_position: </strong>" . $date_meta_start_position;
+				$tax_start_position = strpos($grid_item, "%tax(");
+				//echo "<br /><strong>tax_meta_start_position: </strong>" . $tax_start_position;
 				
-				$date_meta_open_paranthesis = $date_meta_start_position + 5;
-				//echo "<br /><strong>date_meta_open_paranthesis: </strong>" . $date_meta_open_paranthesis;
+				$tax_open_paranthesis = $tax_start_position + 5;
+				//echo "<br /><strong>tax_meta_open_paranthesis: </strong>" . $tax_open_paranthesis;
 				
-				$date_meta_close_paranthesis = $date_meta_start_position + strpos(substr($grid_item, $date_meta_start_position, $date_meta_start_position+50), ")");
-				//echo "<br /><strong>date_meta_close_paranthesis: </strong>" . $date_meta_close_paranthesis;
+				$tax_close_paranthesis = $tax_start_position + strpos(substr($grid_item, $tax_start_position, $tax_start_position+50), ")");
+				//echo "<br /><strong>tax_meta_close_paranthesis: </strong>" . $tax_close_paranthesis;
 				
-				$date_meta = substr($grid_item, $date_meta_start_position+1, $date_meta_close_paranthesis-$date_meta_start_position);
-				//echo "<br /><strong>date_meta: </strong>" . $date_meta;
+				$tax_code = substr($grid_item, $tax_start_position+1, $tax_close_paranthesis-$tax_start_position);
+				//echo "<br /><strong>tax_meta: </strong>" . $tax_code;
 				
-				$date_meta_args = substr($grid_item, $date_meta_open_paranthesis+0, $date_meta_close_paranthesis-$date_meta_open_paranthesis-0);
-				//echo "<br /><strong>date_meta_args: </strong>" . $date_meta_args;
+				$tax_code_args = substr($grid_item, $tax_open_paranthesis+0, $tax_close_paranthesis-$tax_open_paranthesis-0);
+				//echo "<br /><strong>tax_meta_args: </strong>" . $tax_code_args;
 				
-				$term_list = get_the_terms( $post->ID, $date_meta_args );
+				$term_list = get_the_terms( $post->ID, $tax_code_args );
 				$terms_array = array();				
 				foreach ( $term_list as $term ) {
-					$terms_array[] = '<a href="'.  esc_attr( get_term_link( $term->slug, $date_meta_args ) ) .'">'. esc_attr( $term->name ) .'</a>';
+					$terms_array[] = '<a href="'.  esc_attr( get_term_link( $term->slug, $tax_code_args ) ) .'">'. esc_attr( $term->name ) .'</a>';
 				}
 				$terms_string = join( ', ', $terms_array );
 
-				$date_formatted = $terms_string;
-				//echo "<br /><strong>date_formatted: </strong>" . $date_formatted;
+				$tax_formatted = $terms_string;
+				//echo "<br /><strong>tax_formatted: </strong>" . $tax_formatted;
 				
-				$grid_item = substr_replace($grid_item, $date_formatted, $date_meta_start_position, $date_meta_close_paranthesis-$date_meta_start_position+2);
+				$grid_item = substr_replace($grid_item, $tax_formatted, $tax_start_position, $tax_close_paranthesis-$tax_start_position+2);
 				//echo "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";
 			}
 			
