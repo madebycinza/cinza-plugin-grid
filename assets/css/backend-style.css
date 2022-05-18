@@ -20,11 +20,7 @@
 }
 
 #cgrid-optionset .cgrid-options.col-2 {
-    width: 150px;
-}
-
-#cgrid-optionset .cgrid-options.col-3 {
-    width: calc(100% - 160px - 150px);
+	width: calc(100% - 160px);
 }
 
 #cgrid-optionset .cgrid-options input[type="text"],
@@ -39,6 +35,13 @@
 #cgrid-optionset thead p {
     margin: 5px 0;
     font-weight: bold;
+}
+
+/* Skin */
+
+#cgrid-skin textarea {
+    height: 150px;
+    margin: 10px 0;
 }
 
 /* Documentation */

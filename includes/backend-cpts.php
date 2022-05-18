@@ -108,6 +108,7 @@ function add_cinza_grid_columns ( $columns ) {
 add_action( 'add_meta_boxes', 'cgrid_add_fields_meta_boxes', 99, 99 );
 function cgrid_add_fields_meta_boxes() {
 	add_meta_box('cgrid-options', 'Options', 'cgrid_meta_box_options', 'cinza_grid', 'normal', 'default');
+	add_meta_box('cgrid-skin', 'Skin', 'cgrid_meta_box_skin', 'cinza_grid', 'normal', 'default');
 	add_meta_box('cgrid-documentation', 'Documentation', 'cgrid_meta_box_doc', 'cinza_grid', 'side', 'default');
 	remove_meta_box( 'rank_math_metabox' , 'cinza_grid' , 'normal' ); 
 }
@@ -122,50 +123,150 @@ function cgrid_meta_box_options( $post ) {
 	wp_nonce_field( 'cgrid_meta_box_nonce', 'cgrid_meta_box_nonce' );
 	
 	// Set default values
-	$temp_minHeight = 300;
-	$temp_fullWidth = 0;
+	$temp_posttype = 'post';
 	
 	// Get saved values
 	if ( !empty($cgrid_options) ) {
-		$temp_minHeight = esc_attr($cgrid_options['cgrid_minHeight']);
-		$temp_fullWidth = esc_attr($cgrid_options['cgrid_fullWidth']);
+		$temp_posttype = esc_attr($cgrid_options['cgrid_posttype']);
 	}
 
 	?>
 	<table id="cgrid-optionset" width="100%">
 		<thead>
 			<tr>
-				<td class="cgrid-options" colspan="3">
-					<p>Size</p>
+				<td class="cgrid-options" colspan="2">
+					<p>Post Type</p>
 				</td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
             	<td class="cgrid-options col-1">
-                    <label for="cgrid_minHeight">minHeight</label>
+                    <label for="cgrid_posttype">Post type:</label>
 				</td>
-				<td class="cgrid-options col-2">
-                    <input type="text" name="cgrid_minHeight" id="cgrid_minHeight" class="cgrid-minHeight" value="<?php echo esc_attr($temp_minHeight); ?>" /> <span>px</span>
-                </td>
-                <td class="cgrid-options col-3">
-					Manually sets the Grid min-height in pixels. <em>Set value to zero to disable this option.</em>
+				<td class="cgrid-options col-2"><?php
+					// Get a list of all registered post type objects
+					// https://developer.wordpress.org/reference/functions/get_post_types/
+					$args = array(
+					   'public' => true,
+					   '_builtin' => false,
+					);
+					  
+					$output = 'names'; // 'names' or 'objects' (default: 'names')
+					$operator = 'and'; // 'and' or 'or' (default: 'and')
+					
+					$post_types = get_post_types( $args, $output, $operator );
+					array_unshift($post_types , 'post');
+					  
+					if ( $post_types ) { // If there are any custom public post types.
+					    echo '<select name="cgrid_posttype" id="cgrid_posttype">';
+					    foreach ( $post_types  as $post_type ) {
+					    	if(!str_starts_with($post_type, 'cinza_')) {?>
+							    <option value="<?php echo strtolower($post_type); ?>" <?php if(isset($temp_posttype) && ($temp_posttype == $post_type))  echo 'selected="selected"'; ?>><?php echo $post_type; ?></option><?php
+					    	}
+					    }
+					    echo '</select>'; 
+					}?>
                 </td>
             </tr>
+		</tbody>
+	</table>
+	
+	<table id="cgrid-optionset" width="100%">
+		<thead>
+			<tr>
+				<td class="cgrid-options" colspan="2">
+					<p>Sorting</p>
+				</td>
+			</tr>
+		</thead>
+		<tbody>
 			<tr>
 				<td class="cgrid-options col-1">
-					<label for="cgrid_fullWidth">fullWidth</label>
+					<label for="cgrid_AAAAA">Coming soon!</label>
 				</td>
 				<td class="cgrid-options col-2">
-					<input type="checkbox" name="cgrid_fullWidth" id="cgrid_fullWidth" class="widefat cgrid-fullWidth" value="1" <?php checked('1', $temp_fullWidth); ?> />
+					<!-- <input type="checkbox" name="cgrid_AAAAA" id="cgrid_AAAAA" class="widefat cgrid-AAAAA" value="1" <?php checked('1', $temp_AAAAA); ?> /> -->
 				</td>
-                <td class="cgrid-options col-3">
-					Force full width.
-                </td>
+            </tr>
+		</tbody>
+	</table>
+	
+	<table id="cgrid-optionset" width="100%">
+		<thead>
+			<tr>
+				<td class="cgrid-options" colspan="2">
+					<p>Filters</p>
+				</td>
 			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="cgrid-options col-1">
+					<label for="cgrid_AAAAA">Coming soon!</label>
+				</td>
+				<td class="cgrid-options col-2">
+					<!-- <input type="checkbox" name="cgrid_AAAAA" id="cgrid_AAAAA" class="widefat cgrid-AAAAA" value="1" <?php checked('1', $temp_AAAAA); ?> /> -->
+				</td>
+            </tr>
 		</tbody>
 	</table>
     <?php
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Meta Box: _cgrid_skin
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function cgrid_meta_box_skin() {
+	global $post;
+    $cgrid_skin = get_post_meta( $post->ID, '_cgrid_skin', true );
+	wp_nonce_field( 'cgrid_meta_box_nonce', 'cgrid_meta_box_nonce' );
+
+	// Set default values
+	$temp_skin_content = '';
+	
+	// Get saved values
+	if ( !empty($cgrid_skin) ) {
+		$temp_skin_content = esc_attr($cgrid_skin['cgrid_skin_content']);
+	}
+
+	?>
+	<table id="cgrid-fieldset" width="100%">
+		<tbody>
+			<tr class="grid-skin">
+				<td class="cgrid-content">
+					<label>Enter HTML and PHP code template for grid items</label>
+					<textarea type="text" class="widefat cgrid-content" name="cgrid_skin_content"><?php echo esc_html($temp_skin_content); ?></textarea>
+					
+					<table>
+						<tr>
+							<td><code>%title%</code></td>
+							<td><code>$post->post_title</code></td>
+							<td><em></em></td>
+						</tr>
+						<tr>
+							<td><code>%url%</code></td>
+							<td><code>get_permalink( $post->ID )</code></td>
+							<td><em></em></td>
+						</tr>
+						<tr>
+							<td><code>%date%</code></td>
+							<td><code>get_the_date('F j, Y')</code></td>
+							<td><em></em></td>
+						</tr>
+						<tr>
+							<td><code>%date('l F j, Y')%</code></td>
+							<td><code>get_the_date('l F j, Y', $post->ID)</code></td>
+							<td><em>It works with any date format.</em></td>
+						</tr>
+					</table>
+					
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<?php
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,14 +293,20 @@ function cgrid_save_fields_meta_boxes($post_id) {
 		return;
 
 	// Save _cgrid_options
-	$cgrid_minHeight = sanitize_text_field($_POST['cgrid_minHeight']);
-	$cgrid_fullWidth = sanitize_key($_POST['cgrid_fullWidth']);
+	$cgrid_posttype = sanitize_text_field($_POST['cgrid_posttype']);
 
 	$new = array();
-	$new['cgrid_minHeight'] = empty($cgrid_minHeight) ? '0' : wp_strip_all_tags($cgrid_minHeight);
-	$new['cgrid_fullWidth'] = $cgrid_fullWidth ? '1' : '0';
+	$new['cgrid_posttype'] = empty($cgrid_posttype) ? 'post' : wp_strip_all_tags($cgrid_posttype);
 
 	update_post_meta($post_id, '_cgrid_options', $new);
+	
+	// Save _cgrid_skin
+	$cgrid_skin_content = wp_filter_post_kses($_POST['cgrid_skin_content']);
+
+	$new = array();
+	$new['cgrid_skin_content'] = $cgrid_skin_content;
+
+	update_post_meta($post_id, '_cgrid_skin', $new);
 }
 
 ?>
