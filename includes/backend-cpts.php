@@ -1,7 +1,7 @@
 <?php
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Register CPT: cinza_grid
+// Register CPT: cgrid
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 add_action( 'init', 'cgrid_register_post_type' );
@@ -47,11 +47,11 @@ function cgrid_register_post_type() {
 		'description'         => '',
 		'public'              => true,
 		'hierarchical'        => false,
-		'exclude_from_search' => false,
+		'exclude_from_search' => true,
 		'publicly_queryable'  => true,
 		'show_ui'             => true,
 		'show_in_nav_menus'   => true,
-		'show_in_admin_bar'   => false,
+		'show_in_admin_bar'   => true,
 		'show_in_rest'        => true,
 		'query_var'           => false,
 		'can_export'          => true,
@@ -67,26 +67,26 @@ function cgrid_register_post_type() {
 		'rewrite'             => ['with_front' => false],
 	];
 
-	register_post_type( 'cinza_grid', $args );
+	register_post_type( 'cgrid', $args );
 }
 
-add_filter( 'manage_cinza_grid_posts_columns', 'set_custom_edit_cinza_grid_columns' );
-function set_custom_edit_cinza_grid_columns($columns) {
+add_filter( 'manage_cgrid_posts_columns', 'set_custom_edit_cgrid_columns' );
+function set_custom_edit_cgrid_columns($columns) {
     $columns['shortcode'] = __( 'Shortcode', 'your_text_domain' );
     return $columns;
 }
 
-add_action( 'manage_cinza_grid_posts_custom_column' , 'custom_cinza_grid_column', 10, 2 );
-function custom_cinza_grid_column( $column, $post_id ) {
+add_action( 'manage_cgrid_posts_custom_column' , 'custom_cgrid_column', 10, 2 );
+function custom_cgrid_column( $column, $post_id ) {
 	switch ( $column ) {
 		case 'shortcode' :
-			echo('[cinza_grid id="'. esc_attr($post_id) .'"]');
+			cgrid_meta_box_shortcode($post_id);
 			break;
 	}
 }
 
-add_filter ( 'manage_cinza_grid_posts_columns', 'add_cinza_grid_columns', 99, 99 );
-function add_cinza_grid_columns ( $columns ) {
+add_filter ( 'manage_cgrid_posts_columns', 'add_cgrid_columns', 99, 99 );
+function add_cgrid_columns ( $columns ) {
 	unset($columns['title']);
 	unset($columns['shortcode']);
 	unset($columns['date']);
@@ -101,16 +101,44 @@ function add_cinza_grid_columns ( $columns ) {
 	) );
 }
 
+add_filter( 'the_content', 'cgrid_post_content');
+function cgrid_post_content ( $content ) {
+    if ( is_singular('cgrid') ) {
+        return do_shortcode('[cgrid id="'. get_the_ID() .'"]');
+    }
+    return $content;
+}
+
+// Remove UI for Custom Fields metabox
+add_action( 'admin_head' , 'cgrid_remove_post_custom_fields' );
+function cgrid_remove_post_custom_fields() {
+    remove_meta_box( 'postcustom' , 'cgrid' , 'normal' ); 
+}
+
+// Remove CPT from SEO sitemap (for Rank Math SEO plugin)
+// https://rankmath.com/kb/make-theme-rank-math-compatible/#exclude-post-type-from-sitemap
+add_filter( 'rank_math/sitemap/exclude_post_type', function ($exclude, $type) {
+    if ('cgrid' === $type) {
+        $exclude = true;
+    }
+    return $exclude;
+}, 10, 2);
+
+// Remove CPT from SEO sitemap (for Yoast SEO plugin)
+// https://developer.yoast.com/features/xml-sitemaps/api/#exclude-specific-posts
+// https://wordpress.org/support/topic/exclude-multiple-post-types-from-sitemap/
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Add Meta Boxes
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 add_action( 'add_meta_boxes', 'cgrid_add_fields_meta_boxes', 99, 99 );
 function cgrid_add_fields_meta_boxes() {
-	add_meta_box('cgrid-options', 'Options', 'cgrid_meta_box_options', 'cinza_grid', 'normal', 'default');
-	add_meta_box('cgrid-skin', 'Skin', 'cgrid_meta_box_skin', 'cinza_grid', 'normal', 'default');
-	add_meta_box('cgrid-documentation', 'Documentation', 'cgrid_meta_box_doc', 'cinza_grid', 'side', 'default');
-	remove_meta_box( 'rank_math_metabox' , 'cinza_grid' , 'normal' ); 
+	add_meta_box('cgrid-options', 'Options', 'cgrid_meta_box_options', 'cgrid', 'normal', 'default');
+	add_meta_box('cgrid-skin', 'Skin', 'cgrid_meta_box_skin', 'cgrid', 'normal', 'default');
+	add_meta_box('cgrid-shortcode', 'Shortcode', 'cgrid_meta_box_shortcode', 'cgrid', 'side', 'default');
+	add_meta_box('cgrid-documentation', 'Documentation', 'cgrid_meta_box_doc', 'cgrid', 'side', 'default');
+	remove_meta_box( 'rank_math_metabox' , 'cgrid' , 'normal' ); 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -242,27 +270,34 @@ function cgrid_meta_box_skin() {
 					<table>
 						<tr>
 							<td><code>%title%</code></td>
-							<td><code>get_the_title($post->ID)</code></td>
 							<td><em></em></td>
 						</tr>
 						<tr>
 							<td><code>%url%</code></td>
-							<td><code>get_permalink($post->ID)</code></td>
 							<td><em></em></td>
 						</tr>
 						<tr>
 							<td><code>%date%</code></td>
-							<td><code>get_the_date('F j, Y')</code></td>
 							<td><em></em></td>
 						</tr>
 						<tr>
 							<td><code>%date('l F j, Y')%</code></td>
-							<td><code>get_the_date('l F j, Y', $post->ID)</code></td>
-							<td><em>It works with any date format.</em></td>
+							<td><em></em></td>
+						</tr>
+						<tr>
+							<td><code>%tax('taxonomy_name')%</code></td>
+							<td><em></em></td>
+						</tr>
+						<tr>
+							<td><code>%taxsep('taxonomy_name')%</code></td>
+							<td><em></em></td>
+						</tr>
+						<tr>
+							<td><code>%taxurl('taxonomy_name')%</code></td>
+							<td><em></em></td>
 						</tr>
 						<tr>
 							<td><code>%meta('field_name')%</code></td>
-							<td><code>get_post_meta($post->ID, 'field_name', true)</code></td>
 							<td><em></em></td>
 						</tr>
 					</table>
@@ -275,11 +310,27 @@ function cgrid_meta_box_skin() {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Meta Box: _cgrid_shortcode
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function cgrid_meta_box_shortcode( $post ) {
+	$grid_SC = '[cgrid id=&quot;'. get_the_ID() .'&quot;]';
+	$grid_ID = 'cgrid-' . get_the_ID();
+	
+	?>
+	<div class="cgrid_shortcode_copy">
+		<input type="text" value="<?php echo $grid_SC; ?>" class="cgrid_shortcode_copy_input" id="<?php echo $grid_ID; ?>" readonly />
+		<a class="preview button" onclick="cgrid_copy_shortcode('<?php echo $grid_ID; ?>')"><span class="icon icon-edit-copy"></span> Copy</a>
+	</div>
+	<?php
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Meta Box: _cgrid_doc
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function cgrid_meta_box_doc( $post ) {
-	?><a href="https://isotope.metafizzy.co/options.html" target="_blank" class="preview button">Isotope documentation</a><?php
+	?><a href="https://isotope.metafizzy.co/options.html" target="_blank" class="preview button">Metafizzy Isotope doc</a><?php
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

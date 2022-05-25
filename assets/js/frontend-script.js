@@ -1,8 +1,10 @@
 jQuery(document).ready(function($) {
 
-    // init Isotope
-    var $grid = $('.grid').isotope({
-        itemSelector: '.element-item',
+/*
+	// BEGIN: "My First Grid" test
+	// init Isotope
+    var $grid = $('.cgrid').isotope({
+        itemSelector: '.cgrid-item',
         layoutMode: 'fitRows',
         getSortData: {
             title: '.title',
@@ -13,22 +15,30 @@ jQuery(document).ready(function($) {
     // filter functions
     var filterFns = {
         // show if color is...
-        yellow: function() {
+        red: function() {
             var color = $(this).find('.color').text();
-            return color.match( /Yellow/ );
+            return color.match( /Red/ );
         },
-        blue: function() {
+        brown: function() {
             var color = $(this).find('.color').text();
-            return color.match( /Blue/ );
+            return color.match( /Brown/ );
         },
         purple: function() {
             var color = $(this).find('.color').text();
             return color.match( /Purple/ );
+        },
+        green: function() {
+            var color = $(this).find('.color').text();
+            return color.match( /Green/ );
+        },
+        blue: function() {
+            var color = $(this).find('.color').text();
+            return color.match( /Blue/ );
         }
     };
     
     // bind filter button click
-    $('#filters').on( 'click', 'button', function() {
+    $('#cgrid-filters').on( 'click', 'button', function() {
         var filterValue = $( this ).attr('data-filter');
         // use filterFn if matches value
         filterValue = filterFns[ filterValue ] || filterValue;
@@ -36,18 +46,68 @@ jQuery(document).ready(function($) {
     });
     
     // bind sort button click
-    $('#sorts').on( 'click', 'button', function() {
+    $('#cgrid-sorts').on( 'click', 'button', function() {
         var sortByValue = $(this).attr('data-sort-by');
         $grid.isotope({ sortBy: sortByValue });
     });
     
     // change is-checked class on buttons
-    $('.button-group').each( function( i, buttonGroup ) {
+    $('.cgrid-button-group').each( function( i, buttonGroup ) {
         var $buttonGroup = $( buttonGroup );
         $buttonGroup.on( 'click', 'button', function() {
         $buttonGroup.find('.is-checked').removeClass('is-checked');
         $( this ).addClass('is-checked');
         });
     });
+    // END: "My First Grid" test
+*/	
 
+/*
+    // BEGIN: "My Second Grid" test
+    // init Isotope
+    var $grid = $('.cgrid').isotope({
+        itemSelector: '.cgrid-item2',
+        layoutMode: 'fitRows',
+    });
+    
+    // store filter for each group
+    var filters = {};
+    
+    $('.cgrid-filters').on( 'change', function( event ) {
+        var $select = $( event.target );
+        
+        // get group key
+        var filterGroup = $select.attr('value-group');
+        console.log(filterGroup);
+        
+        // set filter for group
+        filters[ filterGroup ] = event.target.value;
+        console.log(event.target.value);
+        
+        // combine filters
+        var filterValue = concatValues( filters );
+        
+        // set filter for Isotope
+        $grid.isotope({ filter: filterValue });
+    });
+    
+    // flatten object by concatting values
+    function concatValues( obj ) {
+        var value = '';
+        for ( var prop in obj ) {
+            value += obj[ prop ];
+        }
+        return value;
+    }
+    // END: "My Second Grid" test
+*/
+	
+	
 });
+
+
+
+
+
+
+

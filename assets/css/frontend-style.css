@@ -1,45 +1,22 @@
-/* Button */
+/* Sorts and Filters */
 
-.button {
-	display: inline-block;
-	padding: 0.5em 1.0em;
-	background: #EEE;
-	border: none;
-	border-radius: 7px;
-	color: #222;
-	font-family: sans-serif;
-	font-size: 16px;
-	text-shadow: 0 1px white;
-	cursor: pointer;
-}
-
-.button:hover {
-	background-color: #8CF;
-	color: #222;
-}
-
-.button:active,
-.button.is-checked {
-	background-color: #28F;
-}
-
-.button.is-checked {
-	color: white;
-}
-
-/* Button Group */
-
-.button-group {
+.cgrid-button-group  {
 	margin-bottom: 20px;
 }
 
-/* Isotope */
-
-.grid {
-	margin: 0 -5px;
+.cgrid-button-group .button:active,
+.cgrid-button-group .button.is-checked {
+	background-color: #000;
 }
 
-.grid:after {
+/* Grid */
+
+.cgrid {
+    width: calc(100% + 20px);
+    margin: 10px -10px;
+}
+
+.cgrid:after {
 	content: '';
 	display: block;
 	clear: both;
@@ -47,13 +24,8 @@
 
 /* Grid Item */
 
-.element-item {
+.cgrid .cgrid-item {
 	background: #f1f1f1;
-	margin: 20px;
-	padding: 20px;
-}
-
-.element-item * {
-	margin: 0;
-	padding: 0;
+	margin: 10px;
+	padding: 30px;
 }

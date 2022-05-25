@@ -2,14 +2,14 @@
 	
 add_action( 'init', 'cgrid_shortcodes_init' );
 function cgrid_shortcodes_init() {
-	add_shortcode( 'cinza_grid', 'cgrid_shortcode' );
+	add_shortcode( 'cgrid', 'cgrid_shortcode' );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// grid shortcode
+// Grid shortcode
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinza_grid' ) {
+function cgrid_shortcode( $atts = [], $content = null, $tag = 'cgrid' ) {
 
 	// Enqueue scripts
     wp_enqueue_script('isotope');
@@ -37,121 +37,232 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinza_grid' ) {
     // Retrieves an array of the latest posts, or posts matching the given criteria
     // https://developer.wordpress.org/reference/functions/get_posts/
 	$args = array(
-		'post_type' => esc_attr($cslider_options['cgrid_posttype']),
+		'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
 		'post_status' => 'publish',
 		'numberposts' => -1,
 	);
 	$posts = get_posts( $args );
 	
 /*
+	// BEGIN: "My First Grid" test
 	// Sorting
 	$sorting ='<h2>Sort</h2>
-    <div id="sorts" class="button-group">
-		<button class="button is-checked" data-sort-by="original-order">original order</button>
-		<button class="button" data-sort-by="title">title</button>
-		<button class="button" data-sort-by="color">color</button>
+    <div id="cgrid-sorts" class="cgrid-button-group">
+		<button class="button is-checked" data-sort-by="original-order">Original order</button>
+		<button class="button" data-sort-by="title">Title</button>
+		<button class="button" data-sort-by="color">Color</button>
     </div>';
     
-	// Filters
-	$filters = '<h2>Filter</h2>
-    <div id="filters" class="button-group">
-		<button class="button is-checked" data-filter="*">show all</button>
-		<button class="button" data-filter="yellow">yellow</button>
-		<button class="button" data-filter="blue">blue</button>
-		<button class="button" data-filter="purple">purple</button>
+    // Filter 
+	$filters = '<h2>Filter by Meta Field</h2>
+    <div id="cgrid-filters" class="cgrid-button-group">
+		<button class="button is-checked" data-filter="*">Show all (not case sensitive)</button>
+		<button class="button" data-filter="red">Red</button>
+		<button class="button" data-filter="brown">Brown</button>
+		<button class="button" data-filter="purple">Purple</button>
+		<button class="button" data-filter="green">Green</button>
+		<button class="button" data-filter="blue">Blue</button>
     </div>';
+	// END: "My First Grid" test
+*/
+    
+/*
+    // BEGIN: "My Second Grid" test
+	// Filters
+	$filters = "<div class='cgrid-filters'>
+        <div class='ui-group'>
+            <h3>Color</h3>
+            <select class='filter-select' value-group='color'>
+                <option value=''>any (case sensitive)</option>
+                <option value='.Red'>Red</option>
+                <option value='.Brown'>Brown</option>
+                <option value='.Purple'>Purple</option>
+                <option value='.Green'>Green</option>
+                <option value='.Blue'>Blue</option>
+            </select>
+        </div>
+		<div class='ui-group'>
+			<h3>Category</h3>
+			<select class='filter-select' value-group='category'>
+				<option value=''>any (case sensitive)</option>
+				<option value='.Small'>Small</option>
+				<option value='.Medium'>Medium</option>
+				<option value='.Large'>Large</option>
+			</select>
+		</div>
+	</div>";
+	// END: "My Second Grid" test
 */
 
     // Grid items
-    $grid = '<div class="grid">';    
+    $grid = '<div class="cgrid cgrid-'.$grid_id.'">';    
 	if( !empty( $posts ) ){
-		foreach ( $posts as $post ){
-			
+		$debug = "";
+
+		foreach ( $posts as $post ){			
 			$grid_item = $cgrid_skin['cgrid_skin_content'];
-			
+						
 			// Replace date meta with custom format
-			if(strpos($grid_item, '%date(') !== false){
+			while(strpos($grid_item, '%date(') !== false){
 				//echo "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
 				
 				$date_start_position = strpos($grid_item, "%date(");
-				//echo "<br /><strong>date_meta_start_position: </strong>" . $date_start_position;
+				//$debug .= "<br /><strong>date_meta_start_position: </strong>" . $date_start_position;
 				
 				$date_open_paranthesis = $date_start_position + 5;
-				//echo "<br /><strong>date_meta_open_paranthesis: </strong>" . $date_open_paranthesis;
+				//$debug .= "<br /><strong>date_meta_open_paranthesis: </strong>" . $date_open_paranthesis;
 				
 				$date_close_paranthesis = $date_start_position + strpos(substr($grid_item, $date_start_position, $date_start_position+50), ")");
-				//echo "<br /><strong>date_meta_close_paranthesis: </strong>" . $date_close_paranthesis;
+				//$debug .= "<br /><strong>date_meta_close_paranthesis: </strong>" . $date_close_paranthesis;
 				
 				$date_code = substr($grid_item, $date_start_position+1, $date_close_paranthesis-$date_start_position);
-				//echo "<br /><strong>date_meta: </strong>" . $date_code;
+				//$debug .= "<br /><strong>date_meta: </strong>" . $date_code;
 				
 				$date_code_args = substr($grid_item, $date_open_paranthesis+2, $date_close_paranthesis-$date_open_paranthesis-3);
-				//echo "<br /><strong>date_meta_args: </strong>" . $date_code_args;
+				//$debug .= "<br /><strong>date_meta_args: </strong>" . $date_code_args;
 				
 				$date_formatted = get_the_date($date_code_args, $post->ID);
-				//echo "<br /><strong>date_formatted: </strong>" . $date_formatted;
+				//$debug .= "<br /><strong>date_formatted: </strong>" . $date_formatted;
 				
 				$grid_item = substr_replace($grid_item, $date_formatted, $date_start_position, $date_close_paranthesis-$date_start_position+2);
-				//echo "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";
+				//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";
 			}
 			
 			// Replace metafiled meta
-			if(strpos($grid_item, '%meta') !== false){
-				//echo "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
+			while(strpos($grid_item, '%meta') !== false){
+				//$debug .= "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
 				
 				$meta_start_position = strpos($grid_item, "%meta(");
-				//echo "<br /><strong>meta_meta_start_position: </strong>" . $meta_start_position;
+				//$debug .= "<br /><strong>meta_meta_start_position: </strong>" . $meta_start_position;
 				
 				$meta_open_paranthesis = $meta_start_position + 5;
-				//echo "<br /><strong>meta_meta_open_paranthesis: </strong>" . $meta_open_paranthesis;
+				//$debug .= "<br /><strong>meta_meta_open_paranthesis: </strong>" . $meta_open_paranthesis;
 				
 				$meta_close_paranthesis = $meta_start_position + strpos(substr($grid_item, $meta_start_position, $meta_start_position+50), ")");
-				//echo "<br /><strong>meta_meta_close_paranthesis: </strong>" . $meta_close_paranthesis;
+				//$debug .= "<br /><strong>meta_meta_close_paranthesis: </strong>" . $meta_close_paranthesis;
 				
 				$meta_code = substr($grid_item, $meta_start_position+1, $meta_close_paranthesis-$meta_start_position);
-				//echo "<br /><strong>meta_meta: </strong>" . $meta_code;
+				//$debug .= "<br /><strong>meta_meta: </strong>" . $meta_code;
 				
-				$meta_code_args = substr($grid_item, $meta_open_paranthesis+1, $meta_close_paranthesis-$meta_open_paranthesis-1);
-				//echo "<br /><strong>meta_meta_args: </strong>" . $meta_code_args;
+				$meta_code_args = substr($grid_item, $meta_open_paranthesis+2, $meta_close_paranthesis-$meta_open_paranthesis-3);
+				//$debug .= "<br /><strong>meta_meta_args: </strong>" . $meta_code_args;
 				
 				$meta_formatted = get_post_meta( $post->ID, $meta_code_args, true );
-				//echo "<br /><strong>meta_formatted: </strong>" . $meta_formatted;
+				//$debug .= "<br /><strong>meta_formatted: </strong>" . $meta_formatted;
 				
 				$grid_item = substr_replace($grid_item, $meta_formatted, $meta_start_position, $meta_close_paranthesis-$meta_start_position+2);
-				//echo "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";
+				//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";					
 			}
 			
-			// Replace taxonomy meta
-			if(strpos($grid_item, '%tax') !== false){
-				//echo "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
+			// Replace taxonomy meta (without link and without separator)
+			while(strpos($grid_item, '%tax(') !== false){
+				//$debug .= "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
 				
 				$tax_start_position = strpos($grid_item, "%tax(");
-				//echo "<br /><strong>tax_meta_start_position: </strong>" . $tax_start_position;
+				//$debug .= "<br /><strong>tax_meta_start_position: </strong>" . $tax_start_position;
 				
 				$tax_open_paranthesis = $tax_start_position + 5;
-				//echo "<br /><strong>tax_meta_open_paranthesis: </strong>" . $tax_open_paranthesis;
+				//$debug .= "<br /><strong>tax_meta_open_paranthesis: </strong>" . $tax_open_paranthesis;
 				
 				$tax_close_paranthesis = $tax_start_position + strpos(substr($grid_item, $tax_start_position, $tax_start_position+50), ")");
-				//echo "<br /><strong>tax_meta_close_paranthesis: </strong>" . $tax_close_paranthesis;
+				//$debug .= "<br /><strong>tax_meta_close_paranthesis: </strong>" . $tax_close_paranthesis;
 				
 				$tax_code = substr($grid_item, $tax_start_position+1, $tax_close_paranthesis-$tax_start_position);
-				//echo "<br /><strong>tax_meta: </strong>" . $tax_code;
+				//$debug .= "<br /><strong>tax_meta: </strong>" . $tax_code;
 				
-				$tax_code_args = substr($grid_item, $tax_open_paranthesis+0, $tax_close_paranthesis-$tax_open_paranthesis-0);
-				//echo "<br /><strong>tax_meta_args: </strong>" . $tax_code_args;
+				$tax_code_args = substr($grid_item, $tax_open_paranthesis+1, $tax_close_paranthesis-$tax_open_paranthesis-2);
+				//$debug .= "<br /><strong>tax_meta_args: </strong>" . $tax_code_args;
 				
 				$term_list = get_the_terms( $post->ID, $tax_code_args );
-				$terms_array = array();				
-				foreach ( $term_list as $term ) {
-					$terms_array[] = '<a href="'.  esc_attr( get_term_link( $term->slug, $tax_code_args ) ) .'">'. esc_attr( $term->name ) .'</a>';
+				if( $term_list && ! is_wp_error( $term_list ) ) {
+					$terms_array = array();				
+					foreach ( $term_list as $term ) {
+						$terms_array[] = esc_attr( $term->name );
+					}
+					$terms_string = join( ' ', $terms_array );
+	
+					$tax_formatted = $terms_string;
+					//$debug .= "<br /><strong>tax_formatted: </strong>" . $tax_formatted;
+					
+					$grid_item = substr_replace($grid_item, $tax_formatted, $tax_start_position, $tax_close_paranthesis-$tax_start_position+2);
+					//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";					
+				} else {
+					$grid_item = substr_replace($grid_item, "Invalid taxonomy.", $tax_start_position, $tax_close_paranthesis-$tax_start_position+2);
 				}
-				$terms_string = join( ', ', $terms_array );
-
-				$tax_formatted = $terms_string;
-				//echo "<br /><strong>tax_formatted: </strong>" . $tax_formatted;
+			}
+			
+			// Replace taxonomy meta (without link and with separator)
+			while(strpos($grid_item, '%taxsep(') !== false){
+				//$debug .= "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
 				
-				$grid_item = substr_replace($grid_item, $tax_formatted, $tax_start_position, $tax_close_paranthesis-$tax_start_position+2);
-				//echo "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";
+				$taxsep_start_position = strpos($grid_item, "%taxsep(");
+				//$debug .= "<br /><strong>tax_meta_start_position: </strong>" . $taxsep_start_position;
+				
+				$taxsep_open_paranthesis = $taxsep_start_position + 5;
+				//$debug .= "<br /><strong>tax_meta_open_paranthesis: </strong>" . $taxsep_open_paranthesis;
+				
+				$taxsep_close_paranthesis = $taxsep_start_position + strpos(substr($grid_item, $taxsep_start_position, $taxsep_start_position+50), ")");
+				//$debug .= "<br /><strong>tax_meta_close_paranthesis: </strong>" . $taxsep_close_paranthesis;
+				
+				$taxsep_code = substr($grid_item, $taxsep_start_position+1, $taxsep_close_paranthesis-$taxsep_start_position);
+				//$debug .= "<br /><strong>tax_meta: </strong>" . $taxsep_code;
+				
+				$taxsep_code_args = substr($grid_item, $taxsep_open_paranthesis+1, $taxsep_close_paranthesis-$taxsep_open_paranthesis-2);
+				//$debug .= "<br /><strong>tax_meta_args: </strong>" . $taxsep_code_args;
+				
+				$term_list = get_the_terms( $post->ID, $taxsep_code_args );
+				if( $term_list && ! is_wp_error( $term_list ) ) {
+					$terms_array = array();				
+					foreach ( $term_list as $term ) {
+						$terms_array[] = esc_attr( $term->name );
+					}
+					$terms_string = join( ', ', $terms_array );
+	
+					$taxsep_formatted = $terms_string;
+					//$debug .= "<br /><strong>tax_formatted: </strong>" . $taxsep_formatted;
+					
+					$grid_item = substr_replace($grid_item, $taxsep_formatted, $taxsep_start_position, $taxsep_close_paranthesis-$taxsep_start_position+2);
+					//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";					
+				} else {
+					$grid_item = substr_replace($grid_item, "Invalid taxonomy.", $taxsep_start_position, $taxsep_close_paranthesis-$taxsep_start_position+2);
+				}
+			}
+			
+			// Replace taxonomy meta (with link and with separator)
+			while(strpos($grid_item, '%taxurl(') !== false){
+				//$debug .= "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
+				
+				$taxurl_start_position = strpos($grid_item, "%taxurl(");
+				//$debug .= "<br /><strong>taxurl_meta_start_position: </strong>" . $taxurl_start_position;
+				
+				$taxurl_open_paranthesis = $taxurl_start_position + 5;
+				//$debug .= "<br /><strong>taxurl_meta_open_paranthesis: </strong>" . $taxurl_open_paranthesis;
+				
+				$taxurl_close_paranthesis = $taxurl_start_position + strpos(substr($grid_item, $taxurl_start_position, $taxurl_start_position+50), ")");
+				//$debug .= "<br /><strong>taxurl_meta_close_paranthesis: </strong>" . $taxurl_close_paranthesis;
+				
+				$taxurl_code = substr($grid_item, $taxurl_start_position+1, $taxurl_close_paranthesis-$taxurl_start_position);
+				//$debug .= "<br /><strong>taxurl_meta: </strong>" . $taxurl_code;
+				
+				$taxurl_code_args = substr($grid_item, $taxurl_open_paranthesis+4, $taxurl_close_paranthesis-$taxurl_open_paranthesis-5);
+				//$debug .= "<br /><strong>taxurl_meta_args: </strong>" . $taxurl_code_args;
+				
+				$term_list = get_the_terms( $post->ID, $taxurl_code_args );
+				if( $term_list && ! is_wp_error( $term_list ) ) {
+					$terms_array = array();				
+					foreach ( $term_list as $term ) {
+						$terms_array[] = '<a href="'.  esc_attr( get_term_link( $term->slug, $taxurl_code_args ) ) .'">'. esc_attr( $term->name ) .'</a>';
+					}
+					$terms_string = join( ', ', $terms_array );
+	
+					$taxurl_formatted = $terms_string;
+					//$debug .= "<br /><strong>taxurl_formatted: </strong>" . $taxurl_formatted;
+					
+					$grid_item = substr_replace($grid_item, $taxurl_formatted, $taxurl_start_position, $taxurl_close_paranthesis-$taxurl_start_position+2);
+					//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";					
+				} else {
+					$grid_item = substr_replace($grid_item, "Invalid taxonomy.", $taxurl_start_position, $taxurl_close_paranthesis-$taxurl_start_position+2);
+				}
 			}
 			
 		    $code1 = array(
@@ -162,35 +273,20 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinza_grid' ) {
 		    
 		    $code2 = array(
 		    	get_the_title($post->ID), 
-		    	get_permalink($post->ID), 
+				get_permalink($post->ID), 
 		    	get_the_date('F j, Y', $post->ID),
 		    );
 		    
-			$grid .= '<div class="element-item">'. str_replace($code1, $code2, $grid_item) .'</div>';
+			$grid .= '<div class="cgrid-item">'. str_replace($code1, $code2, $grid_item) .'</div>';
 		}
 	}
     $grid .= '</div>';
     
-    $grid_reference = '<div class="grid">
-      <div class="element-item transition metal " data-category="transition">
-        <h3 class="title">One</h3>
-        <p class="color">Yellow</p>
-      </div>
-      <div class="element-item metalloid " data-category="metalloid">
-        <h3 class="title">Two</h3>
-        <p class="color">Blue</p>
-      </div>
-      <div class="element-item post-transition metal " data-category="post-transition">
-        <h3 class="title">Three</h3>
-        <p class="color">Purple</p>
-      </div>
-    </div>';
-    
     // Style
     $style = '';
     
-    //return $sorting . $filters . $grid . $style;
-    return $grid . $style;
+    //return $debug . $sorting . $filters . $grid . $style;
+    return $debug . $grid . $style;
 }
 
 function cgrid_replace_date( $p ) {
