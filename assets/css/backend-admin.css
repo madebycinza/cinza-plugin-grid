@@ -60,7 +60,7 @@
 
 /* Replace Cinza Grid dashicon */
   
-#menu-posts-cgrid .dashicons-admin-generic:before {
+#menu-posts-cinza_grid .dashicons-admin-generic:before {
     font-family: 'icoMoon' !important;
     content: '\e901';
     font-size: 1.3em!important;
@@ -69,7 +69,8 @@
 /* Shortcode */
 
 .cgrid_shortcode_copy {
-	max-width: 260px;
+    width: 100%;
+    max-width: 270px;
 }
 
 #cgrid-shortcode .inside,

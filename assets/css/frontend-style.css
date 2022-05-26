@@ -1,22 +1,22 @@
 /* Sorts and Filters */
 
-.cgrid-button-group  {
+.cinza-grid-button-group  {
 	margin-bottom: 20px;
 }
 
-.cgrid-button-group .button:active,
-.cgrid-button-group .button.is-checked {
+.cinza-grid-button-group .button:active,
+.cinza-grid-button-group .button.is-checked {
 	background-color: #000;
 }
 
 /* Grid */
 
-.cgrid {
+.cinza-grid {
     width: calc(100% + 20px);
     margin: 10px -10px;
 }
 
-.cgrid:after {
+.cinza-grid:after {
 	content: '';
 	display: block;
 	clear: both;
@@ -24,7 +24,7 @@
 
 /* Grid Item */
 
-.cgrid .cgrid-item {
+.cinza-grid .cinza-grid-item {
 	background: #f1f1f1;
 	margin: 10px;
 	padding: 30px;

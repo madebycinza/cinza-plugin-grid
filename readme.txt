@@ -4,14 +4,14 @@ Tags: grid, post grid, display post, metafizzy, isotope
 Requires at least: 5.2
 Tested up to: 5.9.3
 Requires PHP: 7.0
-Stable tag: 0.0.4
+Stable tag: 0.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 A minimal grid plugin built with Isotope.
 
 == Description ==
-Cinza Grid is a minimal grid plugin built with <a href="https://isotope.metafizzy.co/" targe="_blank">Isotope by Metafizzy</a>. It makes lightweight and flexible grids that can be easily customized with CSS.
+Cinza Grid is a minimal grid plugin built with <a href="https://isotope.metafizzy.co/" targe="_blank">Isotope</a> by Metafizzy. It makes lightweight and flexible grids that can be easily customized with CSS.
 
 == Installation ==
 Upload the Cinza Grid plugin to your WordPress site, activate it, and start creating grids.
@@ -21,6 +21,11 @@ Upload the Cinza Grid plugin to your WordPress site, activate it, and start crea
 2. B
 
 == Changelog ==
+= 0.0.5 =
+*Release Date - 25th May, 2022*
+
+* Custom Post Type and shortcode fixes
+
 = 0.0.4 =
 *Release Date - 25th May, 2022*
 

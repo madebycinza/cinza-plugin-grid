@@ -2,14 +2,15 @@
 	
 add_action( 'init', 'cgrid_shortcodes_init' );
 function cgrid_shortcodes_init() {
-	add_shortcode( 'cgrid', 'cgrid_shortcode' );
+	add_shortcode( 'cinzagrid', 'cgrid_shortcode' ); // Main
+	add_shortcode( 'cinza_grid', 'cgrid_shortcode' ); // Fallback
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Grid shortcode
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function cgrid_shortcode( $atts = [], $content = null, $tag = 'cgrid' ) {
+function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 
 	// Enqueue scripts
     wp_enqueue_script('isotope');
@@ -47,7 +48,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cgrid' ) {
 	// BEGIN: "My First Grid" test
 	// Sorting
 	$sorting ='<h2>Sort</h2>
-    <div id="cgrid-sorts" class="cgrid-button-group">
+    <div id="cinza-grid-sorts" class="cinza-grid-button-group">
 		<button class="button is-checked" data-sort-by="original-order">Original order</button>
 		<button class="button" data-sort-by="title">Title</button>
 		<button class="button" data-sort-by="color">Color</button>
@@ -55,7 +56,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cgrid' ) {
     
     // Filter 
 	$filters = '<h2>Filter by Meta Field</h2>
-    <div id="cgrid-filters" class="cgrid-button-group">
+    <div id="cinza-grid-filters" class="cinza-grid-button-group">
 		<button class="button is-checked" data-filter="*">Show all (not case sensitive)</button>
 		<button class="button" data-filter="red">Red</button>
 		<button class="button" data-filter="brown">Brown</button>
@@ -69,7 +70,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cgrid' ) {
 /*
     // BEGIN: "My Second Grid" test
 	// Filters
-	$filters = "<div class='cgrid-filters'>
+	$filters = "<div class='cinza-grid-filters'>
         <div class='ui-group'>
             <h3>Color</h3>
             <select class='filter-select' value-group='color'>
@@ -95,7 +96,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cgrid' ) {
 */
 
     // Grid items
-    $grid = '<div class="cgrid cgrid-'.$grid_id.'">';    
+    $grid = '<div class="cinza-grid cinza-grid-'.$grid_id.'">';    
 	if( !empty( $posts ) ){
 		$debug = "";
 
@@ -277,7 +278,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cgrid' ) {
 		    	get_the_date('F j, Y', $post->ID),
 		    );
 		    
-			$grid .= '<div class="cgrid-item">'. str_replace($code1, $code2, $grid_item) .'</div>';
+			$grid .= '<div class="cinza-grid-item">'. str_replace($code1, $code2, $grid_item) .'</div>';
 		}
 	}
     $grid .= '</div>';

@@ -67,16 +67,16 @@ function cgrid_register_post_type() {
 		'rewrite'             => ['with_front' => false],
 	];
 
-	register_post_type( 'cgrid', $args );
+	register_post_type( 'cinza_grid', $args );
 }
 
-add_filter( 'manage_cgrid_posts_columns', 'set_custom_edit_cgrid_columns' );
+add_filter( 'set_custom_edit_cinza_grid_columns', 'set_custom_edit_cgrid_columns' );
 function set_custom_edit_cgrid_columns($columns) {
     $columns['shortcode'] = __( 'Shortcode', 'your_text_domain' );
     return $columns;
 }
 
-add_action( 'manage_cgrid_posts_custom_column' , 'custom_cgrid_column', 10, 2 );
+add_action( 'manage_cinza_grid_posts_custom_column' , 'custom_cgrid_column', 10, 2 );
 function custom_cgrid_column( $column, $post_id ) {
 	switch ( $column ) {
 		case 'shortcode' :
@@ -85,7 +85,7 @@ function custom_cgrid_column( $column, $post_id ) {
 	}
 }
 
-add_filter ( 'manage_cgrid_posts_columns', 'add_cgrid_columns', 99, 99 );
+add_filter ( 'manage_cinza_grid_posts_columns', 'add_cgrid_columns', 99, 99 );
 function add_cgrid_columns ( $columns ) {
 	unset($columns['title']);
 	unset($columns['shortcode']);
@@ -103,8 +103,8 @@ function add_cgrid_columns ( $columns ) {
 
 add_filter( 'the_content', 'cgrid_post_content');
 function cgrid_post_content ( $content ) {
-    if ( is_singular('cgrid') ) {
-        return do_shortcode('[cgrid id="'. get_the_ID() .'"]');
+    if ( is_singular('cinza_grid') ) {
+        return do_shortcode('[cinzagrid id="'. get_the_ID() .'"]');
     }
     return $content;
 }
@@ -112,13 +112,13 @@ function cgrid_post_content ( $content ) {
 // Remove UI for Custom Fields metabox
 add_action( 'admin_head' , 'cgrid_remove_post_custom_fields' );
 function cgrid_remove_post_custom_fields() {
-    remove_meta_box( 'postcustom' , 'cgrid' , 'normal' ); 
+    remove_meta_box( 'postcustom' , 'cinza_grid' , 'normal' ); 
 }
 
 // Remove CPT from SEO sitemap (for Rank Math SEO plugin)
 // https://rankmath.com/kb/make-theme-rank-math-compatible/#exclude-post-type-from-sitemap
 add_filter( 'rank_math/sitemap/exclude_post_type', function ($exclude, $type) {
-    if ('cgrid' === $type) {
+    if ('cinza_grid' === $type) {
         $exclude = true;
     }
     return $exclude;
@@ -134,11 +134,11 @@ add_filter( 'rank_math/sitemap/exclude_post_type', function ($exclude, $type) {
 
 add_action( 'add_meta_boxes', 'cgrid_add_fields_meta_boxes', 99, 99 );
 function cgrid_add_fields_meta_boxes() {
-	add_meta_box('cgrid-options', 'Options', 'cgrid_meta_box_options', 'cgrid', 'normal', 'default');
-	add_meta_box('cgrid-skin', 'Skin', 'cgrid_meta_box_skin', 'cgrid', 'normal', 'default');
-	add_meta_box('cgrid-shortcode', 'Shortcode', 'cgrid_meta_box_shortcode', 'cgrid', 'side', 'default');
-	add_meta_box('cgrid-documentation', 'Documentation', 'cgrid_meta_box_doc', 'cgrid', 'side', 'default');
-	remove_meta_box( 'rank_math_metabox' , 'cgrid' , 'normal' ); 
+	add_meta_box('cgrid-options', 'Options', 'cgrid_meta_box_options', 'cinza_grid', 'normal', 'default');
+	add_meta_box('cgrid-skin', 'Skin', 'cgrid_meta_box_skin', 'cinza_grid', 'normal', 'default');
+	add_meta_box('cgrid-shortcode', 'Shortcode', 'cgrid_meta_box_shortcode', 'cinza_grid', 'side', 'default');
+	add_meta_box('cgrid-documentation', 'Documentation', 'cgrid_meta_box_doc', 'cinza_grid', 'side', 'default');
+	remove_meta_box( 'rank_math_metabox' , 'cinza_grid' , 'normal' ); 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -314,8 +314,8 @@ function cgrid_meta_box_skin() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function cgrid_meta_box_shortcode( $post ) {
-	$grid_SC = '[cgrid id=&quot;'. get_the_ID() .'&quot;]';
-	$grid_ID = 'cgrid-' . get_the_ID();
+	$grid_SC = '[cinzagrid id=&quot;'. get_the_ID() .'&quot;]';
+	$grid_ID = 'cinza-grid-' . get_the_ID();
 	
 	?>
 	<div class="cgrid_shortcode_copy">

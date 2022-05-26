@@ -3,8 +3,8 @@ jQuery(document).ready(function($) {
 /*
 	// BEGIN: "My First Grid" test
 	// init Isotope
-    var $grid = $('.cgrid').isotope({
-        itemSelector: '.cgrid-item',
+    var $grid = $('.cinza-grid').isotope({
+        itemSelector: '.cinza-grid-item',
         layoutMode: 'fitRows',
         getSortData: {
             title: '.title',
@@ -38,7 +38,7 @@ jQuery(document).ready(function($) {
     };
     
     // bind filter button click
-    $('#cgrid-filters').on( 'click', 'button', function() {
+    $('#cinza-grid-filters').on( 'click', 'button', function() {
         var filterValue = $( this ).attr('data-filter');
         // use filterFn if matches value
         filterValue = filterFns[ filterValue ] || filterValue;
@@ -46,13 +46,13 @@ jQuery(document).ready(function($) {
     });
     
     // bind sort button click
-    $('#cgrid-sorts').on( 'click', 'button', function() {
+    $('#cinza-grid-sorts').on( 'click', 'button', function() {
         var sortByValue = $(this).attr('data-sort-by');
         $grid.isotope({ sortBy: sortByValue });
     });
     
     // change is-checked class on buttons
-    $('.cgrid-button-group').each( function( i, buttonGroup ) {
+    $('.cinza-grid-button-group').each( function( i, buttonGroup ) {
         var $buttonGroup = $( buttonGroup );
         $buttonGroup.on( 'click', 'button', function() {
         $buttonGroup.find('.is-checked').removeClass('is-checked');
@@ -60,20 +60,20 @@ jQuery(document).ready(function($) {
         });
     });
     // END: "My First Grid" test
-*/	
+*/
 
 /*
     // BEGIN: "My Second Grid" test
     // init Isotope
-    var $grid = $('.cgrid').isotope({
-        itemSelector: '.cgrid-item2',
+    var $grid = $('.cinza-grid').isotope({
+        itemSelector: '.cinza-grid-item2',
         layoutMode: 'fitRows',
     });
     
     // store filter for each group
     var filters = {};
     
-    $('.cgrid-filters').on( 'change', function( event ) {
+    $('.cinza-grid-filters').on( 'change', function( event ) {
         var $select = $( event.target );
         
         // get group key
