@@ -152,10 +152,14 @@ function cgrid_meta_box_options( $post ) {
 	
 	// Set default values
 	$temp_posttype = 'post';
+	$temp_sorting = '';
+	$temp_filters = '';
 	
 	// Get saved values
 	if ( !empty($cgrid_options) ) {
 		$temp_posttype = esc_attr($cgrid_options['cgrid_posttype']);
+		$temp_sorting = esc_attr($cgrid_options['cgrid_sorting']);
+		$temp_filters = '';
 	}
 
 	?>
@@ -170,9 +174,10 @@ function cgrid_meta_box_options( $post ) {
 		<tbody>
 			<tr>
             	<td class="cgrid-options col-1">
-                    <label for="cgrid_posttype">Post type:</label>
+                    <label for="cgrid_posttype">Post type</label>
 				</td>
 				<td class="cgrid-options col-2"><?php
+					
 					// Get a list of all registered post type objects
 					// https://developer.wordpress.org/reference/functions/get_post_types/
 					$args = array(
@@ -190,11 +195,14 @@ function cgrid_meta_box_options( $post ) {
 					    echo '<select name="cgrid_posttype" id="cgrid_posttype">';
 					    foreach ( $post_types  as $post_type ) {
 					    	if(!str_starts_with($post_type, 'cinza_')) {?>
-							    <option value="<?php echo strtolower($post_type); ?>" <?php if(isset($temp_posttype) && ($temp_posttype == $post_type))  echo 'selected="selected"'; ?>><?php echo $post_type; ?></option><?php
+							    <option value="<?php echo strtolower($post_type); ?>" <?php if(isset($temp_posttype) && ($temp_posttype == $post_type))  echo 'selected="selected"'; ?>>
+							    	<?php echo $post_type; ?>
+							    </option><?php
 					    	}
 					    }
 					    echo '</select>'; 
 					}?>
+					
                 </td>
             </tr>
 		</tbody>
@@ -210,11 +218,18 @@ function cgrid_meta_box_options( $post ) {
 		</thead>
 		<tbody>
 			<tr>
-				<td class="cgrid-options col-1">
-					<label for="cgrid_AAAAA">Coming soon!</label>
-				</td>
-				<td class="cgrid-options col-2">
-					<!-- <input type="checkbox" name="cgrid_AAAAA" id="cgrid_AAAAA" class="widefat cgrid-AAAAA" value="1" <?php checked('1', $temp_AAAAA); ?> /> -->
+				<td class="cgrid-options col-1 colspan="2"">
+					<p>
+						<strong>Enter the CSS class of each element of which the content will be used for sorting.</strong><br />
+						Format: <code>class, label</code> (one per line)<br />
+					</p>
+					<textarea type="text" class="widefat cgrid-content" name="cgrid_sorting"><?php echo esc_html($temp_sorting); ?></textarea>
+					<p><strong>Example:</strong><br />
+						If you want to sort by color and you have the following element skin:<br />
+						<code>&lt;div class=&quot;element-color&quot;&gt;Red&lt;/div&gt;</code><br />
+						Then you should enter the following in the Sorting textarea:<br />
+						<code>element-color, Color</code>
+					</p>
 				</td>
             </tr>
 		</tbody>
@@ -350,9 +365,11 @@ function cgrid_save_fields_meta_boxes($post_id) {
 
 	// Save _cgrid_options
 	$cgrid_posttype = sanitize_text_field($_POST['cgrid_posttype']);
+	$cgrid_sorting = wp_filter_post_kses($_POST['cgrid_sorting']);
 
 	$new = array();
 	$new['cgrid_posttype'] = empty($cgrid_posttype) ? 'post' : wp_strip_all_tags($cgrid_posttype);
+	$new['cgrid_sorting'] = empty($cgrid_sorting) ? '' : wp_strip_all_tags($cgrid_sorting);
 
 	update_post_meta($post_id, '_cgrid_options', $new);
 	

@@ -44,16 +44,70 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	);
 	$posts = get_posts( $args );
 	
-/*
+
+
+
+	
 	// BEGIN: "My First Grid" test
+	$sorting = '';
+	$sorting_data = '';
+	$sorting_temp = empty(esc_attr($cgrid_options['cgrid_sorting'])) ? '' : esc_attr($cgrid_options['cgrid_sorting']);
+	
+	$filters = '';
+	$filters_data = '';
+	$filters_temp = '';
+	
 	// Sorting
-	$sorting ='<h2>Sort</h2>
+	if(!empty($sorting_temp)) {
+		$sorting .= '<div id="cinza-grid-sorts" class="cinza-grid-button-group">';
+		$sort_lines = preg_split("/\r\n|\n|\r/", $sorting_temp);
+		
+		// First button
+		$sorting .= '<button class="button is-checked" data-sort-by="original-order">Original order</button>';
+		
+		// All other buttons
+		foreach ($sort_lines as $sort_line) {
+			$sort_atts = explode (",", $sort_line); 
+			$sorting .= '<button class="button" data-sort-by="'. trim($sort_atts[0]) .'">'. trim($sort_atts[1]) .'</button>';
+			$sorting_data .= '\'' . trim($sort_atts[0]) . '\': ' . '\'.' . trim($sort_atts[0]) . '\', ';
+		}
+		$sorting .= '</div>';
+	}
+	
+	?><script>
+	jQuery(document).ready(function($) {
+	    var $grid = $('.cinza-grid').isotope({
+	        itemSelector: '.cinza-grid-item',
+	        layoutMode: 'fitRows',
+	        getSortData: {<?php echo $sorting_data; ?>}
+	    });
+	    
+	    // bind sort button click
+	    $('#cinza-grid-sorts').on( 'click', 'button', function() {
+	        var sortByValue = $(this).attr('data-sort-by');
+	        $grid.isotope({ sortBy: sortByValue });
+	    });
+	    
+	    // change is-checked class on buttons
+	    $('.cinza-grid-button-group').each( function( i, buttonGroup ) {
+	        var $buttonGroup = $( buttonGroup );
+	        $buttonGroup.on( 'click', 'button', function() {
+	        $buttonGroup.find('.is-checked').removeClass('is-checked');
+	        $( this ).addClass('is-checked');
+	        });
+	    });
+	});
+	</script><?php
+
+
+/*    	
+	$sorting = '<h2>Sort</h2>
     <div id="cinza-grid-sorts" class="cinza-grid-button-group">
 		<button class="button is-checked" data-sort-by="original-order">Original order</button>
 		<button class="button" data-sort-by="title">Title</button>
 		<button class="button" data-sort-by="color">Color</button>
     </div>';
-    
+
     // Filter 
 	$filters = '<h2>Filter by Meta Field</h2>
     <div id="cinza-grid-filters" class="cinza-grid-button-group">
@@ -286,8 +340,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
     // Style
     $style = '';
     
-    //return $debug . $sorting . $filters . $grid . $style;
-    return $debug . $grid . $style;
+    return $debug . $sorting . $filters . $grid . $style;
 }
 
 function cgrid_replace_date( $p ) {
