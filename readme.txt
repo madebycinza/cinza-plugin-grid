@@ -1,65 +1,61 @@
-=== Cinza Slider ===
+=== Cinza Grid ===
 Contributors: madebycinza, razorfrog
-Tags: slider, slideshow, carousel, metafizzy, flickity
+Tags: grid, post grid, display post, metafizzy, isotope
 Requires at least: 5.2
 Tested up to: 6.0
 Requires PHP: 7.2
-Stable tag: 1.0.7
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A minimal slider plugin built with Flickity.
+A minimal grid plugin built with Isotope.
 
 == Description ==
-Cinza Slider is a minimal slider plugin built with <a href="https://flickity.metafizzy.co/" targe="_blank">Flickity</a> by Metafizzy. It makes lightweight and flexible sliders that can be easily customized with CSS.
+Cinza Grid is a minimal grid plugin built with <a href="https://isotope.metafizzy.co/" targe="_blank">Isotope</a> by Metafizzy. It makes lightweight and flexible grids that can be easily customized with CSS.
 
 == Installation ==
-Upload the Cinza Slider plugin to your WordPress site, activate it, and start creating sliders.
+Upload the Cinza Grid plugin to your WordPress site, activate it, and start creating grids.
 
 == Screenshots ==
-1. Global slider settings
-2. Slide cell fields
+1. A
+2. B
 
 == Changelog ==
-= 1.0.7 =
-*Release Date - 17th June, 2022*
+= 1.0.0 =
+*Release Date - 29th June, 2022*
 
-* PHP 8 compatibility update
-* Added unique ID for each slider cell
-* updated shortcode validations
+* Version 1.0.0 is finally ready!
+* Works with any post type and order
+* Custom skin setup for easy use of post details: title, url, thumbnail (image or url), date (any format), taxonomy (plaint text, with link and/or separator), any meta fields
+* Sort buttons, sorting by any the CSS class of the specified element entered in the skin 
+* Filter buttons, filtering by the content of the specified element entered in the skin 
 
-= 1.0.6 =
-*Release Date - 16th June, 2022*
-
-* Fixed frontend js draggable error 
-* Fixed backend style
-
-= 1.0.5 =
+= 0.0.6 =
 *Release Date - 1st June, 2022*
 
 * WP 6.0 compatibility update
 
-= 1.0.4 =
+= 0.0.5 =
 *Release Date - 25th May, 2022*
 
 * Custom Post Type and shortcode fixes
 
-= 1.0.3 =
+= 0.0.4 =
 *Release Date - 25th May, 2022*
 
 * UI/UX improvements
 
-= 1.0.2 =
-*Release Date - 22nd December, 2021*
+= 0.0.3 =
+*Release Date - 18th May, 2022*
 
-* Minor bug fixes
+* Added custom skin meta for custom fields and taxonomy
 
-= 1.0.1 =
-*Release Date - 22nd December, 2021*
+= 0.0.2 =
+*Release Date - 17th May, 2022*
 
-* Minor bug fixes
+* Added custom skin meta for title, url, date (default and custom)
 
-= 1.0.0 =
-*Release Date - 15th December, 2021*
+= 0.0.1 =
+*Release Date - 13th May, 2022*
 
-* First release!
+* First beta release!
