@@ -17,8 +17,8 @@ Cinza Grid is a minimal grid plugin built with <a href="https://isotope.metafizz
 Upload the Cinza Grid plugin to your WordPress site, activate it, and start creating grids.
 
 == Screenshots ==
-1. A
-2. B
+1. Global grid options
+2. Grid skin settings
 
 == Changelog ==
 = 1.0.0 =
