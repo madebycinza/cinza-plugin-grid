@@ -1,58 +1,190 @@
 /* Options */
 
-#cgrid-optionset {
+#cslider-optionset {
     padding: 10px 0;
 }
 
-#cgrid-optionset .cgrid-heading p {
+#cslider-optionset .cslider-heading p {
     margin: 15px 0 5px;
     padding: 15px 0 0;
     font-weight: bold;
     border-top: 1px solid #c3c4c7;
 }
 
-#cgrid-optionset .cgrid-options {
+#cslider-optionset .cslider-options {
     padding: 10px;
 }
 
-#cgrid-optionset .cgrid-options.col-1 {
+#cslider-optionset .cslider-options.col-1 {
     width: 160px;
 }
 
-#cgrid-optionset .cgrid-options.col-2 {
-	width: calc(100% - 160px);
+#cslider-optionset .cslider-options.col-2 {
+    width: 150px;
 }
 
-#cgrid-optionset .cgrid-options input[type="text"],
-#cgrid-optionset .cgrid-options select {
+#cslider-optionset .cslider-options.col-3 {
+    width: calc(100% - 160px - 150px);
+}
+
+#cslider-optionset .cslider-options input[type="text"],
+#cslider-optionset .cslider-options select {
     width: 100px;
 }
 
-#cgrid-optionset thead {
+#cslider-optionset thead {
     background: #f1f1f1;
 }
 
-#cgrid-optionset thead p {
+#cslider-optionset thead p {
     margin: 5px 0;
     font-weight: bold;
 }
 
-/* Skin */
+/* Fields */
 
-#cgrid-skin textarea {
-    height: 150px;
+#cslider-fields p#add-slide-p {
+    margin: 0 0 10px;
+}
+
+#cslider-fields a#add-slide {
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
+}
+
+#cslider-fieldset tr {
+    display: table;
+    vertical-align: top;
+    width: 100%;
+    padding: 10px;
     margin: 10px 0;
+    background: #f6f7f7;
+    border: 1px solid #c3c4c7;
+    box-sizing: border-box;
+}
+
+#cslider-fieldset label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#cslider-fieldset td.cslider-preview {
+    width: 250px;
+    padding: 0px;
+}
+
+#cslider-fieldset td.cslider-preview input.cslider_cell_id {
+	width: 100%;
+	margin: 0;
+}
+
+#cslider-fieldset td.cslider-preview div.cslider-img-preview {
+    height: 160px;
+    width: 100%;
+	margin: 0 0 14px;
+    border-radius: 4px;
+    border: 1px solid #8c8f94;
+    background-size: cover;
+    background-position: center;
+	box-sizing: border-box;
+}
+
+#cslider-fieldset td.cslider-preview div.cslider-img-preview .cslider-img-preview-inner {
+    height: 100%;
+    width: 100%;
+    border-radius: 3px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#cslider-fieldset div.cslider-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 17px 0 0 0;
+}
+
+#cslider-fieldset div.cslider-buttons a.button {
+    padding: 6.5px 5px;
+    line-height: 1;
+    text-align: center;
+    display: flex;
+    width: calc(50% - 5px);
+    align-items: center;
+    justify-content: center;
+}
+
+#cslider-fieldset div.cslider-buttons a.button .icon {
+    width: 15px;
+    margin-right: 8px;
+}
+
+#cslider-fieldset td.cslider-content {
+    padding: 0 0 0 20px;
+}
+
+#cslider-fieldset td.cslider-content textarea.cslider-content {
+    height: 140px;
+    margin: 0 0 10px;
+}
+
+#cslider-fieldset td.cslider-content div.img-details {
+    margin: 0 0 14px;
+    position: relative;
+}
+
+#cslider-fieldset td.cslider-content div.img-details a.button {
+    position: absolute;
+    right: 160px;
+    width: 30px;
+    line-height: 1;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 3px 3px 0;
+}
+
+#cslider-fieldset td.cslider-content div.img-details a.button img {
+    width: 10px;
+}
+
+#cslider-fieldset td.cslider-content div.link-details,
+#cslider-fieldset td.cslider-content div.img-details {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#cslider-fieldset td.cslider-content input.cslider-link,
+#cslider-fieldset td.cslider-content input.cslider-img-url {
+    width: calc(100% - 160px);
+    margin: 0 10px 0 0;
+}
+
+#cslider-fieldset td.cslider-content div.link-details select,
+#cslider-fieldset td.cslider-content div.img-details input.button {
+    width: 150px;
+    margin: 0;
+}
+
+#cslider-fieldset td.cslider-content div.img-details input.cslider-img-id {
+    display: none;
+}
+
+#cslider-fieldset .slide-static td.cslider-content  {
+    padding: 0 !important;
 }
 
 /* Documentation */
 
-#cgrid-documentation .inside {
+#cslider-documentation .inside {
     overflow: hidden;
     padding: 12px;
     margin: 0;
 }
 
-#cgrid-documentation .button {
+#cslider-documentation .button {
     width: 100%;
     text-align: center;
 }
@@ -65,12 +197,92 @@
 
 @media screen and (max-width: 1199px) {
 
+    .wp-core-ui:not(.mobile) #cslider-optionset .col-3 {
+        display: none;
+    }
+
+    .wp-core-ui:not(.mobile) #cslider-fields .button {
+        margin-bottom: 0;
+    }
+
+    .wp-core-ui:not(.mobile) #cslider-fieldset td.cslider-content div.link-details, 
+    .wp-core-ui:not(.mobile) #cslider-fieldset td.cslider-content div.img-details {
+        display: block;
+    }
+
+    .wp-core-ui:not(.mobile) #cslider-fieldset td.cslider-preview,
+    .wp-core-ui:not(.mobile) #cslider-fieldset td.cslider-content {
+        width: 100%;
+        display: block;
+    }
+
+    .wp-core-ui:not(.mobile) #cslider-fieldset td.cslider-content {
+        padding: 20px 0 0;
+    }
+
+    .wp-core-ui:not(.mobile) #cslider-fieldset td.cslider-content input.cslider-link, 
+    .wp-core-ui:not(.mobile) #cslider-fieldset td.cslider-content input.cslider-img-url {
+        width: 100%;
+        margin: 0 0 10px 0;
+    }
+
+    .wp-core-ui:not(.mobile) #cslider-fieldset td.cslider-content div.link-details select, 
+    .wp-core-ui:not(.mobile) #cslider-fieldset td.cslider-content div.img-details input.button {
+        width: 100%;
+    }
+
+    .wp-core-ui:not(.mobile) #cslider-fieldset td.cslider-content div.img-details a.button {
+        top: 0;
+        right: 0;
+    }
 }
 
 @media screen and (max-width: 782px) {
 
+    .wp-core-ui:not(.mobile) #cslider-fieldset td.cslider-content div.img-details a.button {
+        width: 40px;
+    }
+
+    .wp-core-ui.mobile #cslider-fields .button {
+        margin-bottom: 0;
+    }
+
+    .wp-core-ui.mobile #cslider-fieldset td.cslider-content div.link-details, 
+    .wp-core-ui.mobile #cslider-fieldset td.cslider-content div.img-details {
+        display: block;
+    }
+
+    .wp-core-ui.mobile #cslider-fieldset td.cslider-preview,
+    .wp-core-ui.mobile #cslider-fieldset td.cslider-content {
+        width: 100%;
+        display: block;
+    }
+
+    .wp-core-ui.mobile #cslider-fieldset td.cslider-content {
+        padding: 20px 0 0;
+    }
+
+    .wp-core-ui.mobile #cslider-fieldset td.cslider-content input.cslider-link, 
+    .wp-core-ui.mobile #cslider-fieldset td.cslider-content input.cslider-img-url {
+        width: 100%;
+        margin: 0 0 10px 0;
+    }
+
+    .wp-core-ui.mobile #cslider-fieldset td.cslider-content div.link-details select, 
+    .wp-core-ui.mobile #cslider-fieldset td.cslider-content div.img-details input.button {
+        width: 100%;
+    }
+
+    .wp-core-ui.mobile #cslider-fieldset td.cslider-content div.img-details a.button {
+        top: 0;
+        right: 0;
+        width: 40px;       
+    }
 }
 
 @media screen and (max-width: 682px) {
 
+    .wp-core-ui.mobile #cslider-optionset .col-3 {
+        display: none;
+    }
 }

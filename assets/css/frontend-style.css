@@ -1,31 +1,89 @@
-/* Sorts and Filters */
-
-.cinza-grid-button-group  {
-	margin-bottom: 20px;
+.cinza-slider {
+    transition: 0.3s all ease-in-out;
 }
 
-.cinza-grid-button-group .button:active,
-.cinza-grid-button-group .button.is-checked {
-	background-color: #000;
+.cinza-slider .static-cell,
+.cinza-slider .slider-cell-content,
+.cinza-slider .slider-cell-link {
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
-/* Grid */
-
-.cinza-grid {
-    width: calc(100% + 20px);
-    margin: 10px -10px;
+.cinza-slider .static-cell {
+    z-index: 1;
 }
 
-.cinza-grid:after {
-	content: '';
-	display: block;
-	clear: both;
+.cinza-slider.is-draggable .static-cell {
+	pointer-events: none;
 }
 
-/* Grid Item */
+.cinza-slider .slider-cell {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+}
 
-.cinza-grid .cinza-grid-item {
-	background: #f1f1f1;
-	margin: 10px;
-	padding: 30px;
+.cinza-slider .slider-cell .slider-cell-image {
+    width: 100%;
+    object-position: center;
+}
+
+.cinza-slider .slider-cell-content-inner {
+    position: relative;
+    z-index: 1;
+}
+
+.cinza-slider .slider-cell-link {
+    z-index: 2;
+}
+
+.cinza-slider .slider-cell-content,
+.cinza-slider .flickity-prev-next-button, 
+.cinza-slider .flickity-page-dots {
+    z-index: 2;
+}
+
+.cinza-slider .flickity-prev-next-button {
+    color: #FFF;
+    background: transparent;
+    transition: 0.3s all ease-in-out;
+}
+
+.cinza-slider .flickity-prev-next-button:hover {
+    color: rgba(255, 255, 255, 0.5);
+    background: transparent;
+}
+
+.cinza-slider .flickity-page-dots {
+    bottom: 20px;
+}
+
+.cinza-slider .flickity-page-dots .dot {
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 1;
+    transition: 0.3s all ease-in-out;
+}
+
+.cinza-slider .flickity-page-dots .dot:hover, 
+.cinza-slider .flickity-page-dots .dot.is-selected {
+    background: #FFF;
+}
+
+/* Accessibility */
+
+.cinza-slider:focus,
+.cinza-slider:focus-visible,
+.cinza-slider .flickity-viewport:focus,
+.cinza-slider .flickity-viewport:focus-visible,
+.cinza-slider .slider-cell-link:focus {
+    outline: none !important;
+}
+
+.cinza-slider .slider-cell-link:focus-visible {
+	border: 3px solid !important;
 }

@@ -1,350 +1,198 @@
 <?php
 	
-add_action( 'init', 'cgrid_shortcodes_init' );
-function cgrid_shortcodes_init() {
-	add_shortcode( 'cinzagrid', 'cgrid_shortcode' ); // Main
-	add_shortcode( 'cinza_grid', 'cgrid_shortcode' ); // Fallback
+add_action( 'init', 'cslider_shortcodes_init' );
+function cslider_shortcodes_init() {
+	add_shortcode( 'cinzaslider', 'cslider_shortcode' ); // Main
+	add_shortcode( 'cinza_slider', 'cslider_shortcode' ); // Fallback
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Grid shortcode
+// Slider shortcode
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
+	
+function cslider_shortcode( $atts = [], $content = null, $tag = 'cinzaslider' ) {
 
 	// Enqueue scripts
-    wp_enqueue_script('isotope');
+    wp_enqueue_script('flickity');
+	wp_enqueue_style('flickity');
     wp_enqueue_style('animate');
-    wp_enqueue_style('cgrid-frontend');
+    wp_enqueue_style('cslider-frontend');
 	
     // Normalize attribute keys, lowercase
     $atts = array_change_key_case( (array) $atts, CASE_LOWER );
  
     // Override default attributes with user attributes
-    $cgrid_atts = shortcode_atts(
+    $cslider_atts = shortcode_atts(
         array(
             'id' => 'Empty',
         ), $atts, $tag
     );
-	$grid_id = intval( $cgrid_atts['id'] );
-    $cgrid_options = get_post_meta($grid_id, '_cgrid_options', true);
-    $cgrid_skin = get_post_meta($grid_id, '_cgrid_skin', true);
+	$slider_id = intval( $cslider_atts['id'] );
+    $cslider_options = get_post_meta($slider_id, '_cslider_options', true);
 
 	// Shortcode validation
-    if ( $grid_id == 'Empty' || !is_int($grid_id) || empty($cgrid_options) || (get_post_status_object( get_post_status($grid_id) )->label != 'Published' )) {
-        return "<p class='cgrid-error'>Please enter a valid grid ID.</p>";
+    if ( $slider_id == 'Empty' || !is_int($slider_id) ||  empty($cslider_options) ) {
+	    return "<p class='cslider-error'>ERROR: Please enter a valid Cinza Slider ID.</p>";
+    } else if ( get_post_status_object( get_post_status($slider_id) )->label == 'Draft' ) {
+	    return "<p class='cslider-error'>ERROR: This Cinza Slider is not published yet.</p>";
     }
 
-    // Retrieves an array of the latest posts, or posts matching the given criteria
-    // https://developer.wordpress.org/reference/functions/get_posts/
-	$args = array(
-		'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
-		'post_status' => 'publish',
-		'numberposts' => -1,
-	);
-	$posts = get_posts( $args );
-	
+    // Query: _cslider_options
+    $options = ' \'{ ';
 
+        // Query validations
+        if (intval(esc_attr($cslider_options['cslider_autoPlay'])) > 0) {
+            $valid_autoPlay = '"autoPlay": '. esc_attr($cslider_options['cslider_autoPlay']) .','; 
+        } else {
+            $valid_autoPlay = '"autoPlay": false,'; 
+        }
 
+        if (esc_attr($cslider_options['cslider_animation']) == "fade") {
+            wp_enqueue_style('flickity-fade');
+            wp_enqueue_script('flickity-fade');
+            $valid_fade = '"fade": true,'; 
+        } else {
+            $valid_fade = '';
+        }
 
-	
-	// BEGIN: "My First Grid" test
-	$sorting = '';
-	$sorting_data = '';
-	$sorting_temp = empty(esc_attr($cgrid_options['cgrid_sorting'])) ? '' : esc_attr($cgrid_options['cgrid_sorting']);
-	
-	$filters = '';
-	$filters_data = '';
-	$filters_temp = '';
-	
-	// Sorting
-	if(!empty($sorting_temp)) {
-		$sorting .= '<div id="cinza-grid-sorts" class="cinza-grid-button-group">';
-		$sort_lines = preg_split("/\r\n|\n|\r/", $sorting_temp);
-		
-		// First button
-		$sorting .= '<button class="button is-checked" data-sort-by="original-order">Original order</button>';
-		
-		// All other buttons
-		foreach ($sort_lines as $sort_line) {
-			$sort_atts = explode (",", $sort_line); 
-			$sorting .= '<button class="button" data-sort-by="'. trim($sort_atts[0]) .'">'. trim($sort_atts[1]) .'</button>';
-			$sorting_data .= '\'' . trim($sort_atts[0]) . '\': ' . '\'.' . trim($sort_atts[0]) . '\', ';
+        // Behavior
+        $options .= '"draggable": ' . (boolval(esc_attr($cslider_options['cslider_draggable'])) ? "true" : "false") . ',';
+        $options .= '"freeScroll": ' . (boolval(esc_attr($cslider_options['cslider_freeScroll'])) ? "true" : "false") . ',';
+        $options .= '"wrapAround": ' . (boolval(esc_attr($cslider_options['cslider_wrapAround'])) ? "true" : "false") . ',';
+        $options .= '"groupCells": ' . esc_attr($cslider_options['cslider_groupCells']) . ',';
+        $options .= $valid_autoPlay;
+        $options .= $valid_fade;
+        $options .= '"pauseAutoPlayOnHover": ' . (boolval(esc_attr($cslider_options['cslider_pauseAutoPlayOnHover'])) ? "true" : "false") . ',';
+        $options .= '"adaptiveHeight": ' . (boolval(esc_attr($cslider_options['cslider_adaptiveHeight'])) ? "true" : "false") . ',';
+        $options .= '"watchCSS": ' . (boolval(esc_attr($cslider_options['cslider_watchCSS'])) ? "true" : "false") . ',';
+        $options .= '"dragThreshold": "' . esc_attr($cslider_options['cslider_dragThreshold']) . '",';
+        $options .= '"selectedAttraction": "' . esc_attr($cslider_options['cslider_selectedAttraction']) . '",';
+        $options .= '"friction": "' . esc_attr($cslider_options['cslider_friction']) . '",';
+        $options .= '"freeScrollFriction": "' . esc_attr($cslider_options['cslider_freeScrollFriction']) . '",';
+        
+        // Images
+        $options .= '"imagesLoaded": "true",';
+        $options .= '"lazyLoad": "false",';
+
+        // Setup
+        $options .= '"cellSelector": ".slider-cell",';
+        $options .= '"initialIndex": 0,';
+        $options .= '"accessibility": "true",';
+        $options .= '"setGallerySize": ' . (boolval(esc_attr($cslider_options['cslider_setGallerySize'])) ? "true" : "false") . ',';
+        $options .= '"resize": ' . (boolval(esc_attr($cslider_options['cslider_resize'])) ? "true" : "false") . ',';
+
+        // Cell
+        $options .= '"cellAlign": "' . esc_attr($cslider_options['cslider_cellAlign']) . '",';
+        $options .= '"contain": ' . (boolval(esc_attr($cslider_options['cslider_contain'])) ? "true" : "false") . ',';
+        $options .= '"percentPosition": ' . (boolval(esc_attr($cslider_options['cslider_percentPosition'])) ? "true" : "false") . ',';
+
+        // UI
+        $options .= '"prevNextButtons": ' . (boolval(esc_attr($cslider_options['cslider_prevNextButtons'])) ? "true" : "false") . ',';
+        $options .= '"pageDots": ' . (boolval(esc_attr($cslider_options['cslider_pageDots'])) ? "true" : "false");
+
+    $options .= ' }\' ';
+
+    // Query: _cslider_static
+    $cslider_static = get_post_meta($slider_id, '_cslider_static', true);
+    $static = "";
+    if(!empty($cslider_static['cslider_static_content'])) {
+        $static .=  '<div class="static-cell">
+			        	<div class="slider-cell-content">
+			        		<div class="slider-cell-content-inner">
+			        			'. $cslider_static['cslider_static_content'] .'
+			        		</div>
+			        	</div>
+			        </div>';
+    }
+
+    // Query: _cslider_fields
+    $cslider_fields = get_post_meta($slider_id, '_cslider_fields', true);
+    $slides = '';
+    foreach ( $cslider_fields as $field ) {
+        $layer_link_target = '';
+        if($field['cslider_link_target'] == 'new') {
+            $layer_link_target = 'target="_blank"';
+        }
+
+        $layer_img = '';
+        if(!empty($field['cslider_img_id'])) {
+            //$layer_img = '<img class="slider-cell-image" '. src="'. $field['cslider_img'] .'" />';
+            $layer_img = wp_get_attachment_image( intval($field['cslider_img_id']), 'full', "", ["class" => "slider-cell-image"] );
+        }
+
+        $layer_link = '';
+        if(!empty($field['cslider_link'])) {
+            $layer_link .= '<a href="'. $field['cslider_link'] .'" '. $layer_link_target .' class="slider-cell-link"></a>';
+        }
+
+        $layer_content = '';
+        if(!empty($field['cslider_content'])) {
+            $layer_content = '<div class="slider-cell-content"><div class="slider-cell-content-inner">'. $field['cslider_content'] .'</div>'. $layer_link .'</div>';
+        } else {
+            $layer_content = '<div class="slider-cell-content">'. $layer_link .'</div>';
+        }
+
+		$existing_cell_id = '';
+		if(isset($field['cslider_cell_id'])) {
+			$existing_cell_id = $field['cslider_cell_id'];	
 		}
-		$sorting .= '</div>';
-	}
-	
-	?><script>
-	jQuery(document).ready(function($) {
-	    var $grid = $('.cinza-grid').isotope({
-	        itemSelector: '.cinza-grid-item',
-	        layoutMode: 'fitRows',
-	        getSortData: {<?php echo $sorting_data; ?>}
-	    });
-	    
-	    // bind sort button click
-	    $('#cinza-grid-sorts').on( 'click', 'button', function() {
-	        var sortByValue = $(this).attr('data-sort-by');
-	        $grid.isotope({ sortBy: sortByValue });
-	    });
-	    
-	    // change is-checked class on buttons
-	    $('.cinza-grid-button-group').each( function( i, buttonGroup ) {
-	        var $buttonGroup = $( buttonGroup );
-	        $buttonGroup.on( 'click', 'button', function() {
-	        $buttonGroup.find('.is-checked').removeClass('is-checked');
-	        $( this ).addClass('is-checked');
-	        });
-	    });
-	});
-	</script><?php
+        $slides .=  '<div id="'. $existing_cell_id .'" class="slider-cell">' . $layer_img . $layer_content . '</div>';
+    }
 
+    // Dynamic style 
+    $ds_minHeight = intval(esc_attr($cslider_options['cslider_minHeight']));
+    $ds_maxHeight = intval(esc_attr($cslider_options['cslider_maxHeight']));
 
-/*    	
-	$sorting = '<h2>Sort</h2>
-    <div id="cinza-grid-sorts" class="cinza-grid-button-group">
-		<button class="button is-checked" data-sort-by="original-order">Original order</button>
-		<button class="button" data-sort-by="title">Title</button>
-		<button class="button" data-sort-by="color">Color</button>
-    </div>';
+    $style = "<style>";
+    $style .=  ".cinza-slider-".$slider_id." {
+                    height: ". ( ($ds_minHeight + $ds_maxHeight) / 2) ."px; /* Temporary while it loads, removed with jQuery */
+                    opacity: 0;
+                    overflow: hidden; /* Temporary while it loads, removed with jQuery */
+                }
+                
+                .cinza-slider-".$slider_id." .slider-cell .slider-cell-image {
+                    object-fit: ". esc_attr($cslider_options['cslider_imgFit']) .";
+                }";
 
-    // Filter 
-	$filters = '<h2>Filter by Meta Field</h2>
-    <div id="cinza-grid-filters" class="cinza-grid-button-group">
-		<button class="button is-checked" data-filter="*">Show all (not case sensitive)</button>
-		<button class="button" data-filter="red">Red</button>
-		<button class="button" data-filter="brown">Brown</button>
-		<button class="button" data-filter="purple">Purple</button>
-		<button class="button" data-filter="green">Green</button>
-		<button class="button" data-filter="blue">Blue</button>
-    </div>';
-	// END: "My First Grid" test
-*/
-    
-/*
-    // BEGIN: "My Second Grid" test
-	// Filters
-	$filters = "<div class='cinza-grid-filters'>
-        <div class='ui-group'>
-            <h3>Color</h3>
-            <select class='filter-select' value-group='color'>
-                <option value=''>any (case sensitive)</option>
-                <option value='.Red'>Red</option>
-                <option value='.Brown'>Brown</option>
-                <option value='.Purple'>Purple</option>
-                <option value='.Green'>Green</option>
-                <option value='.Blue'>Blue</option>
-            </select>
-        </div>
-		<div class='ui-group'>
-			<h3>Category</h3>
-			<select class='filter-select' value-group='category'>
-				<option value=''>any (case sensitive)</option>
-				<option value='.Small'>Small</option>
-				<option value='.Medium'>Medium</option>
-				<option value='.Large'>Large</option>
-			</select>
-		</div>
-	</div>";
-	// END: "My Second Grid" test
-*/
+    $dynamic_minHeight = 'auto';
+    $dynamic_maxHeight = 'auto';
+    if ($ds_minHeight > 0) {$dynamic_minHeight = $ds_minHeight ."px";}
+    if ($ds_maxHeight> 0) {$dynamic_maxHeight = $ds_maxHeight ."px";}
+    $style .=  ".cinza-slider-".$slider_id.", 
+                .cinza-slider-".$slider_id." .flickity-viewport, 
+                .cinza-slider-".$slider_id." .slider-cell, 
+                .cinza-slider-".$slider_id." .slider-cell .slider-cell-image {
+                    min-height: ". $dynamic_minHeight .";
+                    max-height: ". $dynamic_maxHeight .";
+                }";
 
-    // Grid items
-    $grid = '<div class="cinza-grid cinza-grid-'.$grid_id.'">';    
-	if( !empty( $posts ) ){
-		$debug = "";
+    if (intval(esc_attr($cslider_options['cslider_fullWidth'])) > 0) {
+        $style .=  ".cinza-slider-".$slider_id." {
+                        width: 100vw;
+                        position: relative;
+                        left: 50%;
+                        right: 50%;
+                        margin-left: -50vw;
+                        margin-right: -50vw;
+                    }";
+    }
 
-		foreach ( $posts as $post ){			
-			$grid_item = $cgrid_skin['cgrid_skin_content'];
-						
-			// Replace date meta with custom format
-			while(strpos($grid_item, '%date(') !== false){
-				//echo "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
-				
-				$date_start_position = strpos($grid_item, "%date(");
-				//$debug .= "<br /><strong>date_meta_start_position: </strong>" . $date_start_position;
-				
-				$date_open_paranthesis = $date_start_position + 5;
-				//$debug .= "<br /><strong>date_meta_open_paranthesis: </strong>" . $date_open_paranthesis;
-				
-				$date_close_paranthesis = $date_start_position + strpos(substr($grid_item, $date_start_position, $date_start_position+50), ")");
-				//$debug .= "<br /><strong>date_meta_close_paranthesis: </strong>" . $date_close_paranthesis;
-				
-				$date_code = substr($grid_item, $date_start_position+1, $date_close_paranthesis-$date_start_position);
-				//$debug .= "<br /><strong>date_meta: </strong>" . $date_code;
-				
-				$date_code_args = substr($grid_item, $date_open_paranthesis+2, $date_close_paranthesis-$date_open_paranthesis-3);
-				//$debug .= "<br /><strong>date_meta_args: </strong>" . $date_code_args;
-				
-				$date_formatted = get_the_date($date_code_args, $post->ID);
-				//$debug .= "<br /><strong>date_formatted: </strong>" . $date_formatted;
-				
-				$grid_item = substr_replace($grid_item, $date_formatted, $date_start_position, $date_close_paranthesis-$date_start_position+2);
-				//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";
-			}
-			
-			// Replace metafiled meta
-			while(strpos($grid_item, '%meta') !== false){
-				//$debug .= "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
-				
-				$meta_start_position = strpos($grid_item, "%meta(");
-				//$debug .= "<br /><strong>meta_meta_start_position: </strong>" . $meta_start_position;
-				
-				$meta_open_paranthesis = $meta_start_position + 5;
-				//$debug .= "<br /><strong>meta_meta_open_paranthesis: </strong>" . $meta_open_paranthesis;
-				
-				$meta_close_paranthesis = $meta_start_position + strpos(substr($grid_item, $meta_start_position, $meta_start_position+50), ")");
-				//$debug .= "<br /><strong>meta_meta_close_paranthesis: </strong>" . $meta_close_paranthesis;
-				
-				$meta_code = substr($grid_item, $meta_start_position+1, $meta_close_paranthesis-$meta_start_position);
-				//$debug .= "<br /><strong>meta_meta: </strong>" . $meta_code;
-				
-				$meta_code_args = substr($grid_item, $meta_open_paranthesis+2, $meta_close_paranthesis-$meta_open_paranthesis-3);
-				//$debug .= "<br /><strong>meta_meta_args: </strong>" . $meta_code_args;
-				
-				$meta_formatted = get_post_meta( $post->ID, $meta_code_args, true );
-				//$debug .= "<br /><strong>meta_formatted: </strong>" . $meta_formatted;
-				
-				$grid_item = substr_replace($grid_item, $meta_formatted, $meta_start_position, $meta_close_paranthesis-$meta_start_position+2);
-				//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";					
-			}
-			
-			// Replace taxonomy meta (without link and without separator)
-			while(strpos($grid_item, '%tax(') !== false){
-				//$debug .= "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
-				
-				$tax_start_position = strpos($grid_item, "%tax(");
-				//$debug .= "<br /><strong>tax_meta_start_position: </strong>" . $tax_start_position;
-				
-				$tax_open_paranthesis = $tax_start_position + 5;
-				//$debug .= "<br /><strong>tax_meta_open_paranthesis: </strong>" . $tax_open_paranthesis;
-				
-				$tax_close_paranthesis = $tax_start_position + strpos(substr($grid_item, $tax_start_position, $tax_start_position+50), ")");
-				//$debug .= "<br /><strong>tax_meta_close_paranthesis: </strong>" . $tax_close_paranthesis;
-				
-				$tax_code = substr($grid_item, $tax_start_position+1, $tax_close_paranthesis-$tax_start_position);
-				//$debug .= "<br /><strong>tax_meta: </strong>" . $tax_code;
-				
-				$tax_code_args = substr($grid_item, $tax_open_paranthesis+1, $tax_close_paranthesis-$tax_open_paranthesis-2);
-				//$debug .= "<br /><strong>tax_meta_args: </strong>" . $tax_code_args;
-				
-				$term_list = get_the_terms( $post->ID, $tax_code_args );
-				if( $term_list && ! is_wp_error( $term_list ) ) {
-					$terms_array = array();				
-					foreach ( $term_list as $term ) {
-						$terms_array[] = esc_attr( $term->name );
-					}
-					$terms_string = join( ' ', $terms_array );
-	
-					$tax_formatted = $terms_string;
-					//$debug .= "<br /><strong>tax_formatted: </strong>" . $tax_formatted;
-					
-					$grid_item = substr_replace($grid_item, $tax_formatted, $tax_start_position, $tax_close_paranthesis-$tax_start_position+2);
-					//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";					
-				} else {
-					$grid_item = substr_replace($grid_item, "Invalid taxonomy.", $tax_start_position, $tax_close_paranthesis-$tax_start_position+2);
-				}
-			}
-			
-			// Replace taxonomy meta (without link and with separator)
-			while(strpos($grid_item, '%taxsep(') !== false){
-				//$debug .= "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
-				
-				$taxsep_start_position = strpos($grid_item, "%taxsep(");
-				//$debug .= "<br /><strong>tax_meta_start_position: </strong>" . $taxsep_start_position;
-				
-				$taxsep_open_paranthesis = $taxsep_start_position + 5;
-				//$debug .= "<br /><strong>tax_meta_open_paranthesis: </strong>" . $taxsep_open_paranthesis;
-				
-				$taxsep_close_paranthesis = $taxsep_start_position + strpos(substr($grid_item, $taxsep_start_position, $taxsep_start_position+50), ")");
-				//$debug .= "<br /><strong>tax_meta_close_paranthesis: </strong>" . $taxsep_close_paranthesis;
-				
-				$taxsep_code = substr($grid_item, $taxsep_start_position+1, $taxsep_close_paranthesis-$taxsep_start_position);
-				//$debug .= "<br /><strong>tax_meta: </strong>" . $taxsep_code;
-				
-				$taxsep_code_args = substr($grid_item, $taxsep_open_paranthesis+1, $taxsep_close_paranthesis-$taxsep_open_paranthesis-2);
-				//$debug .= "<br /><strong>tax_meta_args: </strong>" . $taxsep_code_args;
-				
-				$term_list = get_the_terms( $post->ID, $taxsep_code_args );
-				if( $term_list && ! is_wp_error( $term_list ) ) {
-					$terms_array = array();				
-					foreach ( $term_list as $term ) {
-						$terms_array[] = esc_attr( $term->name );
-					}
-					$terms_string = join( ', ', $terms_array );
-	
-					$taxsep_formatted = $terms_string;
-					//$debug .= "<br /><strong>tax_formatted: </strong>" . $taxsep_formatted;
-					
-					$grid_item = substr_replace($grid_item, $taxsep_formatted, $taxsep_start_position, $taxsep_close_paranthesis-$taxsep_start_position+2);
-					//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";					
-				} else {
-					$grid_item = substr_replace($grid_item, "Invalid taxonomy.", $taxsep_start_position, $taxsep_close_paranthesis-$taxsep_start_position+2);
-				}
-			}
-			
-			// Replace taxonomy meta (with link and with separator)
-			while(strpos($grid_item, '%taxurl(') !== false){
-				//$debug .= "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
-				
-				$taxurl_start_position = strpos($grid_item, "%taxurl(");
-				//$debug .= "<br /><strong>taxurl_meta_start_position: </strong>" . $taxurl_start_position;
-				
-				$taxurl_open_paranthesis = $taxurl_start_position + 5;
-				//$debug .= "<br /><strong>taxurl_meta_open_paranthesis: </strong>" . $taxurl_open_paranthesis;
-				
-				$taxurl_close_paranthesis = $taxurl_start_position + strpos(substr($grid_item, $taxurl_start_position, $taxurl_start_position+50), ")");
-				//$debug .= "<br /><strong>taxurl_meta_close_paranthesis: </strong>" . $taxurl_close_paranthesis;
-				
-				$taxurl_code = substr($grid_item, $taxurl_start_position+1, $taxurl_close_paranthesis-$taxurl_start_position);
-				//$debug .= "<br /><strong>taxurl_meta: </strong>" . $taxurl_code;
-				
-				$taxurl_code_args = substr($grid_item, $taxurl_open_paranthesis+4, $taxurl_close_paranthesis-$taxurl_open_paranthesis-5);
-				//$debug .= "<br /><strong>taxurl_meta_args: </strong>" . $taxurl_code_args;
-				
-				$term_list = get_the_terms( $post->ID, $taxurl_code_args );
-				if( $term_list && ! is_wp_error( $term_list ) ) {
-					$terms_array = array();				
-					foreach ( $term_list as $term ) {
-						$terms_array[] = '<a href="'.  esc_attr( get_term_link( $term->slug, $taxurl_code_args ) ) .'">'. esc_attr( $term->name ) .'</a>';
-					}
-					$terms_string = join( ', ', $terms_array );
-	
-					$taxurl_formatted = $terms_string;
-					//$debug .= "<br /><strong>taxurl_formatted: </strong>" . $taxurl_formatted;
-					
-					$grid_item = substr_replace($grid_item, $taxurl_formatted, $taxurl_start_position, $taxurl_close_paranthesis-$taxurl_start_position+2);
-					//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";					
-				} else {
-					$grid_item = substr_replace($grid_item, "Invalid taxonomy.", $taxurl_start_position, $taxurl_close_paranthesis-$taxurl_start_position+2);
-				}
-			}
-			
-		    $code1 = array(
-		    	'%title%', 
-		    	'%url%', 
-		    	'%date%',
-		    );
-		    
-		    $code2 = array(
-		    	get_the_title($post->ID), 
-				get_permalink($post->ID), 
-		    	get_the_date('F j, Y', $post->ID),
-		    );
-		    
-			$grid .= '<div class="cinza-grid-item">'. str_replace($code1, $code2, $grid_item) .'</div>';
-		}
-	}
-    $grid .= '</div>';
-    
-    // Style
-    $style = '';
-    
-    return $debug . $sorting . $filters . $grid . $style;
-}
+    if(!empty($cslider_static['cslider_static_overlay'])) {
+        $style .=  ".cinza-slider-".$slider_id." .slider-cell:after {
+                        content: '';
+                        position: absolute;
+                        display: block;
+                        top: 0;
+                        bottom: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: ". $cslider_static['cslider_static_overlay'] .";
+                        z-index: 1;
+                    }";
+    }
+    $style .= "</style>";
 
-function cgrid_replace_date( $p ) {
-	//echo get_the_date( 'l F j, Y', $p );
-	
-	return $date_formatted;
+    // Output
+    $o = '<div class="cinza-slider cinza-slider-'.$slider_id.' animate__animated animate__fadeIn" data-flickity='. $options .'>'. $static . $slides .'</div>'. $style;
+    return $o;
 }

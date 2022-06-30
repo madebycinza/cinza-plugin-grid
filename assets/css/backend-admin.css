@@ -58,39 +58,39 @@
 }
 
 
-/* Replace Cinza Grid dashicon */
+/* Replace Cinza Slider dashicon */
   
-#menu-posts-cinza_grid .dashicons-admin-generic:before {
+#menu-posts-cinza_slider .dashicons-admin-generic:before {
     font-family: 'icoMoon' !important;
-    content: '\e901';
+    content: '\e900';
     font-size: 1.3em!important;
 }
 
 /* Shortcode */
 
-.cgrid_shortcode_copy {
+.cslider_shortcode_copy {
     width: 100%;
     max-width: 270px;
 }
 
-#cgrid-shortcode .inside,
+#cslider-shortcode .inside,
 tbody .column-shortcode {
     margin: 0;
     display: flex;
 	justify-content: space-between;
 }
 
-#cgrid-shortcode .inside {
+#cslider-shortcode .inside {
     overflow: hidden;
     padding: 12px;
 }
 
-#cgrid-shortcode .cgrid_shortcode_copy_input,
-tbody .column-shortcode .cgrid_shortcode_copy_input {
+#cslider-shortcode .cslider_shortcode_copy_input,
+tbody .column-shortcode .cslider_shortcode_copy_input {
 	width: calc(100% - 90px);
 }
 
-#cgrid-shortcode .button,
+#cslider-shortcode .button,
 tbody .column-shortcode .button {
 	position: relative;
     width: 80px;
@@ -98,7 +98,7 @@ tbody .column-shortcode .button {
 	text-align: center;
 }
 
-#cgrid-shortcode .button .icon,
+#cslider-shortcode .button .icon,
 tbody .column-shortcode .button .icon {
 	margin-right: 3px;
 }
