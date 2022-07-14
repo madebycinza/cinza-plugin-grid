@@ -157,7 +157,7 @@ function cgrid_meta_box_options( $post ) {
 	$temp_sorting = '';
 	$temp_filters = '';
 	
-	//$temp_breakpoint_1 = 0; not needed, always zero
+	//$temp_breakpoint_1 = 1; not needed, always 1
 	$temp_columns_1 = 1;
 	$temp_height_1 = 0;
 	$temp_spacing_1 = 20;
@@ -302,7 +302,7 @@ function cgrid_meta_box_options( $post ) {
 				<td class="cgrid-options col-4">Items spacing</td>
             </tr>
 			<tr>
-				<td class="cgrid-options col-1"><input type="number" name="cgrid_breakpoint_1" id="cgrid_breakpoint_1" value="0" readonly /> <span>px</span></td>
+				<td class="cgrid-options col-1"><input type="number" name="cgrid_breakpoint_1" id="cgrid_breakpoint_1" value="1" readonly /> <span>px</span></td>
 				<td class="cgrid-options col-2"><input type="number" name="cgrid_columns_1" id="cgrid_columns_1" value="<?php echo esc_attr($temp_columns_1); ?>" /></td>
 				<td class="cgrid-options col-3"><input type="number" name="cgrid_height_1" id="cgrid_height_1" value="<?php echo esc_attr($temp_height_1); ?>" /> <span>px</span></td>
 				<td class="cgrid-options col-4"><input type="number" name="cgrid_spacing_1" id="cgrid_spacing_1" value="<?php echo esc_attr($temp_spacing_1); ?>" /> <span>px</span></td>
@@ -336,6 +336,7 @@ function cgrid_meta_box_options( $post ) {
 					<p><strong>Notes:</strong></p>
 					<ul>
 						<li>Breakpoints are defined with min-width media queries.</li>
+						<li>Breakpoints must be in ascending order.</li>
 						<li>Disable <em>Items min-height</em> by setting the value to zero.</li>
 					</ul>
 				</td>
@@ -359,7 +360,7 @@ function cgrid_meta_box_options( $post ) {
 					<textarea type="text" class="widefat cgrid-content" name="cgrid_sorting"><?php echo esc_html($temp_sorting); ?></textarea>
 					<p><strong>Notes:</strong></p>
 					<p>To sort by the 'color' meta field when you have the following element skin: <code>&lt;div class=&quot;element-color&quot;&gt;Red&lt;/div&gt;</code></p>
-					<p>You should enter the following in the Sorting textarea: <code>element-color, Color</code></p>
+					<p>You should enter the following in the Sorting textarea: <code>element-color / Color</code></p>
 					</p>
 				</td>
             </tr>

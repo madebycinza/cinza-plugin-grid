@@ -62,9 +62,11 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 			
 			// All other buttons
 			foreach ($sort_lines as $sort_line) {
-				$sort_atts = explode ("/", $sort_line); 
-				$sorts .= '<button class="button" data-sort-by="'. trim($sort_atts[0]) .'">'. trim($sort_atts[1]) .'</button>';
-				$sorts_data .= '\'' . trim($sort_atts[0]) . '\': ' . '\'.' . trim($sort_atts[0]) . '\', ';
+				if(!empty($sort_line)) {
+					$sort_atts = explode ("/", $sort_line); 
+					$sorts .= '<button class="button" data-sort-by="'. trim($sort_atts[0]) .'">'. trim($sort_atts[1]) .'</button>';
+					$sorts_data .= '\'' . trim($sort_atts[0]) . '\': ' . '\'.' . trim($sort_atts[0]) . '\', ';					
+				}
 			}
 		$sorts .= '</div>';
 	}
@@ -78,18 +80,20 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 			$filter_lines = preg_split("/\r\n|\n|\r/", $filters_temp);
 			
 			foreach ($filter_lines as $filter_line) {
-				$filter_atts = explode ("/", $filter_line); 
-				$filters .= '<div class="cinza-grid-button-group" data-filter-group="'. trim(strtolower($filter_atts[1])) .'">';
-					
-					// First button
-					$filters .= '<button class="button is-checked" data-filter="*">All '. trim($filter_atts[1]) .'</button>';
-					
-					// All other buttons
-					$filter_buttons = explode (",", $filter_atts[2]); 
-					foreach ($filter_buttons as $filter_button) {
-						$filters .= '<button class="button" data-filter=".'. str_replace(' ', '-', trim(strtolower($filter_button))) .'">'. trim($filter_button) .'</button>';	
-					}
-				$filters .= '</div>';
+				if(!empty($filter_line)) {
+					$filter_atts = explode ("/", $filter_line); 
+					$filters .= '<div class="cinza-grid-button-group" data-filter-group="'. trim(strtolower($filter_atts[1])) .'">';
+						
+						// First button
+						$filters .= '<button class="button is-checked" data-filter="*">All '. trim($filter_atts[1]) .'</button>';
+						
+						// All other buttons
+						$filter_buttons = explode (",", $filter_atts[2]); 
+						foreach ($filter_buttons as $filter_button) {
+							$filters .= '<button class="button" data-filter=".'. str_replace(' ', '-', trim(strtolower($filter_button))) .'">'. trim($filter_button) .'</button>';	
+						}
+					$filters .= '</div>';					
+				}
 			}
 	    $filters .= '</div>';	    
     }
@@ -361,7 +365,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
     $style = "<style>";
     
     	// Breakpoint 1 -----
-	    $style .= "@media (min-width: 0px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_2'])-1 ."px) {
+	    $style .= "@media (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_2']-1) ."px) {
 			.cinza-grid {
 				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px); 
 				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_2']) ."px / 2);
@@ -382,7 +386,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	    $style .= "}";
 
     	// Breakpoint 2 -----
-	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_2']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_3'])-1 ."px) {
+	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_2']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_3']-1) ."px) {
 			.cinza-grid {
 				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px); 
 				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_2']) ."px / 2);
@@ -403,7 +407,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	    $style .= "}";
 	    
     	// Breakpoint 3 -----
-	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_3']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_4'])-1 ."px) {
+	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_3']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_4']-1) ."px) {
 			.cinza-grid {
 				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_3']) ."px); 
 				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_3']) ."px / 2);
@@ -424,7 +428,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	    $style .= "}";
 	    
     	// Breakpoint 4 -----
-	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_4']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_5'])-1 ."px) {
+	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_4']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_5']-1) ."px) {
 			.cinza-grid {
 				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_4']) ."px); 
 				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_4']) ."px / 2);
