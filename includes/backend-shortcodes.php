@@ -352,13 +352,120 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 		    	get_the_post_thumbnail_url($post->ID),
 		    );
 		    
-			$grid .= '<div class="cinza-grid-item cinza-slider-'. $post->ID . $filter_classes.'">'. str_replace($code1, $code2, $grid_item) .'</div>';
+			$grid .= '<div class="cinza-grid-item cinza-grid-'. $post->ID . $filter_classes.'">'. str_replace($code1, $code2, $grid_item) .'</div>';
 		}
 	}
     $grid .= '</div>';
     
     // Style
-    $style = '';
+    $style = "<style>";
+    
+    	// Breakpoint 1 -----
+	    $style .= "@media (min-width: 0px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_2'])-1 ."px) {
+			.cinza-grid {
+				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px); 
+				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_2']) ."px / 2);
+			}
+			.cinza-grid-item {
+				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_1']) ." - ". esc_attr($cgrid_options['cgrid_spacing_1']) ."px); 
+				min-height: ". esc_attr($cgrid_options['cgrid_height_1']) ."px;
+				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_1']) ."px / 2);
+			}";
+			
+		    if (esc_attr($cgrid_options['cgrid_columns_1']) == 1) {
+			    $style .= "
+					.cinza-grid {width: 100%; margin: 0px;}
+					.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_1']) ."px 0px;}
+					.cinza-grid-item:last-child {margin-bottom: 0px;}
+			    ";		    
+		    }
+	    $style .= "}";
+
+    	// Breakpoint 2 -----
+	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_2']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_3'])-1 ."px) {
+			.cinza-grid {
+				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px); 
+				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_2']) ."px / 2);
+			}
+			.cinza-grid-item {
+				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_2']) ." - ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px); 
+				min-height: ". esc_attr($cgrid_options['cgrid_height_2']) ."px;
+				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_2']) ."px / 2);
+			}";
+			
+		    if (esc_attr($cgrid_options['cgrid_columns_2']) == 1) {
+			    $style .= "
+					.cinza-grid {width: 100%; margin: 0px;}
+					.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px 0px;}
+					.cinza-grid-item:last-child {margin-bottom: 0px;}
+			    ";		    
+		    }
+	    $style .= "}";
+	    
+    	// Breakpoint 3 -----
+	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_3']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_4'])-1 ."px) {
+			.cinza-grid {
+				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_3']) ."px); 
+				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_3']) ."px / 2);
+			}
+			.cinza-grid-item {
+				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_3']) ." - ". esc_attr($cgrid_options['cgrid_spacing_3']) ."px); 
+				min-height: ". esc_attr($cgrid_options['cgrid_height_3']) ."px;
+				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_3']) ."px / 2);
+			}";
+			
+		    if (esc_attr($cgrid_options['cgrid_columns_3']) == 1) {
+			    $style .= "
+					.cinza-grid {width: 100%; margin: 0px;}
+					.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_3']) ."px 0px;}
+					.cinza-grid-item:last-child {margin-bottom: 0px;}
+			    ";		    
+		    }
+	    $style .= "}";
+	    
+    	// Breakpoint 4 -----
+	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_4']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_5'])-1 ."px) {
+			.cinza-grid {
+				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_4']) ."px); 
+				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_4']) ."px / 2);
+			}
+			.cinza-grid-item {
+				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_4']) ." - ". esc_attr($cgrid_options['cgrid_spacing_4']) ."px); 
+				min-height: ". esc_attr($cgrid_options['cgrid_height_4']) ."px;
+				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_4']) ."px / 2);
+			}";
+			
+		    if (esc_attr($cgrid_options['cgrid_columns_4']) == 1) {
+			    $style .= "
+					.cinza-grid {width: 100%; margin: 0px;}
+					.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_4']) ."px 0px;}
+					.cinza-grid-item:last-child {margin-bottom: 0px;}
+			    ";		    
+		    }
+	    $style .= "}";
+	    
+    	// Breakpoint 5 -----
+	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_5']) ."px) {
+			.cinza-grid {
+				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_5']) ."px); 
+				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_5']) ."px / 2);
+			}
+			.cinza-grid-item {
+				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_5']) ." - ". esc_attr($cgrid_options['cgrid_spacing_5']) ."px); 
+				min-height: ". esc_attr($cgrid_options['cgrid_height_5']) ."px;
+				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_5']) ."px / 2);
+			}";
+			
+		    if (esc_attr($cgrid_options['cgrid_columns_5']) == 1) {
+			    $style .= "
+					.cinza-grid {width: 100%; margin: 0px;}
+					.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_5']) ."px 0px;}
+					.cinza-grid-item:last-child {margin-bottom: 0px;}
+			    ";		    
+		    }
+	    $style .= "}";
+	    
+    $style .= "</style>";
     
     return $debug . $sorts . $filters . $grid . $style;
 }

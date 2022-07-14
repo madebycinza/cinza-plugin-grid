@@ -152,10 +152,35 @@ function cgrid_meta_box_options( $post ) {
 	
 	// Set default values
 	$temp_posttype = 'post';
-	$cgrid_orderby = 'date';
-	$cgrid_order = 'ASC';
+	$temp_orderby = 'date';
+	$temp_order = 'ASC';
 	$temp_sorting = '';
 	$temp_filters = '';
+	
+	//$temp_breakpoint_1 = 0; not needed, always zero
+	$temp_columns_1 = 1;
+	$temp_height_1 = 0;
+	$temp_spacing_1 = 20;
+	
+	$temp_breakpoint_2 = 500;
+	$temp_columns_2 = 2;
+	$temp_height_2 = 0;
+	$temp_spacing_2 = 20;
+	
+	$temp_breakpoint_3 = 700;
+	$temp_columns_3 = 3;
+	$temp_height_3 = 0;
+	$temp_spacing_3 = 20;
+	
+	$temp_breakpoint_4 = 900;
+	$temp_columns_4 = 4;
+	$temp_height_4 = 0;
+	$temp_spacing_4 = 20;
+	
+	$temp_breakpoint_5 = 1200;
+	$temp_columns_5 = 5;
+	$temp_height_5 = 0;
+	$temp_spacing_5 = 20;
 	
 	// Get saved values
 	if ( !empty($cgrid_options) ) {
@@ -164,6 +189,30 @@ function cgrid_meta_box_options( $post ) {
 		$temp_order = esc_attr($cgrid_options['cgrid_order']);
 		$temp_sorting = esc_attr($cgrid_options['cgrid_sorting']);
 		$temp_filters = esc_attr($cgrid_options['cgrid_filters']);
+		
+		$temp_columns_1 = esc_attr($cgrid_options['cgrid_columns_1']);
+		$temp_height_1 = esc_attr($cgrid_options['cgrid_height_1']);
+		$temp_spacing_1 = esc_attr($cgrid_options['cgrid_spacing_1']);
+		
+		$temp_breakpoint_2 = esc_attr($cgrid_options['cgrid_breakpoint_2']);
+		$temp_columns_2 = esc_attr($cgrid_options['cgrid_columns_2']);
+		$temp_height_2 = esc_attr($cgrid_options['cgrid_height_2']);
+		$temp_spacing_2 = esc_attr($cgrid_options['cgrid_spacing_2']);
+		
+		$temp_breakpoint_3 = esc_attr($cgrid_options['cgrid_breakpoint_3']);
+		$temp_columns_3 = esc_attr($cgrid_options['cgrid_columns_3']);
+		$temp_height_3 = esc_attr($cgrid_options['cgrid_height_3']);
+		$temp_spacing_3 = esc_attr($cgrid_options['cgrid_spacing_3']);
+		
+		$temp_breakpoint_4 = esc_attr($cgrid_options['cgrid_breakpoint_4']);
+		$temp_columns_4 = esc_attr($cgrid_options['cgrid_columns_4']);
+		$temp_height_4 = esc_attr($cgrid_options['cgrid_height_4']);
+		$temp_spacing_4 = esc_attr($cgrid_options['cgrid_spacing_4']);
+		
+		$temp_breakpoint_5 = esc_attr($cgrid_options['cgrid_breakpoint_5']);
+		$temp_columns_5 = esc_attr($cgrid_options['cgrid_columns_5']);
+		$temp_height_5 = esc_attr($cgrid_options['cgrid_height_5']);
+		$temp_spacing_5 = esc_attr($cgrid_options['cgrid_spacing_5']);
 	}
 
 	?>
@@ -171,14 +220,14 @@ function cgrid_meta_box_options( $post ) {
 		<thead>
 			<tr>
 				<td class="cgrid-options" colspan="2">
-					<p>Post Type</p>
+					<p>Source</p>
 				</td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
             	<td class="cgrid-options col-1">
-                    <label for="cgrid_posttype">Post type</label>
+                    <label for="cgrid_posttype">Post Type</label>
 				</td>
 				<td class="cgrid-options col-2"><?php
 					
@@ -237,6 +286,63 @@ function cgrid_meta_box_options( $post ) {
 		</tbody>
 	</table>
 	
+	<table id="cgrid-optionset" class="cgrid-sizeset" width="100%">
+		<thead>
+			<tr>
+				<td class="cgrid-options" colspan="4">
+					<p>Size</p>
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="size-headings">
+				<td class="cgrid-options col-1">Breakpoint</td>
+				<td class="cgrid-options col-2">Number of columns</td>
+				<td class="cgrid-options col-3">Items min-height</td>
+				<td class="cgrid-options col-4">Items spacing</td>
+            </tr>
+			<tr>
+				<td class="cgrid-options col-1"><input type="number" name="cgrid_breakpoint_1" id="cgrid_breakpoint_1" value="0" readonly /> <span>px</span></td>
+				<td class="cgrid-options col-2"><input type="number" name="cgrid_columns_1" id="cgrid_columns_1" value="<?php echo esc_attr($temp_columns_1); ?>" /></td>
+				<td class="cgrid-options col-3"><input type="number" name="cgrid_height_1" id="cgrid_height_1" value="<?php echo esc_attr($temp_height_1); ?>" /> <span>px</span></td>
+				<td class="cgrid-options col-4"><input type="number" name="cgrid_spacing_1" id="cgrid_spacing_1" value="<?php echo esc_attr($temp_spacing_1); ?>" /> <span>px</span></td>
+            </tr>
+			<tr>
+				<td class="cgrid-options col-1"><input type="number" name="cgrid_breakpoint_2" id="cgrid_breakpoint_2" value="<?php echo esc_attr($temp_breakpoint_2); ?>" /> <span>px</span></td>
+				<td class="cgrid-options col-2"><input type="number" name="cgrid_columns_2" id="cgrid_columns_2" value="<?php echo esc_attr($temp_columns_2); ?>" /></td>
+				<td class="cgrid-options col-3"><input type="number" name="cgrid_height_2" id="cgrid_height_2" value="<?php echo esc_attr($temp_height_2); ?>" /> <span>px</span></td>
+				<td class="cgrid-options col-4"><input type="number" name="cgrid_spacing_2" id="cgrid_spacing_2" value="<?php echo esc_attr($temp_spacing_2); ?>" /> <span>px</span></td>
+            </tr>
+			<tr>
+				<td class="cgrid-options col-1"><input type="number" name="cgrid_breakpoint_3" id="cgrid_breakpoint_3" value="<?php echo esc_attr($temp_breakpoint_3); ?>" /> <span>px</span></td>
+				<td class="cgrid-options col-2"><input type="number" name="cgrid_columns_3" id="cgrid_columns_3" value="<?php echo esc_attr($temp_columns_3); ?>" /></td>
+				<td class="cgrid-options col-3"><input type="number" name="cgrid_height_3" id="cgrid_height_3" value="<?php echo esc_attr($temp_height_3); ?>" /> <span>px</span></td>
+				<td class="cgrid-options col-4"><input type="number" name="cgrid_spacing_3" id="cgrid_spacing_3" value="<?php echo esc_attr($temp_spacing_3); ?>" /> <span>px</span></td>
+            </tr>
+			<tr>
+				<td class="cgrid-options col-1"><input type="number" name="cgrid_breakpoint_4" id="cgrid_breakpoint_4" value="<?php echo esc_attr($temp_breakpoint_4); ?>" /> <span>px</span></td>
+				<td class="cgrid-options col-2"><input type="number" name="cgrid_columns_4" id="cgrid_columns_4" value="<?php echo esc_attr($temp_columns_4); ?>" /></td>
+				<td class="cgrid-options col-3"><input type="number" name="cgrid_height_4" id="cgrid_height_4" value="<?php echo esc_attr($temp_height_4); ?>" /> <span>px</span></td>
+				<td class="cgrid-options col-4"><input type="number" name="cgrid_spacing_4" id="cgrid_spacing_4" value="<?php echo esc_attr($temp_spacing_4); ?>" /> <span>px</span></td>
+            </tr>
+			<tr>
+				<td class="cgrid-options col-1"><input type="number" name="cgrid_breakpoint_5" id="cgrid_breakpoint_5" value="<?php echo esc_attr($temp_breakpoint_5); ?>" /> <span>px</span></td>
+				<td class="cgrid-options col-2"><input type="number" name="cgrid_columns_5" id="cgrid_columns_5" value="<?php echo esc_attr($temp_columns_5); ?>" /></td>
+				<td class="cgrid-options col-3"><input type="number" name="cgrid_height_5" id="cgrid_height_5" value="<?php echo esc_attr($temp_height_5); ?>" /> <span>px</span></td>
+				<td class="cgrid-options col-4"><input type="number" name="cgrid_spacing_5" id="cgrid_spacing_5" value="<?php echo esc_attr($temp_spacing_5); ?>" /> <span>px</span></td>
+            </tr>
+			<tr>
+				<td class="cgrid-options" colspan="4">
+					<p><strong>Notes:</strong></p>
+					<ul>
+						<li>Breakpoints are defined with min-width media queries.</li>
+						<li>Disable <em>Items min-height</em> by setting the value to zero.</li>
+					</ul>
+				</td>
+            </tr>
+		</tbody>
+	</table>
+	
 	<table id="cgrid-optionset" width="100%">
 		<thead>
 			<tr>
@@ -247,17 +353,13 @@ function cgrid_meta_box_options( $post ) {
 		</thead>
 		<tbody>
 			<tr>
-				<td class="cgrid-options col-1 colspan="2"">
-					<p>
-						<strong>Enter the CSS class of each element of which the content will be used for sorting.</strong><br />
-						Format: <code>class / label</code> (one per line)<br />
-					</p>
+				<td class="cgrid-options col-1" colspan="2">
+					<p><strong>Enter the CSS class of each element of which the content will be used for sorting.</strong></p>
+					<p>Format: <code>class / label</code> (one per line)</p>
 					<textarea type="text" class="widefat cgrid-content" name="cgrid_sorting"><?php echo esc_html($temp_sorting); ?></textarea>
-					<p><strong>Example:</strong><br />
-						To sort by the 'color' meta field when you have the following element skin:<br />
-						<code>&lt;div class=&quot;element-color&quot;&gt;Red&lt;/div&gt;</code><br />
-						You should enter the following in the Sorting textarea:<br />
-						<code>element-color, Color</code>
+					<p><strong>Notes:</strong></p>
+					<p>To sort by the 'color' meta field when you have the following element skin: <code>&lt;div class=&quot;element-color&quot;&gt;Red&lt;/div&gt;</code></p>
+					<p>You should enter the following in the Sorting textarea: <code>element-color, Color</code></p>
 					</p>
 				</td>
             </tr>
@@ -274,16 +376,14 @@ function cgrid_meta_box_options( $post ) {
 		</thead>
 		<tbody>
 			<tr>
-				<td class="cgrid-options col-1 colspan="2"">
-					<p>
-						<strong>Enter the code and buttons of each element that will be used for filtering.</strong><br />
-						Format: <code>meta / label / buttons separated by comma</code> (one per line)<br />
-					</p>
+				<td class="cgrid-options col-1" colspan="2">
+					<p><strong>Enter the code and buttons of each element that will be used for filtering.</strong></p>
+					<p>Format: <code>meta / label / buttons separated by comma</code> (one per line)</p>
 					<textarea type="text" class="widefat cgrid-content" name="cgrid_filters"><?php echo esc_html($temp_filters); ?></textarea>
-					<p><strong>Example:</strong><br />
-						To filter by the 'color' meta field, with the default button called "All Colors" and filters for the colors Blue, Red and Yellow, you should enter the following in the Filter textarea:<br />
-						<code>%meta('color')% / Colors / Blue, Red, Yellow</code>
-					</p>
+					<p><strong>Notes:</strong></p>
+					<p>Filters only work with <code>%meta('x')%</code> and <code>%tax('x')%</code>.</p>
+					<p>To filter by the 'color' meta field, with the default button called "All Colors" and filters for the colors Blue, Red and Yellow, you should enter the following in the Filter textarea:</p>
+					<p><code>%meta('color')% / Colors / Blue, Red, Yellow</code></p>
 				</td>
             </tr>
 		</tbody>
@@ -316,6 +416,7 @@ function cgrid_meta_box_skin() {
 					<label>Enter HTML and PHP code template for grid items</label>
 					<textarea type="text" class="widefat cgrid-content" name="cgrid_skin_content"><?php echo esc_html($temp_skin_content); ?></textarea>
 					
+					<p><strong>Supported meta tags:</strong></p>
 					<table>
 						<tr>
 							<td><code>%title%</code></td>
@@ -411,6 +512,30 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	$cgrid_order = sanitize_text_field($_POST['cgrid_order']);
 	$cgrid_sorting = wp_filter_post_kses($_POST['cgrid_sorting']);
 	$cgrid_filters = wp_filter_post_kses($_POST['cgrid_filters']);
+	
+	$cgrid_columns_1 = sanitize_text_field($_POST['cgrid_columns_1']);
+	$cgrid_height_1 = sanitize_text_field($_POST['cgrid_height_1']);
+	$cgrid_spacing_1 = sanitize_text_field($_POST['cgrid_spacing_1']);
+	
+	$cgrid_breakpoint_2 = sanitize_text_field($_POST['cgrid_breakpoint_2']);
+	$cgrid_columns_2 = sanitize_text_field($_POST['cgrid_columns_2']);
+	$cgrid_height_2 = sanitize_text_field($_POST['cgrid_height_2']);
+	$cgrid_spacing_2 = sanitize_text_field($_POST['cgrid_spacing_2']);
+	
+	$cgrid_breakpoint_3 = sanitize_text_field($_POST['cgrid_breakpoint_3']);
+	$cgrid_columns_3 = sanitize_text_field($_POST['cgrid_columns_3']);
+	$cgrid_height_3 = sanitize_text_field($_POST['cgrid_height_3']);
+	$cgrid_spacing_3 = sanitize_text_field($_POST['cgrid_spacing_3']);
+	
+	$cgrid_breakpoint_4 = sanitize_text_field($_POST['cgrid_breakpoint_4']);
+	$cgrid_columns_4 = sanitize_text_field($_POST['cgrid_columns_4']);
+	$cgrid_height_4 = sanitize_text_field($_POST['cgrid_height_4']);
+	$cgrid_spacing_4 = sanitize_text_field($_POST['cgrid_spacing_4']);
+	
+	$cgrid_breakpoint_5 = sanitize_text_field($_POST['cgrid_breakpoint_5']);
+	$cgrid_columns_5 = sanitize_text_field($_POST['cgrid_columns_5']);
+	$cgrid_height_5 = sanitize_text_field($_POST['cgrid_height_5']);
+	$cgrid_spacing_5 = sanitize_text_field($_POST['cgrid_spacing_5']);
 
 	$new = array();
 	$new['cgrid_posttype'] = empty($cgrid_posttype) ? 'post' : wp_strip_all_tags($cgrid_posttype);
@@ -418,6 +543,30 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	$new['cgrid_order'] = empty($cgrid_order) ? 'ASC' : wp_strip_all_tags($cgrid_order);
 	$new['cgrid_sorting'] = empty($cgrid_sorting) ? '' : wp_filter_post_kses($cgrid_sorting);
 	$new['cgrid_filters'] = empty($cgrid_filters) ? '' : wp_filter_post_kses($cgrid_filters);
+	
+	$new['cgrid_columns_1'] = empty($cgrid_columns_1) ? '1' : wp_filter_post_kses($cgrid_columns_1);
+	$new['cgrid_height_1'] = empty($cgrid_height_1) ? '0' : wp_filter_post_kses($cgrid_height_1);
+	$new['cgrid_spacing_1'] = empty($cgrid_spacing_1) ? '0' : wp_filter_post_kses($cgrid_spacing_1);
+	
+	$new['cgrid_breakpoint_2'] = empty($cgrid_breakpoint_2) ? '1' : wp_filter_post_kses($cgrid_breakpoint_2);
+	$new['cgrid_columns_2'] = empty($cgrid_columns_2) ? '1' : wp_filter_post_kses($cgrid_columns_2);
+	$new['cgrid_height_2'] = empty($cgrid_height_2) ? '0' : wp_filter_post_kses($cgrid_height_2);
+	$new['cgrid_spacing_2'] = empty($cgrid_spacing_2) ? '0' : wp_filter_post_kses($cgrid_spacing_2);
+	
+	$new['cgrid_breakpoint_3'] = empty($cgrid_breakpoint_3) ? '1' : wp_filter_post_kses($cgrid_breakpoint_3);
+	$new['cgrid_columns_3'] = empty($cgrid_columns_3) ? '1' : wp_filter_post_kses($cgrid_columns_3);
+	$new['cgrid_height_3'] = empty($cgrid_height_3) ? '0' : wp_filter_post_kses($cgrid_height_3);
+	$new['cgrid_spacing_3'] = empty($cgrid_spacing_3) ? '0' : wp_filter_post_kses($cgrid_spacing_3);
+	
+	$new['cgrid_breakpoint_4'] = empty($cgrid_breakpoint_4) ? '1' : wp_filter_post_kses($cgrid_breakpoint_4);
+	$new['cgrid_columns_4'] = empty($cgrid_columns_4) ? '1' : wp_filter_post_kses($cgrid_columns_4);
+	$new['cgrid_height_4'] = empty($cgrid_height_4) ? '0' : wp_filter_post_kses($cgrid_height_4);
+	$new['cgrid_spacing_4'] = empty($cgrid_spacing_4) ? '0' : wp_filter_post_kses($cgrid_spacing_4);
+	
+	$new['cgrid_breakpoint_5'] = empty($cgrid_breakpoint_5) ? '1' : wp_filter_post_kses($cgrid_breakpoint_5);
+	$new['cgrid_columns_5'] = empty($cgrid_columns_5) ? '1' : wp_filter_post_kses($cgrid_columns_5);
+	$new['cgrid_height_5'] = empty($cgrid_height_5) ? '0' : wp_filter_post_kses($cgrid_height_5);
+	$new['cgrid_spacing_5'] = empty($cgrid_spacing_5) ? '0' : wp_filter_post_kses($cgrid_spacing_5); 
 
 	update_post_meta($post_id, '_cgrid_options', $new);
 	

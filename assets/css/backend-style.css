@@ -41,6 +41,23 @@
     height: 150px;
 }
 
+#cgrid-optionset.cgrid-sizeset .size-headings td {
+	font-weight: bold;
+	padding-top: 20px;
+}
+
+#cgrid-optionset.cgrid-sizeset .cgrid-options input[type="number"] {
+	width: 100px;
+}
+
+#cgrid-optionset.cgrid-sizeset td.cgrid-options {
+	width: 100px !important;
+}
+
+#cgrid-optionset.cgrid-sizeset ul {
+    list-style: disc inside;
+}
+
 /* Skin */
 
 #cgrid-skin textarea {
