@@ -24,8 +24,13 @@
 }
 
 #cgrid-optionset .cgrid-options input[type="text"],
+#cgrid-optionset .cgrid-options input[type="number"],
 #cgrid-optionset .cgrid-options select {
     width: 150px;
+}
+
+#cgrid-optionset .cgrid-options input[type="text"]#cgrid_tax_terms {
+	width: 100% !important;
 }
 
 #cgrid-optionset thead {
@@ -39,6 +44,10 @@
 
 #cgrid-options textarea {
     height: 150px;
+}
+
+#cgrid-optionset .meta-disabled {
+	display: none;
 }
 
 #cgrid-optionset.cgrid-sizeset .size-headings td {

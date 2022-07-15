@@ -153,7 +153,11 @@ function cgrid_meta_box_options( $post ) {
 	// Set default values
 	$temp_posttype = 'post';
 	$temp_orderby = 'date';
+	$temp_orderby_meta = '';
 	$temp_order = 'ASC';
+	$temp_num = '-1';
+	$temp_tax = '';
+	$temp_tax_terms = '';
 	$temp_sorting = '';
 	$temp_filters = '';
 	
@@ -186,7 +190,11 @@ function cgrid_meta_box_options( $post ) {
 	if ( !empty($cgrid_options) ) {
 		$temp_posttype = esc_attr($cgrid_options['cgrid_posttype']);
 		$temp_orderby = esc_attr($cgrid_options['cgrid_orderby']);
+		$temp_orderby_meta = esc_attr($cgrid_options['cgrid_orderby_meta']);
 		$temp_order = esc_attr($cgrid_options['cgrid_order']);
+		$temp_num = esc_attr($cgrid_options['cgrid_num']);
+		$temp_tax = esc_attr($cgrid_options['cgrid_tax']);
+		$temp_tax_terms = esc_attr($cgrid_options['cgrid_tax_terms']);
 		$temp_sorting = esc_attr($cgrid_options['cgrid_sorting']);
 		$temp_filters = esc_attr($cgrid_options['cgrid_filters']);
 		
@@ -260,16 +268,26 @@ function cgrid_meta_box_options( $post ) {
             </tr>
 			<tr>
             	<td class="cgrid-options col-1">
+                    <label for="cgrid_order">Number of items</label>
+				</td>
+				<td class="cgrid-options col-2">
+					<input type="number" name="cgrid_num" id="cgrid_num" value="<?php echo esc_attr($temp_num); ?>" />
+                </td>
+            </tr>
+			<tr>
+            	<td class="cgrid-options col-1">
                     <label for="cgrid_orderby">Order by</label>
 				</td>
 				<td class="cgrid-options col-2">
-					<select name="cgrid_orderby" id="cgrid_orderby">
+					<select name="cgrid_orderby" id="cgrid_orderby" onchange="sortByMetaField(this)">
 						<option value="date" <?php if(isset($temp_orderby) && ($temp_orderby == 'date'))  echo 'selected="selected"'; ?>>Date</option>
 						<option value="id" <?php if(isset($temp_orderby) && ($temp_orderby == 'id'))  echo 'selected="selected"'; ?>>ID</option>
 						<option value="menu_order" <?php if(isset($temp_orderby) && ($temp_orderby == 'menu_order'))  echo 'selected="selected"'; ?>>Menu order</option>
 						<option value="modified" <?php if(isset($temp_orderby) && ($temp_orderby == 'modified'))  echo 'selected="selected"'; ?>>Modified</option>
 						<option value="title" <?php if(isset($temp_orderby) && ($temp_orderby == 'title'))  echo 'selected="selected"'; ?>>Title</option>
+						<option value="meta_value" <?php if(isset($temp_orderby) && ($temp_orderby == 'meta_value'))  echo 'selected="selected"'; ?>>Meta Field</option>
 					</select>
+					<input type="text" name="cgrid_orderby_meta" id="cgrid_orderby_meta" placeholder="field_name" value="<?php echo esc_attr($temp_orderby_meta); ?>" class="meta-disabled" disabled />
                 </td>
             </tr>
 			<tr>
@@ -281,6 +299,22 @@ function cgrid_meta_box_options( $post ) {
 						<option value="ASC" <?php if(isset($temp_order) && ($temp_order == 'ASC'))  echo 'selected="selected"'; ?>>ASC</option>
 						<option value="DESC" <?php if(isset($temp_order) && ($temp_order == 'DESC'))  echo 'selected="selected"'; ?>>DESC</option>
 					</select>
+                </td>
+            </tr>
+			<tr>
+            	<td class="cgrid-options col-1">
+                    <label for="cgrid_order">Taxonomy</label>
+				</td>
+				<td class="cgrid-options col-2">
+					<input type="text" name="cgrid_tax" id="cgrid_tax" placeholder="taxonomy_name" value="<?php echo esc_attr($temp_tax); ?>" />
+                </td>
+            </tr>
+			<tr>
+            	<td class="cgrid-options col-1">
+                    <label for="cgrid_order">Taxonomy terms</label>
+				</td>
+				<td class="cgrid-options col-2">
+					<input type="text" name="cgrid_tax_terms" id="cgrid_tax_terms" placeholder="term_slug1, term_slug2, term_slug3" value="<?php echo esc_attr($temp_tax_terms); ?>" />
                 </td>
             </tr>
 		</tbody>
@@ -382,13 +416,27 @@ function cgrid_meta_box_options( $post ) {
 					<p>Format: <code>meta / label / buttons separated by comma</code> (one per line)</p>
 					<textarea type="text" class="widefat cgrid-content" name="cgrid_filters"><?php echo esc_html($temp_filters); ?></textarea>
 					<p><strong>Notes:</strong></p>
-					<p>Filters only work with <code>%meta('x')%</code> and <code>%tax('x')%</code>.</p>
+					<p>Filters only work with <code>%meta('field_name')%</code> and <code>%tax('taxonomy_name')%</code>.</p>
 					<p>To filter by the 'color' meta field, with the default button called "All Colors" and filters for the colors Blue, Red and Yellow, you should enter the following in the Filter textarea:</p>
 					<p><code>%meta('color')% / Colors / Blue, Red, Yellow</code></p>
 				</td>
             </tr>
 		</tbody>
 	</table>
+	
+	<script>
+		sortByMetaField();
+		function sortByMetaField(sender) {
+			let val = document.getElementById("cgrid_orderby").value;
+			if (val == "meta_value") {
+				jQuery("#cgrid_orderby_meta").removeClass("meta-disabled");	
+				jQuery("#cgrid_orderby_meta").prop( "disabled", false );
+			} else {
+				jQuery("#cgrid_orderby_meta").addClass("meta-disabled");
+				jQuery("#cgrid_orderby_meta").prop( "disabled", true );
+			}
+		}
+	</script>
     <?php
 }
 
@@ -510,7 +558,11 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	// Save _cgrid_options
 	$cgrid_posttype = sanitize_text_field($_POST['cgrid_posttype']);
 	$cgrid_orderby = sanitize_text_field($_POST['cgrid_orderby']);
+	$cgrid_orderby_meta = wp_filter_post_kses($_POST['cgrid_orderby_meta']);
 	$cgrid_order = sanitize_text_field($_POST['cgrid_order']);
+	$cgrid_num = wp_filter_post_kses($_POST['cgrid_num']);
+	$cgrid_tax = wp_filter_post_kses($_POST['cgrid_tax']);
+	$cgrid_tax_terms = wp_filter_post_kses($_POST['cgrid_tax_terms']);
 	$cgrid_sorting = wp_filter_post_kses($_POST['cgrid_sorting']);
 	$cgrid_filters = wp_filter_post_kses($_POST['cgrid_filters']);
 	
@@ -541,7 +593,11 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	$new = array();
 	$new['cgrid_posttype'] = empty($cgrid_posttype) ? 'post' : wp_strip_all_tags($cgrid_posttype);
 	$new['cgrid_orderby'] = empty($cgrid_orderby) ? 'date' : wp_strip_all_tags($cgrid_orderby);
+	$new['cgrid_orderby_meta'] = empty($cgrid_orderby_meta) ? '' : wp_strip_all_tags($cgrid_orderby_meta);
 	$new['cgrid_order'] = empty($cgrid_order) ? 'ASC' : wp_strip_all_tags($cgrid_order);
+	$new['cgrid_num'] = empty($cgrid_num) ? '-1' : wp_strip_all_tags($cgrid_num);
+	$new['cgrid_tax'] = empty($cgrid_tax) ? '' : wp_strip_all_tags($cgrid_tax);
+	$new['cgrid_tax_terms'] = empty($cgrid_tax_terms) ? '' : wp_strip_all_tags($cgrid_tax_terms);
 	$new['cgrid_sorting'] = empty($cgrid_sorting) ? '' : wp_filter_post_kses($cgrid_sorting);
 	$new['cgrid_filters'] = empty($cgrid_filters) ? '' : wp_filter_post_kses($cgrid_filters);
 	

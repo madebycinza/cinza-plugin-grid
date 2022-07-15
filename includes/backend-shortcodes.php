@@ -39,13 +39,63 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 
     // Retrieves an array of the latest posts, or posts matching the given criteria
     // https://developer.wordpress.org/reference/functions/get_posts/
-	$args = array(
-		'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
-		'post_status' => 'publish',
-		'numberposts' => -1,
-		'orderby' => esc_attr($cgrid_options['cgrid_orderby']),
-		'order' => esc_attr($cgrid_options['cgrid_order']),
-	);
+    $aux_orderby_meta = esc_attr($cgrid_options['cgrid_orderby']) === "meta_value";
+    $aux_taxonomy = !empty(esc_attr($cgrid_options['cgrid_tax'])) && !empty(esc_attr($cgrid_options['cgrid_tax_terms']));
+    $aux_taxonomy_terms = explode (",", esc_attr($cgrid_options['cgrid_tax_terms'])); 
+    
+    if ($aux_orderby_meta && $aux_taxonomy) {
+	    echo('Scenario 1');
+		$args = array(
+			'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
+			'post_status' => 'publish',
+			'numberposts' => esc_attr($cgrid_options['cgrid_num']),
+			'meta_key' => esc_attr($cgrid_options['cgrid_orderby_meta']),
+			'orderby' => 'meta_value',
+			'order' => esc_attr($cgrid_options['cgrid_order']),
+		    'tax_query' => array(
+		        array(
+		            'taxonomy' => esc_attr($cgrid_options['cgrid_tax']),
+		            'field'    => 'slug',
+		            'terms'    => $aux_taxonomy_terms,
+		        ),
+		    ),
+		);
+    } else if (!$aux_orderby_meta && $aux_taxonomy) {
+	    echo('Scenario 2');
+		$args = array(
+			'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
+			'post_status' => 'publish',
+			'numberposts' => esc_attr($cgrid_options['cgrid_num']),
+			'orderby' => esc_attr($cgrid_options['cgrid_orderby']),
+			'order' => esc_attr($cgrid_options['cgrid_order']),
+		    'tax_query' => array(
+		        array(
+		            'taxonomy' => esc_attr($cgrid_options['cgrid_tax']),
+		            'field'    => 'slug',
+		            'terms'    => $aux_taxonomy_terms,
+		        ),
+		    ),
+		);
+    } else if ($aux_orderby_meta && !$aux_taxonomy) {
+	    echo('Scenario 3');
+		$args = array(
+			'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
+			'post_status' => 'publish',
+			'numberposts' => esc_attr($cgrid_options['cgrid_num']),
+			'meta_key' => esc_attr($cgrid_options['cgrid_orderby_meta']),
+			'orderby' => 'meta_value',
+			'order' => esc_attr($cgrid_options['cgrid_order']),
+		);
+    } else {
+	    echo('Scenario 4');
+		$args = array(
+			'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
+			'post_status' => 'publish',
+			'numberposts' => esc_attr($cgrid_options['cgrid_num']),
+			'orderby' => esc_attr($cgrid_options['cgrid_orderby']),
+			'order' => esc_attr($cgrid_options['cgrid_order']),
+		);
+    }
 	$posts = get_posts( $args );
 	
 	// Sorting

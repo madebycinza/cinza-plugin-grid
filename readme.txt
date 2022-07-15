@@ -4,7 +4,7 @@ Tags: grid, post grid, display post, metafizzy, isotope
 Requires at least: 5.2
 Tested up to: 6.0
 Requires PHP: 7.2
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,11 @@ Upload the Cinza Grid plugin to your WordPress site, activate it, and start crea
 2. Grid skin settings
 
 == Changelog ==
+= 1.0.3 =
+*Release Date - 14th July, 2022*
+
+* Added new parameters for WP Query: number of items, order by meta field, taxonomy and taxonomy terms
+
 = 1.0.2 =
 *Release Date - 14th July, 2022*
 
