@@ -4,7 +4,7 @@
  * Plugin Name:       Cinza Grid
  * Plugin URI:        https://cinza.io/plugin/grid
  * Description:       A minimal grid plugin.
- * Version:           1.0.3
+ * Version:           1.0.4
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Cinza Web Design

@@ -44,7 +44,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
     $aux_taxonomy_terms = explode (",", esc_attr($cgrid_options['cgrid_tax_terms'])); 
     
     if ($aux_orderby_meta && $aux_taxonomy) {
-	    echo('Scenario 1');
+	    //echo('Scenario 1');
 		$args = array(
 			'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
 			'post_status' => 'publish',
@@ -61,7 +61,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 		    ),
 		);
     } else if (!$aux_orderby_meta && $aux_taxonomy) {
-	    echo('Scenario 2');
+	    //echo('Scenario 2');
 		$args = array(
 			'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
 			'post_status' => 'publish',
@@ -77,7 +77,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 		    ),
 		);
     } else if ($aux_orderby_meta && !$aux_taxonomy) {
-	    echo('Scenario 3');
+	    //echo('Scenario 3');
 		$args = array(
 			'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
 			'post_status' => 'publish',
@@ -87,7 +87,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 			'order' => esc_attr($cgrid_options['cgrid_order']),
 		);
     } else {
-	    echo('Scenario 4');
+	    //echo('Scenario 4');
 		$args = array(
 			'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
 			'post_status' => 'publish',
@@ -148,59 +148,60 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	    $filters .= '</div>';	    
     }
 	
-	?><script>
+	$script = "<script>
 	jQuery(document).ready(function($) {
-	    var $grid = $('<?php echo "#cinza-grid-".$grid_id.""; ?>').isotope({
+		
+	    var grid = $('#cinza-grid-".$grid_id."').isotope({
 	        itemSelector: '.cinza-grid-item',
 	        layoutMode: 'fitRows',
-	        getSortData: {<?php echo $sorts_data; ?>}
+	        getSortData: {".$sorts_data."}
 	    });
 	    
-	    <?php if(!empty($sorts)) { ?>
+	    if( '".$sorts."' != '' ) {
 	    	// bind sort button click
-		    $('<?php echo "#cinza-grid-".$grid_id."-sorts"; ?>').on( 'click', 'button', function() {
+		    $('#cinza-grid-".$grid_id."-sorts').on( 'click', 'button', function() {
 		        var sortByValue = $(this).attr('data-sort-by');
-		        $grid.isotope({ sortBy: sortByValue });
+		        grid.isotope({ sortBy: sortByValue });
 		    });
 		    
 		    // change is-checked class on buttons
-		    $('<?php echo "#cinza-grid-".$grid_id."-sorts"; ?>').each( function( i, buttonGroup ) {
-		        var $buttonGroup = $( buttonGroup );
-		        $buttonGroup.on( 'click', 'button', function() {
-		        $buttonGroup.find('.is-checked').removeClass('is-checked');
+		    $('#cinza-grid-".$grid_id."-sorts').each( function( i, buttonGroup ) {
+		        var buttonGroup = $( buttonGroup );
+		        buttonGroup.on( 'click', 'button', function() {
+		        buttonGroup.find('.is-checked').removeClass('is-checked');
 		        $( this ).addClass('is-checked');
 		        });
 		    });			    
-		<?php } ?>
+		}
 		
-	    <?php if(!empty($filters)) { ?>
+	    if( '".$filters."' != '' ) {
 			// store filter for each group
 			var filters = {};
 			
-			$('<?php echo "#cinza-grid-".$grid_id."-filters"; ?>').on( 'click', '.button', function( event ) {
-				var $button = $( event.currentTarget );
+			$('#cinza-grid-".$grid_id."-filters').on( 'click', '.button', function( event ) {
+				var button = $( event.currentTarget );
 				
 				// get group key
-				var $buttonGroup = $button.parents('.cinza-grid-button-group');
-				var filterGroup = $buttonGroup.attr('data-filter-group');
+				var buttonGroup = button.parents('.cinza-grid-button-group');
+				var filterGroup = buttonGroup.attr('data-filter-group');
 				
 				// set filter for group
-				filters[ filterGroup ] = $button.attr('data-filter');
+				filters[ filterGroup ] = button.attr('data-filter');
 				
 				// combine filters
 				var filterValue = concatValues( filters );
 				
 				// set filter for Isotope
-				$grid.isotope({ filter: filterValue });
+				grid.isotope({ filter: filterValue });
 			});
 			
 			// change is-checked class on buttons
 			$('.cinza-grid-button-group').each( function( i, buttonGroup ) {
-				var $buttonGroup = $( buttonGroup );
-				$buttonGroup.on( 'click', 'button', function( event ) {
-					$buttonGroup.find('.is-checked').removeClass('is-checked');
-					var $button = $( event.currentTarget );
-					$button.addClass('is-checked');
+				var buttonGroup = $( buttonGroup );
+				buttonGroup.on( 'click', 'button', function( event ) {
+					buttonGroup.find('.is-checked').removeClass('is-checked');
+					var button = $( event.currentTarget );
+					button.addClass('is-checked');
 				});
 			});
 			  
@@ -210,9 +211,9 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 				for ( var prop in obj ) value += obj[ prop ];
 				return value;
 			}
-		<?php } ?>	    
+		}	    
 	});
-	</script><?php
+	</script>";
 
     // Grid items
     $grid = '<div id="cinza-grid-'.$grid_id.'" class="cinza-grid">';    
@@ -275,7 +276,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 				//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";					
 			}
 			
-			$filter_classes .= " ".str_replace(' ', '-', filter_meta_replace($post, $filters_temp));
+			$filter_classes .= filter_meta_replace($post, $filters_temp);
 			
 			// Replace taxonomy meta (without link and without separator)
 			while(strpos($grid_item, '%tax(') !== false){
@@ -314,7 +315,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 				}
 			}
 			
-			$filter_classes .= " ".str_replace(' ', '-', filter_tax_replace($post, $filters_temp));
+			$filter_classes .= filter_tax_replace($post, $filters_temp);
 			
 			// Replace taxonomy meta (without link and with separator)
 			while(strpos($grid_item, '%taxsep(') !== false){
@@ -412,116 +413,122 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
     $grid .= '</div>';
     
     // Style
-    $style = "<style>";
+    $style = "<style>
+    	";
     
-    	// Breakpoint 1 -----
-	    $style .= "@media (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_2']-1) ."px) {
+	    $style .= "/* ----- Breakpoint 1 ----- */
+	    @media only screen and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_2']-1) ."px) {
 			.cinza-grid {
 				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px); 
 				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_2']) ."px / 2);
 			}
 			.cinza-grid-item {
-				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_1']) ." - ". esc_attr($cgrid_options['cgrid_spacing_1']) ."px); 
+				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_1']) ." - ". esc_attr($cgrid_options['cgrid_spacing_1']) ."px - 1px); /* -1px to be safe */
 				min-height: ". esc_attr($cgrid_options['cgrid_height_1']) ."px;
 				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_1']) ."px / 2);
 			}";
 			
 		    if (esc_attr($cgrid_options['cgrid_columns_1']) == 1) {
 			    $style .= "
-					.cinza-grid {width: 100%; margin: 0px;}
-					.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_1']) ."px 0px;}
-					.cinza-grid-item:last-child {margin-bottom: 0px;}
-			    ";		    
+				.cinza-grid {width: 100%; margin: 0px;}
+				.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_1']) ."px 0px;}
+				.cinza-grid-item:last-child {margin-bottom: 0px;}";		    
 		    }
-	    $style .= "}";
+	    $style .= "
+	    }
+	    ";
 
-    	// Breakpoint 2 -----
-	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_2']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_3']-1) ."px) {
+		$style .= "/* ----- Breakpoint 2 ----- */
+	    @media only screen and (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_2']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_3']-1) ."px) {
 			.cinza-grid {
 				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px); 
 				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_2']) ."px / 2);
 			}
 			.cinza-grid-item {
-				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_2']) ." - ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px); 
+				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_2']) ." - ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px - 1px); /* -1px to be safe */
 				min-height: ". esc_attr($cgrid_options['cgrid_height_2']) ."px;
 				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_2']) ."px / 2);
 			}";
 			
 		    if (esc_attr($cgrid_options['cgrid_columns_2']) == 1) {
 			    $style .= "
-					.cinza-grid {width: 100%; margin: 0px;}
-					.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px 0px;}
-					.cinza-grid-item:last-child {margin-bottom: 0px;}
-			    ";		    
+				.cinza-grid {width: 100%; margin: 0px;}
+				.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px 0px;}
+				.cinza-grid-item:last-child {margin-bottom: 0px;}";		    
 		    }
-	    $style .= "}";
+	    $style .= "
+	    }
+	    ";
 	    
-    	// Breakpoint 3 -----
-	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_3']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_4']-1) ."px) {
+    	$style .= "/* ----- Breakpoint 3 ----- */
+	    @media only screen and (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_3']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_4']-1) ."px) {
 			.cinza-grid {
 				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_3']) ."px); 
 				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_3']) ."px / 2);
 			}
 			.cinza-grid-item {
-				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_3']) ." - ". esc_attr($cgrid_options['cgrid_spacing_3']) ."px); 
+				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_3']) ." - ". esc_attr($cgrid_options['cgrid_spacing_3']) ."px - 1px); /* -1px to be safe */
 				min-height: ". esc_attr($cgrid_options['cgrid_height_3']) ."px;
 				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_3']) ."px / 2);
 			}";
 			
 		    if (esc_attr($cgrid_options['cgrid_columns_3']) == 1) {
 			    $style .= "
-					.cinza-grid {width: 100%; margin: 0px;}
-					.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_3']) ."px 0px;}
-					.cinza-grid-item:last-child {margin-bottom: 0px;}
-			    ";		    
+				.cinza-grid {width: 100%; margin: 0px;}
+				.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_3']) ."px 0px;}
+				.cinza-grid-item:last-child {margin-bottom: 0px;}";		    
 		    }
-	    $style .= "}";
+	    $style .= "
+	    }
+	    ";
 	    
-    	// Breakpoint 4 -----
-	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_4']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_5']-1) ."px) {
+	    $style .= "/* ----- Breakpoint 4 ----- */
+	    @media only screen and (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_4']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_5']-1) ."px) {
 			.cinza-grid {
 				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_4']) ."px); 
 				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_4']) ."px / 2);
 			}
 			.cinza-grid-item {
-				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_4']) ." - ". esc_attr($cgrid_options['cgrid_spacing_4']) ."px); 
+				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_4']) ." - ". esc_attr($cgrid_options['cgrid_spacing_4']) ."px - 1px); /* -1px to be safe */
 				min-height: ". esc_attr($cgrid_options['cgrid_height_4']) ."px;
 				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_4']) ."px / 2);
 			}";
 			
 		    if (esc_attr($cgrid_options['cgrid_columns_4']) == 1) {
 			    $style .= "
-					.cinza-grid {width: 100%; margin: 0px;}
-					.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_4']) ."px 0px;}
-					.cinza-grid-item:last-child {margin-bottom: 0px;}
-			    ";		    
+				.cinza-grid {width: 100%; margin: 0px;}
+				.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_4']) ."px 0px;}
+				.cinza-grid-item:last-child {margin-bottom: 0px;}";		    
 		    }
-	    $style .= "}";
+	    $style .= "
+	    }
+	    ";
 	    
-    	// Breakpoint 5 -----
-	    $style .= "@media (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_5']) ."px) {
+	    $style .= "/* ----- Breakpoint 5 ----- */
+	    @media only screen and (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_5']) ."px) {
 			.cinza-grid {
 				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_5']) ."px); 
 				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_5']) ."px / 2);
 			}
 			.cinza-grid-item {
-				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_5']) ." - ". esc_attr($cgrid_options['cgrid_spacing_5']) ."px); 
+				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_5']) ." - ". esc_attr($cgrid_options['cgrid_spacing_5']) ."px - 1px); /* -1px to be safe */
 				min-height: ". esc_attr($cgrid_options['cgrid_height_5']) ."px;
 				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_5']) ."px / 2);
 			}";
 			
 		    if (esc_attr($cgrid_options['cgrid_columns_5']) == 1) {
 			    $style .= "
-					.cinza-grid {width: 100%; margin: 0px;}
-					.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_5']) ."px 0px;}
-					.cinza-grid-item:last-child {margin-bottom: 0px;}
-			    ";		    
+				.cinza-grid {width: 100%; margin: 0px;}
+				.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_5']) ."px 0px;}
+				.cinza-grid-item:last-child {margin-bottom: 0px;}";		    
 		    }
-	    $style .= "}";
+	    $style .= "
+	    }
+	    ";
 	    
     $style .= "</style>";
     
-    return $debug . $sorts . $filters . $grid . $style;
+    return $debug . $sorts . $filters . $grid . $style . $script;
 }
 
 function filter_meta_replace($post, $filters_temp) {
@@ -532,7 +539,7 @@ function filter_meta_replace($post, $filters_temp) {
 		$meta_code = substr($filters_temp, $meta_start_position+1, $meta_close_paranthesis-$meta_start_position);
 		$meta_code_args = substr($filters_temp, $meta_open_paranthesis+2, $meta_close_paranthesis-$meta_open_paranthesis-3);
 		$meta_formatted = get_post_meta( $post->ID, $meta_code_args, true );
-		return strtolower($meta_formatted);
+		return " ".str_replace(' ', '-', strtolower($meta_formatted));
 	}	
 }
 
@@ -547,11 +554,10 @@ function filter_tax_replace($post, $filters_temp) {
 		if( $term_list && ! is_wp_error( $term_list ) ) {
 			$terms_array = array();				
 			foreach ( $term_list as $term ) {
-				$terms_array[] = esc_attr( $term->name );
+				$terms_array[] = str_replace(' ', '-', esc_attr($term->name) );
 			}
-			$terms_string = join( ' ', $terms_array );
-			$tax_formatted = $terms_string;
-			return strtolower($tax_formatted);
+			$tax_formatted = join( ' ', $terms_array );
+			return " ".strtolower($tax_formatted);
 		}
 	}
 }
