@@ -4,7 +4,7 @@ Tags: grid, post grid, display post, metafizzy, isotope
 Requires at least: 5.2
 Tested up to: 6.0
 Requires PHP: 7.2
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,15 +22,22 @@ Upload the Cinza Grid plugin to your WordPress site, activate it, and start crea
 
 == Changelog ==
 
+= 1.0.5 =
+*Release Date - 20th July, 2022*
+
+* Added custom skin meta for content
+* Set transition duration to 0.4 seconds
+* Style fixes
+
 = 1.0.4 =
 *Release Date - 15th July, 2022*
 
-- Fixed dynamic frontend style
-- Fixed JavaScript console errors 
-- Fixed filter tags for grid items
-- Fixed filter_meta_replace and filter_tax_replace
-- Removed duplicated Metafizzy script 
-- Removed skin debug strings for WP Queries
+* Fixed dynamic frontend style
+* Fixed JavaScript console errors 
+* Fixed filter tags for grid items
+* Fixed filter_meta_replace and filter_tax_replace
+* Removed duplicated Metafizzy script 
+* Removed skin debug strings for WP Queries
 
 = 1.0.3 =
 *Release Date - 14th July, 2022*

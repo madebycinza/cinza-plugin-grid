@@ -484,6 +484,10 @@ function cgrid_meta_box_skin() {
 							<td><em>Returns post featured image URL</em></td>
 						</tr>
 						<tr>
+							<td><code>%content%</code></td>
+							<td><em>Returns post content</em></td>
+						</tr>
+						<tr>
 							<td><code>%date%</code></td>
 							<td><em>Returns date in the default format</em></td>
 						</tr>

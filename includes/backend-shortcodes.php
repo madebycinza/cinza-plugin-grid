@@ -154,6 +154,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	    var grid = $('#cinza-grid-".$grid_id."').isotope({
 	        itemSelector: '.cinza-grid-item',
 	        layoutMode: 'fitRows',
+	        transitionDuration: '0.4s',
 	        getSortData: {".$sorts_data."}
 	    });
 	    
@@ -397,6 +398,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 		    	'%date%',
 		    	'%img%',
 		    	'%imgurl%',
+		    	'%content%',
 		    );
 		    
 		    $code2 = array(
@@ -405,6 +407,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 		    	get_the_date('F j, Y', $post->ID),
 		    	get_the_post_thumbnail($post->ID),
 		    	get_the_post_thumbnail_url($post->ID),
+		    	get_post_field('post_content', $post->ID),
 		    );
 		    
 			$grid .= '<div class="cinza-grid-item cinza-grid-'. $post->ID . $filter_classes.'">'. str_replace($code1, $code2, $grid_item) .'</div>';
