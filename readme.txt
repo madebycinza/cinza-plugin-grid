@@ -4,7 +4,7 @@ Tags: grid, post grid, display post, metafizzy, isotope
 Requires at least: 5.2
 Tested up to: 6.0
 Requires PHP: 7.2
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,18 @@ Upload the Cinza Grid plugin to your WordPress site, activate it, and start crea
 2. Grid skin settings
 
 == Changelog ==
+
+= 1.0.6 =
+*Release Date - 15th September, 2022*
+
+* Added new full width option
+* Added new javascript function for URL query filter
+* Added '%slug%' meta
+* Added condition to check if Rank Math is active before filter exclude_post_type
+* Added new Rank Math filter set robots to noindex nofollow
+* Added new function for breakpoint styling
+* Improved meta field validations
+* Improved '%content%' meta
 
 = 1.0.5 =
 *Release Date - 20th July, 2022*

@@ -37,24 +37,61 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
         return "<p class='cgrid-error'>ERROR: This Cinza Grid is not published yet.</p>";
     }
 
+    // Get setting values with validation
+	$cgrid_posttype = isset($cgrid_options['cgrid_posttype']) ? esc_attr($cgrid_options['cgrid_posttype']) : 'post';
+	$cgrid_orderby = isset($cgrid_options['cgrid_orderby']) ? esc_attr($cgrid_options['cgrid_orderby']) : 'date';
+	$cgrid_orderby_meta = isset($cgrid_options['cgrid_orderby_meta']) ? esc_attr($cgrid_options['cgrid_orderby_meta']) : '';
+	$cgrid_order = isset($cgrid_options['cgrid_order']) ? esc_attr($cgrid_options['cgrid_order']) : 'ASC';
+	$cgrid_num = isset($cgrid_options['cgrid_num']) ? esc_attr($cgrid_options['cgrid_num']) : '-1';
+	$cgrid_tax = isset($cgrid_options['cgrid_tax']) ? esc_attr($cgrid_options['cgrid_tax']) : '';
+	$cgrid_tax_terms = isset($cgrid_options['cgrid_tax_terms']) ? esc_attr($cgrid_options['cgrid_tax_terms']) : '';
+	$cgrid_full_width = isset($cgrid_options['cgrid_full_width']) ? esc_attr($cgrid_options['cgrid_full_width']) : '0';
+	$cgrid_sorting = isset($cgrid_options['cgrid_sorting']) ? esc_attr($cgrid_options['cgrid_sorting']) : '';
+	$cgrid_filters = isset($cgrid_options['cgrid_filters']) ? esc_attr($cgrid_options['cgrid_filters']) : '';
+
+	$cgrid_breakpoint_1 = 1;
+	$cgrid_columns_1 = isset($cgrid_options['cgrid_columns_1']) ? esc_attr($cgrid_options['cgrid_columns_1']) : '1';
+	$cgrid_height_1 = isset($cgrid_options['cgrid_height_1']) ? esc_attr($cgrid_options['cgrid_height_1']) : '0';
+	$cgrid_spacing_1 = isset($cgrid_options['cgrid_spacing_1']) ? esc_attr($cgrid_options['cgrid_spacing_1']) : '20';
+	
+	$cgrid_breakpoint_2 = isset($cgrid_options['cgrid_breakpoint_2']) ? esc_attr($cgrid_options['cgrid_breakpoint_2']) : '500';
+	$cgrid_columns_2 = isset($cgrid_options['cgrid_columns_2']) ? esc_attr($cgrid_options['cgrid_columns_2']) : '2';
+	$cgrid_height_2 = isset($cgrid_options['cgrid_height_2']) ? esc_attr($cgrid_options['cgrid_height_2']) : '0';
+	$cgrid_spacing_2 = isset($cgrid_options['cgrid_spacing_2']) ? esc_attr($cgrid_options['cgrid_spacing_2']) : '20';
+	
+	$cgrid_breakpoint_3 = isset($cgrid_options['cgrid_breakpoint_3']) ? esc_attr($cgrid_options['cgrid_breakpoint_3']) : '700';
+	$cgrid_columns_3 = isset($cgrid_options['cgrid_columns_3']) ? esc_attr($cgrid_options['cgrid_columns_3']) : '3';
+	$cgrid_height_3 = isset($cgrid_options['cgrid_height_3']) ? esc_attr($cgrid_options['cgrid_height_3']) : '0';
+	$cgrid_spacing_3 = isset($cgrid_options['cgrid_spacing_3']) ? esc_attr($cgrid_options['cgrid_spacing_3']) : '20';
+	
+	$cgrid_breakpoint_4 = isset($cgrid_options['cgrid_breakpoint_4']) ? esc_attr($cgrid_options['cgrid_breakpoint_4']) : '900';
+	$cgrid_columns_4 = isset($cgrid_options['cgrid_columns_4']) ? esc_attr($cgrid_options['cgrid_columns_4']) : '4';
+	$cgrid_height_4 = isset($cgrid_options['cgrid_height_4']) ? esc_attr($cgrid_options['cgrid_height_4']) : '0';
+	$cgrid_spacing_4 = isset($cgrid_options['cgrid_spacing_4']) ? esc_attr($cgrid_options['cgrid_spacing_4']) : '20';
+	
+	$cgrid_breakpoint_5 = isset($cgrid_options['cgrid_breakpoint_5']) ? esc_attr($cgrid_options['cgrid_breakpoint_5']) : '1200';
+	$cgrid_columns_5 = isset($cgrid_options['cgrid_columns_5']) ? esc_attr($cgrid_options['cgrid_columns_5']) : '5';
+	$cgrid_height_5 = isset($cgrid_options['cgrid_height_5']) ? esc_attr($cgrid_options['cgrid_height_5']) : '0';
+	$cgrid_spacing_5 = isset($cgrid_options['cgrid_spacing_5']) ? esc_attr($cgrid_options['cgrid_spacing_5']) : '20';
+
     // Retrieves an array of the latest posts, or posts matching the given criteria
     // https://developer.wordpress.org/reference/functions/get_posts/
-    $aux_orderby_meta = esc_attr($cgrid_options['cgrid_orderby']) === "meta_value";
-    $aux_taxonomy = !empty(esc_attr($cgrid_options['cgrid_tax'])) && !empty(esc_attr($cgrid_options['cgrid_tax_terms']));
-    $aux_taxonomy_terms = explode (",", esc_attr($cgrid_options['cgrid_tax_terms'])); 
+    $aux_orderby_meta = $cgrid_orderby === "meta_value";
+    $aux_taxonomy = !empty($cgrid_tax) && !empty($cgrid_tax_terms);
+    $aux_taxonomy_terms = explode (",", $cgrid_tax_terms); 
     
     if ($aux_orderby_meta && $aux_taxonomy) {
 	    //echo('Scenario 1');
 		$args = array(
-			'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
+			'post_type' => $cgrid_posttype,
 			'post_status' => 'publish',
-			'numberposts' => esc_attr($cgrid_options['cgrid_num']),
-			'meta_key' => esc_attr($cgrid_options['cgrid_orderby_meta']),
+			'numberposts' => $cgrid_num,
+			'meta_key' => $cgrid_orderby_meta,
 			'orderby' => 'meta_value',
-			'order' => esc_attr($cgrid_options['cgrid_order']),
+			'order' => $cgrid_order,
 		    'tax_query' => array(
 		        array(
-		            'taxonomy' => esc_attr($cgrid_options['cgrid_tax']),
+		            'taxonomy' => $cgrid_tax,
 		            'field'    => 'slug',
 		            'terms'    => $aux_taxonomy_terms,
 		        ),
@@ -63,14 +100,14 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
     } else if (!$aux_orderby_meta && $aux_taxonomy) {
 	    //echo('Scenario 2');
 		$args = array(
-			'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
+			'post_type' => $cgrid_posttype,
 			'post_status' => 'publish',
-			'numberposts' => esc_attr($cgrid_options['cgrid_num']),
-			'orderby' => esc_attr($cgrid_options['cgrid_orderby']),
-			'order' => esc_attr($cgrid_options['cgrid_order']),
+			'numberposts' => $cgrid_num,
+			'orderby' => $cgrid_orderby,
+			'order' => $cgrid_order,
 		    'tax_query' => array(
 		        array(
-		            'taxonomy' => esc_attr($cgrid_options['cgrid_tax']),
+		            'taxonomy' => $cgrid_tax,
 		            'field'    => 'slug',
 		            'terms'    => $aux_taxonomy_terms,
 		        ),
@@ -79,21 +116,21 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
     } else if ($aux_orderby_meta && !$aux_taxonomy) {
 	    //echo('Scenario 3');
 		$args = array(
-			'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
+			'post_type' => $cgrid_posttype,
 			'post_status' => 'publish',
-			'numberposts' => esc_attr($cgrid_options['cgrid_num']),
-			'meta_key' => esc_attr($cgrid_options['cgrid_orderby_meta']),
+			'numberposts' => $cgrid_num,
+			'meta_key' => $cgrid_orderby_meta,
 			'orderby' => 'meta_value',
-			'order' => esc_attr($cgrid_options['cgrid_order']),
+			'order' => $cgrid_order,
 		);
     } else {
 	    //echo('Scenario 4');
 		$args = array(
-			'post_type' => esc_attr($cgrid_options['cgrid_posttype']),
+			'post_type' => $cgrid_posttype,
 			'post_status' => 'publish',
-			'numberposts' => esc_attr($cgrid_options['cgrid_num']),
-			'orderby' => esc_attr($cgrid_options['cgrid_orderby']),
-			'order' => esc_attr($cgrid_options['cgrid_order']),
+			'numberposts' => $cgrid_num,
+			'orderby' => $cgrid_orderby,
+			'order' => $cgrid_order,
 		);
     }
 	$posts = get_posts( $args );
@@ -101,11 +138,10 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	// Sorting
 	$sorts = '';
 	$sorts_data = '';
-	$sorts_temp = empty($cgrid_options['cgrid_sorting']) ? '' : $cgrid_options['cgrid_sorting'];
 	
-	if(!empty($sorts_temp)) {
+	if(!empty($cgrid_sorting)) {
 		$sorts .= '<div id="cinza-grid-'.$grid_id.'-sorts" class="cinza-grid-button-group">';
-			$sort_lines = preg_split("/\r\n|\n|\r/", $sorts_temp);
+			$sort_lines = preg_split("/\r\n|\n|\r/", $cgrid_sorting);
 			
 			// First button
 			$sorts .= '<button class="button is-checked" data-sort-by="original-order">Original order</button>';
@@ -140,7 +176,8 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 						// All other buttons
 						$filter_buttons = explode (",", $filter_atts[2]); 
 						foreach ($filter_buttons as $filter_button) {
-							$filters .= '<button class="button" data-filter=".'. str_replace(' ', '-', trim(strtolower($filter_button))) .'">'. trim($filter_button) .'</button>';	
+							$button_dashed = str_replace(' ', '-', trim(strtolower($filter_button)));
+							$filters .= '<button class="button" id="'. $button_dashed .'" data-filter=".'. $button_dashed .'">'. trim($filter_button) .'</button>';	
 						}
 					$filters .= '</div>';					
 				}
@@ -212,7 +249,38 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 				for ( var prop in obj ) value += obj[ prop ];
 				return value;
 			}
-		}	    
+		}
+
+		// URL query string 
+		// Example: https://razorfrog.dev/grid-shortcode-test/#filter=red
+		
+		function getHashFilter() {
+			// get filter=filterName
+			var matches = location.hash.match( /filter=([^&]+)/i );
+			var hashFilter = matches && matches[1];
+			return hashFilter && decodeURIComponent( hashFilter );
+		}
+		
+		var isIsotopeInit = false;
+		function onHashchange() {
+			var hashFilter = getHashFilter();
+			if ( !hashFilter && isIsotopeInit ) {
+				return;
+			}
+			isIsotopeInit = true;
+	
+			// set selected class on button
+			if ( hashFilter ) {
+				$('.cinza-grid-button-group').find('.is-checked').removeClass('is-checked');
+				
+				var click_button = 'button#' + hashFilter;
+				$(click_button).click();
+				$(click_button).addClass('is-checked');
+			}
+		}
+		$(window).on( 'hashchange', onHashchange );
+		onHashchange();
+		
 	});
 	</script>";
 
@@ -394,7 +462,8 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 			
 		    $code1 = array(
 		    	'%title%', 
-		    	'%url%', 
+		    	'%url%',
+		    	'%slug%',
 		    	'%date%',
 		    	'%img%',
 		    	'%imgurl%',
@@ -404,10 +473,11 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 		    $code2 = array(
 		    	get_the_title($post->ID), 
 				get_permalink($post->ID), 
+				$post->post_name,
 		    	get_the_date('F j, Y', $post->ID),
 		    	get_the_post_thumbnail($post->ID),
 		    	get_the_post_thumbnail_url($post->ID),
-		    	get_post_field('post_content', $post->ID),
+	    	    wpautop($post->post_content)
 		    );
 		    
 			$grid .= '<div class="cinza-grid-item cinza-grid-'. $post->ID . $filter_classes.'">'. str_replace($code1, $code2, $grid_item) .'</div>';
@@ -416,119 +486,12 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
     $grid .= '</div>';
     
     // Style
-    $style = "<style>
-    	";
-    
-	    $style .= "/* ----- Breakpoint 1 ----- */
-	    @media only screen and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_2']-1) ."px) {
-			.cinza-grid {
-				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px); 
-				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_2']) ."px / 2);
-			}
-			.cinza-grid-item {
-				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_1']) ." - ". esc_attr($cgrid_options['cgrid_spacing_1']) ."px - 1px); /* -1px to be safe */
-				min-height: ". esc_attr($cgrid_options['cgrid_height_1']) ."px;
-				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_1']) ."px / 2);
-			}";
-			
-		    if (esc_attr($cgrid_options['cgrid_columns_1']) == 1) {
-			    $style .= "
-				.cinza-grid {width: 100%; margin: 0px;}
-				.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_1']) ."px 0px;}
-				.cinza-grid-item:last-child {margin-bottom: 0px;}";		    
-		    }
-	    $style .= "
-	    }
-	    ";
-
-		$style .= "/* ----- Breakpoint 2 ----- */
-	    @media only screen and (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_2']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_3']-1) ."px) {
-			.cinza-grid {
-				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px); 
-				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_2']) ."px / 2);
-			}
-			.cinza-grid-item {
-				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_2']) ." - ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px - 1px); /* -1px to be safe */
-				min-height: ". esc_attr($cgrid_options['cgrid_height_2']) ."px;
-				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_2']) ."px / 2);
-			}";
-			
-		    if (esc_attr($cgrid_options['cgrid_columns_2']) == 1) {
-			    $style .= "
-				.cinza-grid {width: 100%; margin: 0px;}
-				.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_2']) ."px 0px;}
-				.cinza-grid-item:last-child {margin-bottom: 0px;}";		    
-		    }
-	    $style .= "
-	    }
-	    ";
-	    
-    	$style .= "/* ----- Breakpoint 3 ----- */
-	    @media only screen and (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_3']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_4']-1) ."px) {
-			.cinza-grid {
-				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_3']) ."px); 
-				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_3']) ."px / 2);
-			}
-			.cinza-grid-item {
-				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_3']) ." - ". esc_attr($cgrid_options['cgrid_spacing_3']) ."px - 1px); /* -1px to be safe */
-				min-height: ". esc_attr($cgrid_options['cgrid_height_3']) ."px;
-				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_3']) ."px / 2);
-			}";
-			
-		    if (esc_attr($cgrid_options['cgrid_columns_3']) == 1) {
-			    $style .= "
-				.cinza-grid {width: 100%; margin: 0px;}
-				.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_3']) ."px 0px;}
-				.cinza-grid-item:last-child {margin-bottom: 0px;}";		    
-		    }
-	    $style .= "
-	    }
-	    ";
-	    
-	    $style .= "/* ----- Breakpoint 4 ----- */
-	    @media only screen and (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_4']) ."px) and (max-width: ". esc_attr($cgrid_options['cgrid_breakpoint_5']-1) ."px) {
-			.cinza-grid {
-				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_4']) ."px); 
-				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_4']) ."px / 2);
-			}
-			.cinza-grid-item {
-				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_4']) ." - ". esc_attr($cgrid_options['cgrid_spacing_4']) ."px - 1px); /* -1px to be safe */
-				min-height: ". esc_attr($cgrid_options['cgrid_height_4']) ."px;
-				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_4']) ."px / 2);
-			}";
-			
-		    if (esc_attr($cgrid_options['cgrid_columns_4']) == 1) {
-			    $style .= "
-				.cinza-grid {width: 100%; margin: 0px;}
-				.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_4']) ."px 0px;}
-				.cinza-grid-item:last-child {margin-bottom: 0px;}";		    
-		    }
-	    $style .= "
-	    }
-	    ";
-	    
-	    $style .= "/* ----- Breakpoint 5 ----- */
-	    @media only screen and (min-width: ". esc_attr($cgrid_options['cgrid_breakpoint_5']) ."px) {
-			.cinza-grid {
-				width: calc(100% + ". esc_attr($cgrid_options['cgrid_spacing_5']) ."px); 
-				margin: calc(-". esc_attr($cgrid_options['cgrid_spacing_5']) ."px / 2);
-			}
-			.cinza-grid-item {
-				width: calc(100% / ". esc_attr($cgrid_options['cgrid_columns_5']) ." - ". esc_attr($cgrid_options['cgrid_spacing_5']) ."px - 1px); /* -1px to be safe */
-				min-height: ". esc_attr($cgrid_options['cgrid_height_5']) ."px;
-				margin: calc(". esc_attr($cgrid_options['cgrid_spacing_5']) ."px / 2);
-			}";
-			
-		    if (esc_attr($cgrid_options['cgrid_columns_5']) == 1) {
-			    $style .= "
-				.cinza-grid {width: 100%; margin: 0px;}
-				.cinza-grid-item {width: 100%; margin: 0px 0px ". esc_attr($cgrid_options['cgrid_spacing_5']) ."px 0px;}
-				.cinza-grid-item:last-child {margin-bottom: 0px;}";		    
-		    }
-	    $style .= "
-	    }
-	    ";
-	    
+    $style = "<style>";
+		$style .= css_breakpoint($grid_id, $cgrid_breakpoint_1, $cgrid_columns_1, $cgrid_full_width, $cgrid_height_1, $cgrid_spacing_1);
+		$style .= css_breakpoint($grid_id, $cgrid_breakpoint_2, $cgrid_columns_2, $cgrid_full_width, $cgrid_height_2, $cgrid_spacing_2);
+		$style .= css_breakpoint($grid_id, $cgrid_breakpoint_3, $cgrid_columns_3, $cgrid_full_width, $cgrid_height_3, $cgrid_spacing_3);
+		$style .= css_breakpoint($grid_id, $cgrid_breakpoint_4, $cgrid_columns_4, $cgrid_full_width, $cgrid_height_4, $cgrid_spacing_4);
+		$style .= css_breakpoint($grid_id, $cgrid_breakpoint_5, $cgrid_columns_5, $cgrid_full_width, $cgrid_height_5, $cgrid_spacing_5);
     $style .= "</style>";
     
     return $debug . $sorts . $filters . $grid . $style . $script;
@@ -563,4 +526,72 @@ function filter_tax_replace($post, $filters_temp) {
 			return " ".strtolower($tax_formatted);
 		}
 	}
+}
+
+function css_breakpoint($grid_id, $breakpoint, $col, $full_width, $height, $space) {
+    $style = "
+    @media only screen and (min-width: ". $breakpoint ."px) {";
+		
+	    if (boolval($full_width)) {
+		    if ($col == 1) {
+			    $style .= "
+				#cinza-grid-".$grid_id." {
+	                width: calc(100vw - 2 * ". $space ."px);
+	                margin-left: calc(-50vw + ". $space ."px);
+			        position: relative; 
+			        left: 50%; 
+			        right: 50%;
+				}
+				#cinza-grid-".$grid_id." .cinza-grid-item {
+					width: 100%; 
+					margin: 0px 0px ". $space ."px 0px;
+				}
+				#cinza-grid-".$grid_id." .cinza-grid-item:last-child {
+					margin-bottom: 0px;
+				}";		    
+		    } else {
+		        $style .=  "	        
+		        #cinza-grid-".$grid_id." {
+	                width: calc(100vw - ". $space ."px);
+	                margin-left: calc(-50vw + ". $space ."px / 2);
+			        position: relative; 
+			        left: 50%; 
+			        right: 50%;
+	            }
+				#cinza-grid-".$grid_id." .cinza-grid-item {
+					width: calc(100% / ". $col ." - ". $space ."px - 0.5px); /* -0.5px to be safe */
+					min-height: ". $height ."px;
+					margin: calc(". $space ."px / 2);
+				}";
+		    }
+	    } else {
+		    if ($col == 1) {
+			    $style .= "
+				#cinza-grid-".$grid_id." {
+					width: 100%; 
+					margin: 0px; a: 0;
+				}
+				#cinza-grid-".$grid_id." .cinza-grid-item {
+					width: 100%; 
+					margin: 0px 0px ". $space ."px 0px;
+				}
+				#cinza-grid-".$grid_id." .cinza-grid-item:last-child {
+					margin-bottom: 0px;
+				}";			    
+		    } else {
+		        $style .=  "
+				#cinza-grid-".$grid_id." {
+					width: calc(100% + ". $space ."px); 
+					margin: 0 calc(-". $space ."px / 2);
+				}
+				#cinza-grid-".$grid_id." .cinza-grid-item {
+					width: calc(100% / ". $col ." - ". $space ."px - 0.5px); /* -0.5px to be safe */
+					min-height: ". $height ."px;
+					margin: calc(". $space ."px / 2);
+				}";
+		    }
+	    }
+    $style .= "}";
+	    
+	return $style;
 }

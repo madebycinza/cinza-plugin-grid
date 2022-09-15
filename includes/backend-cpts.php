@@ -115,16 +115,28 @@ function cgrid_remove_post_custom_fields() {
     remove_meta_box( 'postcustom' , 'cinza_grid' , 'normal' ); 
 }
 
-// Remove CPT from SEO sitemap (for Rank Math SEO plugin)
-// https://rankmath.com/kb/make-theme-rank-math-compatible/#exclude-post-type-from-sitemap
-add_filter( 'rank_math/sitemap/exclude_post_type', function ($exclude, $type) {
-    if ('cinza_grid' === $type) {
-        $exclude = true;
-    }
-    return $exclude;
-}, 10, 2);
+// Remove CPT from SEO sitemap and set robots to noindex nofollow (for Rank Math SEO plugin)
+if ( in_array( 'seo-by-rank-math/rank-math.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 
-// Remove CPT from SEO sitemap (for Yoast SEO plugin)
+	// https://rankmath.com/kb/make-theme-rank-math-compatible/#exclude-post-type-from-sitemap
+	add_filter( 'rank_math/sitemap/exclude_post_type', function ($exclude, $type) {
+	    if ($type === 'cinza_grid') {
+	        $exclude = true;
+	    }
+	    return $exclude;
+	}, 10, 2);	
+
+	// https://support.rankmath.com/ticket/cpt-noindex/
+	add_filter( 'rank_math/frontend/robots', function( $robots ) {
+		if(get_post_type() == 'cinza_grid' ) {
+			$robots['index'] = 'noindex';
+			$robots['follow'] = 'nofollow';
+		}
+		return $robots;
+	});
+}
+
+// [Possible future addition] Remove CPT from SEO sitemap (for Yoast SEO plugin)
 // https://developer.yoast.com/features/xml-sitemaps/api/#exclude-specific-posts
 // https://wordpress.org/support/topic/exclude-multiple-post-types-from-sitemap/
 
@@ -151,77 +163,41 @@ function cgrid_meta_box_options( $post ) {
 	wp_nonce_field( 'cgrid_meta_box_nonce', 'cgrid_meta_box_nonce' );
 	
 	// Set default values
-	$temp_posttype = 'post';
-	$temp_orderby = 'date';
-	$temp_orderby_meta = '';
-	$temp_order = 'ASC';
-	$temp_num = '-1';
-	$temp_tax = '';
-	$temp_tax_terms = '';
-	$temp_sorting = '';
-	$temp_filters = '';
+	$temp_posttype = isset($cgrid_options['cgrid_posttype']) ? esc_attr($cgrid_options['cgrid_posttype']) : 'post';
+	$temp_orderby = isset($cgrid_options['cgrid_orderby']) ? esc_attr($cgrid_options['cgrid_orderby']) : 'date';
+	$temp_orderby_meta = isset($cgrid_options['cgrid_orderby_meta']) ? esc_attr($cgrid_options['cgrid_orderby_meta']) : '';
+	$temp_order = isset($cgrid_options['cgrid_order']) ? esc_attr($cgrid_options['cgrid_order']) : 'ASC';
+	$temp_num = isset($cgrid_options['cgrid_num']) ? esc_attr($cgrid_options['cgrid_num']) : '-1';
+	$temp_tax = isset($cgrid_options['cgrid_tax']) ? esc_attr($cgrid_options['cgrid_tax']) : '';
+	$temp_tax_terms = isset($cgrid_options['cgrid_tax_terms']) ? esc_attr($cgrid_options['cgrid_tax_terms']) : '';
+	$temp_full_width = isset($cgrid_options['cgrid_full_width']) ? esc_attr($cgrid_options['cgrid_full_width']) : '0';
+	$temp_sorting = isset($cgrid_options['cgrid_sorting']) ? esc_attr($cgrid_options['cgrid_sorting']) : '';
+	$temp_filters = isset($cgrid_options['cgrid_filters']) ? esc_attr($cgrid_options['cgrid_filters']) : '';
 	
-	//$temp_breakpoint_1 = 1; not needed, always 1
-	$temp_columns_1 = 1;
-	$temp_height_1 = 0;
-	$temp_spacing_1 = 20;
+	$temp_breakpoint_1 = 1;
+	$temp_columns_1 = isset($cgrid_options['cgrid_columns_1']) ? esc_attr($cgrid_options['cgrid_columns_1']) : '1';
+	$temp_height_1 = isset($cgrid_options['cgrid_height_1']) ? esc_attr($cgrid_options['cgrid_height_1']) : '0';
+	$temp_spacing_1 = isset($cgrid_options['cgrid_spacing_1']) ? esc_attr($cgrid_options['cgrid_spacing_1']) : '20';
 	
-	$temp_breakpoint_2 = 500;
-	$temp_columns_2 = 2;
-	$temp_height_2 = 0;
-	$temp_spacing_2 = 20;
+	$temp_breakpoint_2 = isset($cgrid_options['cgrid_breakpoint_2']) ? esc_attr($cgrid_options['cgrid_breakpoint_2']) : '500';
+	$temp_columns_2 = isset($cgrid_options['cgrid_columns_2']) ? esc_attr($cgrid_options['cgrid_columns_2']) : '2';
+	$temp_height_2 = isset($cgrid_options['cgrid_height_2']) ? esc_attr($cgrid_options['cgrid_height_2']) : '0';
+	$temp_spacing_2 = isset($cgrid_options['cgrid_spacing_2']) ? esc_attr($cgrid_options['cgrid_spacing_2']) : '20';
 	
-	$temp_breakpoint_3 = 700;
-	$temp_columns_3 = 3;
-	$temp_height_3 = 0;
-	$temp_spacing_3 = 20;
+	$temp_breakpoint_3 = isset($cgrid_options['cgrid_breakpoint_3']) ? esc_attr($cgrid_options['cgrid_breakpoint_3']) : '700';
+	$temp_columns_3 = isset($cgrid_options['cgrid_columns_3']) ? esc_attr($cgrid_options['cgrid_columns_3']) : '3';
+	$temp_height_3 = isset($cgrid_options['cgrid_height_3']) ? esc_attr($cgrid_options['cgrid_height_3']) : '0';
+	$temp_spacing_3 = isset($cgrid_options['cgrid_spacing_3']) ? esc_attr($cgrid_options['cgrid_spacing_3']) : '20';
 	
-	$temp_breakpoint_4 = 900;
-	$temp_columns_4 = 4;
-	$temp_height_4 = 0;
-	$temp_spacing_4 = 20;
+	$temp_breakpoint_4 = isset($cgrid_options['cgrid_breakpoint_4']) ? esc_attr($cgrid_options['cgrid_breakpoint_4']) : '900';
+	$temp_columns_4 = isset($cgrid_options['cgrid_columns_4']) ? esc_attr($cgrid_options['cgrid_columns_4']) : '4';
+	$temp_height_4 = isset($cgrid_options['cgrid_height_4']) ? esc_attr($cgrid_options['cgrid_height_4']) : '0';
+	$temp_spacing_4 = isset($cgrid_options['cgrid_spacing_4']) ? esc_attr($cgrid_options['cgrid_spacing_4']) : '20';
 	
-	$temp_breakpoint_5 = 1200;
-	$temp_columns_5 = 5;
-	$temp_height_5 = 0;
-	$temp_spacing_5 = 20;
-	
-	// Get saved values
-	if ( !empty($cgrid_options) ) {
-		$temp_posttype = esc_attr($cgrid_options['cgrid_posttype']);
-		$temp_orderby = esc_attr($cgrid_options['cgrid_orderby']);
-		$temp_orderby_meta = esc_attr($cgrid_options['cgrid_orderby_meta']);
-		$temp_order = esc_attr($cgrid_options['cgrid_order']);
-		$temp_num = esc_attr($cgrid_options['cgrid_num']);
-		$temp_tax = esc_attr($cgrid_options['cgrid_tax']);
-		$temp_tax_terms = esc_attr($cgrid_options['cgrid_tax_terms']);
-		$temp_sorting = esc_attr($cgrid_options['cgrid_sorting']);
-		$temp_filters = esc_attr($cgrid_options['cgrid_filters']);
-		
-		$temp_columns_1 = esc_attr($cgrid_options['cgrid_columns_1']);
-		$temp_height_1 = esc_attr($cgrid_options['cgrid_height_1']);
-		$temp_spacing_1 = esc_attr($cgrid_options['cgrid_spacing_1']);
-		
-		$temp_breakpoint_2 = esc_attr($cgrid_options['cgrid_breakpoint_2']);
-		$temp_columns_2 = esc_attr($cgrid_options['cgrid_columns_2']);
-		$temp_height_2 = esc_attr($cgrid_options['cgrid_height_2']);
-		$temp_spacing_2 = esc_attr($cgrid_options['cgrid_spacing_2']);
-		
-		$temp_breakpoint_3 = esc_attr($cgrid_options['cgrid_breakpoint_3']);
-		$temp_columns_3 = esc_attr($cgrid_options['cgrid_columns_3']);
-		$temp_height_3 = esc_attr($cgrid_options['cgrid_height_3']);
-		$temp_spacing_3 = esc_attr($cgrid_options['cgrid_spacing_3']);
-		
-		$temp_breakpoint_4 = esc_attr($cgrid_options['cgrid_breakpoint_4']);
-		$temp_columns_4 = esc_attr($cgrid_options['cgrid_columns_4']);
-		$temp_height_4 = esc_attr($cgrid_options['cgrid_height_4']);
-		$temp_spacing_4 = esc_attr($cgrid_options['cgrid_spacing_4']);
-		
-		$temp_breakpoint_5 = esc_attr($cgrid_options['cgrid_breakpoint_5']);
-		$temp_columns_5 = esc_attr($cgrid_options['cgrid_columns_5']);
-		$temp_height_5 = esc_attr($cgrid_options['cgrid_height_5']);
-		$temp_spacing_5 = esc_attr($cgrid_options['cgrid_spacing_5']);
-	}
+	$temp_breakpoint_5 = isset($cgrid_options['cgrid_breakpoint_5']) ? esc_attr($cgrid_options['cgrid_breakpoint_5']) : '1200';
+	$temp_columns_5 = isset($cgrid_options['cgrid_columns_5']) ? esc_attr($cgrid_options['cgrid_columns_5']) : '5';
+	$temp_height_5 = isset($cgrid_options['cgrid_height_5']) ? esc_attr($cgrid_options['cgrid_height_5']) : '0';
+	$temp_spacing_5 = isset($cgrid_options['cgrid_spacing_5']) ? esc_attr($cgrid_options['cgrid_spacing_5']) : '20';
 
 	?>
 	<table id="cgrid-optionset" width="100%">
@@ -329,6 +305,14 @@ function cgrid_meta_box_options( $post ) {
 			</tr>
 		</thead>
 		<tbody>
+			<tr>
+				<td class="cgrid-options col-1">
+					<label for="cgrid_full_width">Force full width display</label>
+				</td>
+				<td class="cgrid-options col-2">
+					<input type="checkbox" name="cgrid_full_width" id="cgrid_full_width" class="widefat cgrid-full_width" value="1" <?php checked('1', $temp_full_width); ?> />
+				</td>
+			</tr>
 			<tr class="size-headings">
 				<td class="cgrid-options col-1">Breakpoint</td>
 				<td class="cgrid-options col-2">Number of columns</td>
@@ -567,6 +551,7 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	$cgrid_num = wp_filter_post_kses($_POST['cgrid_num']);
 	$cgrid_tax = wp_filter_post_kses($_POST['cgrid_tax']);
 	$cgrid_tax_terms = wp_filter_post_kses($_POST['cgrid_tax_terms']);
+	$cgrid_full_width = isset($_POST['cgrid_full_width']) ? sanitize_key($_POST['cgrid_full_width']) : '';
 	$cgrid_sorting = wp_filter_post_kses($_POST['cgrid_sorting']);
 	$cgrid_filters = wp_filter_post_kses($_POST['cgrid_filters']);
 	
@@ -602,6 +587,7 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	$new['cgrid_num'] = empty($cgrid_num) ? '-1' : wp_strip_all_tags($cgrid_num);
 	$new['cgrid_tax'] = empty($cgrid_tax) ? '' : wp_strip_all_tags($cgrid_tax);
 	$new['cgrid_tax_terms'] = empty($cgrid_tax_terms) ? '' : wp_strip_all_tags($cgrid_tax_terms);
+	$new['cgrid_full_width'] = $cgrid_full_width ? '1' : '0';
 	$new['cgrid_sorting'] = empty($cgrid_sorting) ? '' : wp_filter_post_kses($cgrid_sorting);
 	$new['cgrid_filters'] = empty($cgrid_filters) ? '' : wp_filter_post_kses($cgrid_filters);
 	
