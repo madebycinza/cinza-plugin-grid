@@ -48,6 +48,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	$cgrid_full_width = isset($cgrid_options['cgrid_full_width']) ? esc_attr($cgrid_options['cgrid_full_width']) : '0';
 	$cgrid_sorting = isset($cgrid_options['cgrid_sorting']) ? esc_attr($cgrid_options['cgrid_sorting']) : '';
 	$cgrid_filters = isset($cgrid_options['cgrid_filters']) ? esc_attr($cgrid_options['cgrid_filters']) : '';
+	$cgrid_query_string = isset($cgrid_options['cgrid_query_string']) ? esc_attr($cgrid_options['cgrid_query_string']) : '0';
 
 	$cgrid_breakpoint_1 = 1;
 	$cgrid_columns_1 = isset($cgrid_options['cgrid_columns_1']) ? esc_attr($cgrid_options['cgrid_columns_1']) : '1';
@@ -144,7 +145,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 			$sort_lines = preg_split("/\r\n|\n|\r/", $cgrid_sorting);
 			
 			// First button
-			$sorts .= '<button class="button is-checked" data-sort-by="original-order">Original order</button>';
+			$sorts .= '<button class="button is-checked" data-sort-by="original-order">Default</button>';
 			
 			// All other buttons
 			foreach ($sort_lines as $sort_line) {
@@ -188,22 +189,26 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	$script = "<script>
 	jQuery(document).ready(function($) {
 		
-	    var grid = $('#cinza-grid-".$grid_id."').isotope({
+	    var grid = $('#cinza-grid-".$grid_id."').isotope
+	    ({
 	        itemSelector: '.cinza-grid-item',
 	        layoutMode: 'fitRows',
 	        transitionDuration: '0.4s',
 	        getSortData: {".$sorts_data."}
 	    });
 	    
-	    if( '".$sorts."' != '' ) {
+	    if( '".$sorts."' != '' ) 
+	    {
 	    	// bind sort button click
-		    $('#cinza-grid-".$grid_id."-sorts').on( 'click', 'button', function() {
+		    $('#cinza-grid-".$grid_id."-sorts').on( 'click', 'button', function() 
+		    {
 		        var sortByValue = $(this).attr('data-sort-by');
 		        grid.isotope({ sortBy: sortByValue });
 		    });
 		    
 		    // change is-checked class on buttons
-		    $('#cinza-grid-".$grid_id."-sorts').each( function( i, buttonGroup ) {
+		    $('#cinza-grid-".$grid_id."-sorts').each( function( i, buttonGroup ) 
+		    {
 		        var buttonGroup = $( buttonGroup );
 		        buttonGroup.on( 'click', 'button', function() {
 		        buttonGroup.find('.is-checked').removeClass('is-checked');
@@ -212,11 +217,14 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 		    });			    
 		}
 		
-	    if( '".$filters."' != '' ) {
+	    if( '".$filters."' != '' ) 
+	    {
 			// store filter for each group
 			var filters = {};
+			var filterButtonGroup = $('#cinza-grid-".$grid_id."-filters');
 			
-			$('#cinza-grid-".$grid_id."-filters').on( 'click', '.button', function( event ) {
+			filterButtonGroup.on( 'click', '.button', function( event ) 
+			{
 				var button = $( event.currentTarget );
 				
 				// get group key
@@ -231,51 +239,90 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 				
 				// set filter for Isotope
 				grid.isotope({ filter: filterValue });
-			});
+				
+				// change query string in real time
+				if( ".$cgrid_query_string." == 1 ) 
+				{
+					location.hash = 'filter=' + encodeURIComponent( filterValue );
+				}
+			});		
 			
 			// change is-checked class on buttons
-			$('.cinza-grid-button-group').each( function( i, buttonGroup ) {
+			$('.cinza-grid-button-group').each( function( i, buttonGroup ) 
+			{
 				var buttonGroup = $( buttonGroup );
-				buttonGroup.on( 'click', 'button', function( event ) {
+				buttonGroup.on( 'click', 'button', function( event ) 
+				{
 					buttonGroup.find('.is-checked').removeClass('is-checked');
-					var button = $( event.currentTarget );
-					button.addClass('is-checked');
+					$( event.currentTarget ).addClass('is-checked');
 				});
 			});
-			  
-			// flatten object by concatting values
-			function concatValues( obj ) {
-				var value = '';
-				for ( var prop in obj ) value += obj[ prop ];
-				return value;
+		}
+		
+		// flatten object by concatenating values
+		function concatValues( obj ) 
+		{
+			var value = '';
+			for ( var prop in obj ) 
+			{
+				value += obj[ prop ];
 			}
+			return value;
 		}
 
 		// URL query string 
-		// Example: https://razorfrog.dev/grid-shortcode-test/#filter=red
+		// Example: https://vinicius.razorfrog.dev/grid-shortcode-test/#filter=.blue
+		// Example: https://vinicius.razorfrog.dev/grid-shortcode-test/#filter=.blue.small.scrollto-rowID
 		
-		function getHashFilter() {
-			// get filter=filterName
+		function getHashFilter() 
+		{
 			var matches = location.hash.match( /filter=([^&]+)/i );
 			var hashFilter = matches && matches[1];
-			return hashFilter && decodeURIComponent( hashFilter );
+			return hashFilter && decodeURIComponent( hashFilter );  
 		}
 		
 		var isIsotopeInit = false;
-		function onHashchange() {
+		function onHashchange() 
+		{
 			var hashFilter = getHashFilter();
+			
 			if ( !hashFilter && isIsotopeInit ) {
 				return;
 			}
+			
 			isIsotopeInit = true;
-	
-			// set selected class on button
-			if ( hashFilter ) {
-				$('.cinza-grid-button-group').find('.is-checked').removeClass('is-checked');
+			
+			grid.isotope
+			({
+				itemSelector: '.cinza-grid-item',
+				filter: hashFilter
+			});
+			
+			if ( hashFilter ) 
+			{
+				// remove first dot so we don't have hashSplit[0] empty
+				var hashSplit = hashFilter.substring(1, hashFilter.length).split('.');
 				
-				var click_button = 'button#' + hashFilter;
-				$(click_button).click();
-				$(click_button).addClass('is-checked');
+				// checks if scrollto is in the query string
+				var scrollCheck = hashFilter.indexOf('scrollto');
+
+				// if scrollto is in found in the array
+				if ( scrollCheck > -1 ) 
+				{
+					// get scrollto ID, which should always be the last item in the array
+					var scrollID = '#' + hashSplit[hashSplit.length - 1].replace('scrollto-','');
+
+					// remove scrollto item from the array
+					hashSplit.splice(hashSplit.length - 1, 1);
+
+					// scroll to ID
+					document.querySelector(String(scrollID)).scrollIntoView({ behavior:  'smooth' });
+				} 
+				
+				hashSplit.forEach(element => 
+				{
+					filterButtonGroup.find('[data-filter=\".' + element + '\"]').click();
+				});
 			}
 		}
 		$(window).on( 'hashchange', onHashchange );

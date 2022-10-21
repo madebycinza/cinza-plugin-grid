@@ -80,11 +80,6 @@ tbody .column-shortcode {
 	justify-content: space-between;
 }
 
-#cgrid-shortcode .inside {
-    overflow: hidden;
-    padding: 12px;
-}
-
 #cgrid-shortcode .cgrid_shortcode_copy_input,
 tbody .column-shortcode .cgrid_shortcode_copy_input {
 	width: calc(100% - 90px);
