@@ -45,9 +45,11 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	$cgrid_num = isset($cgrid_options['cgrid_num']) ? esc_attr($cgrid_options['cgrid_num']) : '-1';
 	$cgrid_tax = isset($cgrid_options['cgrid_tax']) ? esc_attr($cgrid_options['cgrid_tax']) : '';
 	$cgrid_tax_terms = isset($cgrid_options['cgrid_tax_terms']) ? esc_attr($cgrid_options['cgrid_tax_terms']) : '';
-	$cgrid_full_width = isset($cgrid_options['cgrid_full_width']) ? esc_attr($cgrid_options['cgrid_full_width']) : '0';
 	$cgrid_sorting = isset($cgrid_options['cgrid_sorting']) ? esc_attr($cgrid_options['cgrid_sorting']) : '';
 	$cgrid_filters = isset($cgrid_options['cgrid_filters']) ? esc_attr($cgrid_options['cgrid_filters']) : '';
+	
+	$cgrid_layout = isset($cgrid_options['cgrid_layout']) ? esc_attr($cgrid_options['cgrid_layout']) : 'fitRows';
+	$cgrid_full_width = isset($cgrid_options['cgrid_full_width']) ? esc_attr($cgrid_options['cgrid_full_width']) : '0';
 	$cgrid_query_string = isset($cgrid_options['cgrid_query_string']) ? esc_attr($cgrid_options['cgrid_query_string']) : '0';
 
 	$cgrid_breakpoint_1 = 1;
@@ -172,13 +174,14 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 					$filters .= '<div class="cinza-grid-button-group" data-filter-group="'. trim(strtolower($filter_atts[1])) .'">';
 						
 						// First button
-						$filters .= '<button class="button is-checked" data-filter="*">All '. trim($filter_atts[1]) .'</button>';
+						$filters .= '<button class="button is-checked" data-filter="*">'. trim($filter_atts[1]) .'</button>';
 						
 						// All other buttons
 						$filter_buttons = explode (",", $filter_atts[2]); 
 						foreach ($filter_buttons as $filter_button) {
-							$button_dashed = str_replace(' ', '-', trim(strtolower($filter_button)));
-							$filters .= '<button class="button" id="'. $button_dashed .'" data-filter=".'. $button_dashed .'">'. trim($filter_button) .'</button>';	
+							$characters = array("&amp;", " ", "---");
+							$encoded_classes = str_replace($characters, '-', trim(strtolower($filter_button)));
+							$filters .= '<button class="button" id="'. $encoded_classes .'" data-filter=".'. $encoded_classes .'">'. trim($filter_button) .'</button>';	
 						}
 					$filters .= '</div>';					
 				}
@@ -186,13 +189,15 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	    $filters .= '</div>';	    
     }
 	
+	if ($cgrid_layout == "fitrows") $cgrid_layout = "fitRows";
+	
 	$script = "<script>
 	jQuery(document).ready(function($) {
 		
 	    var grid = $('#cinza-grid-".$grid_id."').isotope
 	    ({
 	        itemSelector: '.cinza-grid-item',
-	        layoutMode: 'fitRows',
+	        layoutMode: '".$cgrid_layout."',
 	        transitionDuration: '0.4s',
 	        getSortData: {".$sorts_data."}
 	    });
@@ -527,7 +532,9 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	    	    wpautop($post->post_content)
 		    );
 		    
-			$grid .= '<div class="cinza-grid-item cinza-grid-'. $post->ID . $filter_classes.'">'. str_replace($code1, $code2, $grid_item) .'</div>';
+			$characters = array("&amp;", "---");
+			$encoded_classes = str_replace($characters, '-', strtolower($filter_classes));
+			$grid .= '<div class="cinza-grid-item cinza-grid-'. $post->ID . $encoded_classes.'">'. str_replace($code1, $code2, $grid_item) .'</div>';
 		}
 	}
     $grid .= '</div>';
@@ -541,7 +548,8 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 		$style .= css_breakpoint($grid_id, $cgrid_breakpoint_5, $cgrid_columns_5, $cgrid_full_width, $cgrid_height_5, $cgrid_spacing_5);
     $style .= "</style>";
     
-    return $debug . $sorts . $filters . $grid . $style . $script;
+    //return $debug . $sorts . $filters . $grid . $style . $script;
+    return $sorts . $filters . $grid . $style . $script;
 }
 
 function filter_meta_replace($post, $filters_temp) {

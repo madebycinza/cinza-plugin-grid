@@ -13,10 +13,11 @@
 
 #cgrid-optionset .cgrid-options {
     padding: 10px;
+    box-sizing: border-box;
 }
 
 #cgrid-optionset .cgrid-options.col-1 {
-    width: 150px;
+    width: 170px;
 }
 
 #cgrid-optionset .cgrid-options.col-2 {
@@ -43,7 +44,7 @@
 }
 
 #cgrid-optionset tbody > tr:first-of-type > td {
-	padding-top: 28px;
+	padding-top: 28px !important;
 }
 
 #cgrid-optionset tbody > tr:first-of-type > td > p:first-of-type {
@@ -161,14 +162,91 @@
 
 /* Breakpoins */
 
-@media screen and (max-width: 1199px) {
-
+@media screen and (max-width: 899px) {
+	/* Force table to not be like tables anymore */
+	table.cgrid-sizeset, .cgrid-sizeset thead, .cgrid-sizeset tbody, .cgrid-sizeset th, .cgrid-sizeset td, .cgrid-sizeset tr { 
+		width: 100%;
+	    display: flex;
+	    flex-wrap: wrap;
+	    align-items: center;
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	.cgrid-sizeset tr.size-headings { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	#cgrid-optionset.cgrid-sizeset td.cgrid-options.col-1 {
+	    padding: 20px 10px !important;
+	}
+	
+ 	.cgrid-sizeset tr {
+	 	overflow: hidden;
+ 	}
+	
+	#cgrid-optionset.cgrid-sizeset td.cgrid-options { 
+		/* Behave  like a "row" */
+		width: 100% !important;
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding: 10px 10px 10px 200px !important;
+	}
+	
+	.cgrid-sizeset td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 15px;
+		left: 10px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+	
+	.cgrid-sizeset td span {
+		margin-left: 5px;
+	}
+	
+	/*
+	Label the data
+	*/
+	.cgrid-sizeset td:nth-of-type(1):before { content: ""; }
+	.cgrid-sizeset td:nth-of-type(2):before { content: "Min-width"; }
+	.cgrid-sizeset td:nth-of-type(3):before { content: "Number of columns"; }
+	.cgrid-sizeset td:nth-of-type(4):before { content: "Items min-height"; }
+	.cgrid-sizeset td:nth-of-type(5):before { content: "Items spacing"; }
 }
 
 @media screen and (max-width: 782px) {
-
+	.cgrid-sizeset td:before {top: 20px;}
 }
 
-@media screen and (max-width: 682px) {
+@media screen and (max-width: 599px) {
+	#cgrid-optionset .cgrid-options.col-1 {
+	    width: 100%;
+	    display: block;
+	    padding: 10px 10px 5px;
+	}
+	
+	#cgrid-optionset .cgrid-options.col-2 {
+	    width: 100%;
+	    display: block;
+	    padding: 0px 10px 10px;
+	}
+	
+	.cgrid-skin-tags tr {display: block; padding-bottom: 15px;}
+	.cgrid-skin-tags td {display: block;}
+	
+	#cgrid-optionset tbody > tr:first-of-type > td:not(.col-1) {
+		padding-top: 0px !important;
+	}
+}
 
+@media screen and (max-width: 399px) {
+    #cgrid-optionset.cgrid-sizeset td.cgrid-options {padding-left: 150px !important;}
+    
+    #cgrid-optionset.cgrid-sizeset .cgrid-options input[type="number"] {width: 80px;}
 }

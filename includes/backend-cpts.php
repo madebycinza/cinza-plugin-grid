@@ -48,7 +48,7 @@ function cgrid_register_post_type() {
 		'public'              => true,
 		'hierarchical'        => false,
 		'exclude_from_search' => true,
-		'publicly_queryable'  => true,
+		'publicly_queryable'  => false, // For single post
 		'show_ui'             => true,
 		'show_in_nav_menus'   => true,
 		'show_in_admin_bar'   => true,
@@ -171,9 +171,11 @@ function cgrid_meta_box_options( $post ) {
 	$temp_num = isset($cgrid_options['cgrid_num']) ? esc_attr($cgrid_options['cgrid_num']) : '-1';
 	$temp_tax = isset($cgrid_options['cgrid_tax']) ? esc_attr($cgrid_options['cgrid_tax']) : '';
 	$temp_tax_terms = isset($cgrid_options['cgrid_tax_terms']) ? esc_attr($cgrid_options['cgrid_tax_terms']) : '';
-	$temp_full_width = isset($cgrid_options['cgrid_full_width']) ? esc_attr($cgrid_options['cgrid_full_width']) : '0';
 	$temp_sorting = isset($cgrid_options['cgrid_sorting']) ? esc_attr($cgrid_options['cgrid_sorting']) : '';
 	$temp_filters = isset($cgrid_options['cgrid_filters']) ? esc_attr($cgrid_options['cgrid_filters']) : '';
+	
+	$temp_layout = isset($cgrid_options['cgrid_layout']) ? esc_attr($cgrid_options['cgrid_layout']) : 'fitRows';
+	$temp_full_width = isset($cgrid_options['cgrid_full_width']) ? esc_attr($cgrid_options['cgrid_full_width']) : '0';
 	$temp_query_string = isset($cgrid_options['cgrid_query_string']) ? esc_attr($cgrid_options['cgrid_query_string']) : '0';
 	
 	$temp_breakpoint_1 = 1;
@@ -308,6 +310,17 @@ function cgrid_meta_box_options( $post ) {
 		</thead>
 		<tbody>
 			<tr>
+            	<td class="cgrid-options col-1">
+                    <label for="cgrid_layout">Layout mode</label>
+				</td>
+				<td class="cgrid-options col-2">
+					<select name="cgrid_layout" id="cgrid_layout">
+						<option value="fitRows" <?php if(isset($temp_layout) && ($temp_layout == 'fitRows'))  echo 'selected="selected"'; ?>>FitRows</option>
+						<option value="masonry" <?php if(isset($temp_layout) && ($temp_layout == 'masonry'))  echo 'selected="selected"'; ?>>Masonry</option>
+					</select>
+                </td>
+            </tr>
+			<tr>
 				<td class="cgrid-options col-1">
 					Full width
 				</td>
@@ -426,7 +439,7 @@ function cgrid_meta_box_options( $post ) {
 			<tr>
 				<td class="cgrid-options col-1" colspan="2">
 					<p><strong>Enter the code and buttons of each element that will be used for filtering.</strong></p>
-					<p>Format: <code>meta / label / buttons separated by comma</code> (one per line)</p>
+					<p>Format: <code>meta / "All" button / buttons separated by comma</code> (one per line)</p>
 					<textarea type="text" class="widefat cgrid-content" name="cgrid_filters"><?php echo esc_html($temp_filters); ?></textarea>
 				</td>
             </tr>
@@ -447,7 +460,7 @@ function cgrid_meta_box_options( $post ) {
 					<ul>
 						<li>Filters only work with <code>%meta('field_name')%</code> and <code>%tax('taxonomy_name')%</code>.</li>
 						<li>To filter by the 'color' meta field, with the default button called "All Colors" and filters for the colors Blue, Red and Yellow, you should enter the following in the Filter textarea:</li>
-						<li><code>%meta('color')% / Colors / Blue, Red, Yellow</code></li>						
+						<li><code>%meta('color')% / All Colors / Blue, Red, Yellow</code></li>						
 					</ul>
 				</td>
             </tr>
@@ -615,9 +628,11 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	$cgrid_num 				= isset($_POST['cgrid_num']) ? wp_filter_post_kses($_POST['cgrid_num']) : '';
 	$cgrid_tax 				= isset($_POST['cgrid_tax']) ? wp_filter_post_kses($_POST['cgrid_tax']) : '';
 	$cgrid_tax_terms 		= isset($_POST['cgrid_tax_terms']) ? wp_filter_post_kses($_POST['cgrid_tax_terms']) : '';
-	$cgrid_full_width 		= isset($_POST['cgrid_full_width']) ? sanitize_key($_POST['cgrid_full_width']) : '';
 	$cgrid_sorting 			= isset($_POST['cgrid_sorting']) ? wp_filter_post_kses($_POST['cgrid_sorting']) : '';
 	$cgrid_filters 			= isset($_POST['cgrid_filters']) ? wp_filter_post_kses($_POST['cgrid_filters']) : '';
+	
+	$cgrid_layout	 		= isset($_POST['cgrid_layout']) ? sanitize_key($_POST['cgrid_layout']) : '';
+	$cgrid_full_width 		= isset($_POST['cgrid_full_width']) ? sanitize_key($_POST['cgrid_full_width']) : '';
 	$cgrid_query_string 	= isset($_POST['cgrid_query_string']) ? sanitize_key($_POST['cgrid_query_string']) : '';
 	
 	$cgrid_columns_1 		= isset($_POST['cgrid_columns_1']) ? sanitize_text_field($_POST['cgrid_columns_1']) : '';
@@ -652,9 +667,11 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	$new['cgrid_num'] = empty($cgrid_num) ? '-1' : wp_strip_all_tags($cgrid_num);
 	$new['cgrid_tax'] = empty($cgrid_tax) ? '' : wp_strip_all_tags($cgrid_tax);
 	$new['cgrid_tax_terms'] = empty($cgrid_tax_terms) ? '' : wp_strip_all_tags($cgrid_tax_terms);
-	$new['cgrid_full_width'] = $cgrid_full_width ? '1' : '0';
 	$new['cgrid_sorting'] = empty($cgrid_sorting) ? '' : wp_filter_post_kses($cgrid_sorting);
 	$new['cgrid_filters'] = empty($cgrid_filters) ? '' : wp_filter_post_kses($cgrid_filters);
+	
+	$new['cgrid_layout'] = empty($cgrid_layout) ? 'fitRows' : wp_strip_all_tags($cgrid_layout);
+	$new['cgrid_full_width'] = $cgrid_full_width ? '1' : '0';
 	$new['cgrid_query_string'] = $cgrid_query_string ? '1' : '0';
 	
 	$new['cgrid_columns_1'] = empty($cgrid_columns_1) ? '1' : wp_filter_post_kses($cgrid_columns_1);
