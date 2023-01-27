@@ -595,7 +595,7 @@ function cgrid_meta_box_credits( $post ) {
 	$cinza_logo = plugin_dir_url( dirname( __FILE__ ) ) . 'assets/images/cinza-icon-pink.png';
 	$razorfrog_logo = plugin_dir_url( dirname( __FILE__ ) ) . 'assets/images/razorfrog-icon-turquoise.png';
 	
-	?><a href="https://profiles.wordpress.org/madebycinza/#content-plugins" target="_blank">
+	?><a href="https://cinza.io/" target="_blank">
 		<img src="<?php echo $cinza_logo; ?>" />
 		<span>Cinza</span>
 	</a>
