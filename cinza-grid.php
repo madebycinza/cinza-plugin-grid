@@ -4,7 +4,7 @@
  * Plugin Name:       Cinza Grid
  * Plugin URI:        https://cinza.io/plugin/cinza-grid/
  * Description:       A minimal grid plugin.
- * Version:           1.1.0
+ * Version:           1.1.1
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Cinza Web Design
@@ -27,11 +27,11 @@ function cgrid_scripts_frontend_init( $hook ) {
 	
     // CSS
     wp_register_style('animate', plugins_url('/assets/css/animate.min.css', __FILE__), array(), '4.1.1', false);
-    wp_register_style('cgrid-frontend', plugins_url('/assets/css/frontend-style.css', __FILE__), array(), '1.0.0', false);
+    wp_register_style('cgrid-frontend', plugins_url('/assets/css/frontend-style.css', __FILE__), array(), '1.1.1', false);
 
     // JS
     wp_register_script('isotope', plugins_url('/assets/js/isotope.pkgd.min.js', __FILE__), array('jquery'), '2.2.2', false);
-    wp_enqueue_script('cgrid-frontend', plugins_url('/assets/js/frontend-script.js', __FILE__), array('jquery'), '1.0.0', false);
+    wp_enqueue_script('cgrid-frontend', plugins_url('/assets/js/frontend-script.js', __FILE__), array('jquery'), '1.1.1', false);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,18 +46,18 @@ function add_script_to_cgrid_cpt() {
 	if ( !is_admin() ) return;
 
     // Admin
-    wp_register_style('cgrid-admin', plugins_url('/assets/css/backend-admin.css', __FILE__), array(), '1.0.0', false);
+    wp_register_style('cgrid-admin', plugins_url('/assets/css/backend-admin.css', __FILE__), array(), '1.1.1', false);
     wp_enqueue_style('cgrid-admin');
  
     // Register scripts below only on cgrid CPT pages only
 	if( $post_type != 'cinza_grid' ) return;
 
     // CSS
-    wp_register_style('cgrid-backend-css', plugins_url('/assets/css/backend-style.css', __FILE__), array(), '1.0.0', false);
+    wp_register_style('cgrid-backend-css', plugins_url('/assets/css/backend-style.css', __FILE__), array(), '1.1.1', false);
     wp_enqueue_style('cgrid-backend-css');
 
     // JS
-    wp_enqueue_script('cgrid-backend-js', plugins_url('/assets/js/backend-script.js', __FILE__), array('jquery'), '1.0.0', false);
+    wp_enqueue_script('cgrid-backend-js', plugins_url('/assets/js/backend-script.js', __FILE__), array('jquery'), '1.1.1', false);
     wp_enqueue_media();
 }
 

@@ -520,11 +520,19 @@ function cgrid_meta_box_skin() {
 						</tr>
 						<tr>
 							<td><code>%img%</code></td>
-							<td><em>Returns post featured image</em></td>
+							<td><em>Returns post featured image in full size</em></td>
 						</tr>
 						<tr>
 							<td><code>%imgurl%</code></td>
-							<td><em>Returns post featured image URL</em></td>
+							<td><em>Returns post featured image URL in full size</em></td>
+						</tr>
+						<tr>
+							<td><code>%img('size')%</code></td>
+							<td><em>Returns post featured image in the specified size</em></td>
+						</tr>
+						<tr>
+							<td><code>%imgurl('size')%</code></td>
+							<td><em>Returns post featured image URL in the specified size</em></td>
 						</tr>
 						<tr>
 							<td><code>%content%</code></td>
@@ -568,15 +576,15 @@ function cgrid_meta_box_skin() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function cgrid_meta_box_shortcode( $post ) {
-	$grid_SC = '[cinzagrid id=&quot;'. get_the_ID() .'&quot;]';
-	$grid_ID = 'cinza-grid-' . get_the_ID();
-	
-	?>
-	<div class="cgrid_shortcode_copy">
-		<input type="text" value="<?php echo $grid_SC; ?>" class="cgrid_shortcode_copy_input" id="<?php echo $grid_ID; ?>" readonly />
-		<a class="preview button" onclick="cgrid_copy_shortcode('<?php echo $grid_ID; ?>')"><span class="icon icon-edit-copy"></span> Copy</a>
-	</div>
-	<?php
+    $grid_SC = '[cinzagrid id=&quot;'. get_the_ID() .'&quot;]';
+    $grid_ID = 'cinza-grid-' . get_the_ID();
+    
+    ?>
+    <div class="cgrid_shortcode_copy">
+        <input type="text" value="<?php echo $grid_SC; ?>" class="cgrid_shortcode_copy_input" id="<?php echo $grid_ID; ?>" readonly />
+        <a class="preview button button-primary" onclick="cgrid_copy_shortcode('<?php echo $grid_ID; ?>')"><span class="icon icon-edit-copy"></span> Copy</a>
+    </div>
+    <?php
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -592,14 +600,19 @@ function cgrid_meta_box_doc( $post ) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function cgrid_meta_box_credits( $post ) {
+	$metafizzy_logo = plugin_dir_url( dirname( __FILE__ ) ) . 'assets/images/metafizzy-icon.png';
 	$cinza_logo = plugin_dir_url( dirname( __FILE__ ) ) . 'assets/images/cinza-icon-pink.png';
 	$razorfrog_logo = plugin_dir_url( dirname( __FILE__ ) ) . 'assets/images/razorfrog-icon-turquoise.png';
 	
-	?><a href="https://cinza.io/" target="_blank">
+	?><a href="https://metafizzy.co/" class="button" target="_blank">
+		<img src="<?php echo $metafizzy_logo; ?>" />
+		<span>Metafizzy</span>
+	</a>
+	<a href="https://cinza.io/" class="button" target="_blank">
 		<img src="<?php echo $cinza_logo; ?>" />
 		<span>Cinza</span>
 	</a>
-	<a href="https://razorfrog.com/" target="_blank">
+	<a href="https://razorfrog.com/" class="button" target="_blank">
 		<img src="<?php echo $razorfrog_logo; ?>" />
 		<span>Razorfrog</span>
 	</a><?php

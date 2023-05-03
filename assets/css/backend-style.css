@@ -1,7 +1,7 @@
 /* Options */
 
 #cgrid-optionset {
-    padding: 10px 0;
+    padding: 15px 0;
 }
 
 #cgrid-optionset .cgrid-heading p {
@@ -34,13 +34,18 @@
 	width: 100% !important;
 }
 
-#cgrid-optionset thead {
-    background: #f1f1f1;
+#cgrid-optionset thead .cgrid-options {
+	padding: 0;
 }
 
 #cgrid-optionset thead p {
-    margin: 5px 0;
+    font-size: 15px;
+    margin: 0;
+    padding: 10px;
+    background: #f6f6f6;
     font-weight: bold;
+    border-radius: 3px;
+    text-align: center;
 }
 
 #cgrid-optionset tbody > tr:first-of-type > td {
@@ -91,6 +96,10 @@
     margin: 0 0 0 3px;
 }
 
+.wp-core-ui.post-type-cinza_grid #publishing-action input#publish {
+	width: 80px;
+}
+
 /* Skin */
 
 #cgrid-skin textarea {
@@ -104,6 +113,101 @@
 
 #cgrid-skin .cgrid-skin-tags td:first-child {
 	padding-right: 20px;
+}
+
+/* Focus */
+
+.wp-core-ui.post-type-cinza_grid form#post input[type=color]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=date]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=datetime-local]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=datetime]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=email]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=month]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=number]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=password]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=radio]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=search]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=tel]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=text]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=time]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=url]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post input[type=week]:focus, 
+.wp-core-ui.post-type-cinza_grid form#post select:focus, 
+.wp-core-ui.post-type-cinza_grid form#post textarea:focus,
+.wp-core-ui.post-type-cinza_grid form#post .button:focus,
+#cgrid-credits a:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: 2px solid transparent;
+}
+
+.wp-core-ui.post-type-cinza_grid form#post input[type=checkbox]:focus {
+    border-color: #2271b1 !important;
+    box-shadow: 0 0 0 2px #2271b1 !important;
+    outline: 2px solid transparent !important;
+}
+
+/* Checkbox toggle */
+
+.wp-admin.post-type-cinza_grid #postbox-container-2 input[type=checkbox] {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    position: relative !important;
+    border: 0 !important;
+    outline: 0 !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+    background: none !important;
+    width: 50px !important;
+    height: 25px !important;
+    margin: 0 15px 0 0 !important;
+    border-radius: 50px !important;
+}
+
+.wp-admin.post-type-cinza_grid #postbox-container-2 input[type=checkbox]:after {
+    content: '';
+    width: 50px;
+    height: 25px;
+    display: inline-block;
+    background: rgba(196, 195, 195, 0.8);
+    border-radius: 18px;
+    clear: both;
+}
+
+.wp-admin.post-type-cinza_grid #postbox-container-2 input[type=checkbox]:before {
+    content: '';
+    width: 25px;
+    height: 25px;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0px;
+    margin: 0;
+    border-radius: 50%;
+    background: rgb(255, 255, 255);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.wp-admin.post-type-cinza_grid #postbox-container-2 input[type=checkbox]:checked:before {
+    left: 25px;
+    box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.wp-admin.post-type-cinza_grid #postbox-container-2 input[type=checkbox]:checked:after {
+    background: #2271b1;
+}
+
+
+.wp-admin.post-type-cinza_grid #postbox-container-2 input[type=checkbox]:before,
+.wp-admin.post-type-cinza_grid #postbox-container-2 input[type=checkbox]:after,
+.wp-admin.post-type-cinza_grid #postbox-container-2 input[type=checkbox]:checked:before,
+.wp-admin.post-type-cinza_grid #postbox-container-2 input[type=checkbox]:checked:after {
+    transition: ease .3s;
+    -webkit-transition: ease .3s;
+    -moz-transition: ease .3s;
+    -o-transition: ease .3s;
 }
 
 /* Documentation */
@@ -130,30 +234,22 @@
 }
 
 #cgrid-credits a {
-	width: 100%;
+    width: 100%;
     box-sizing: border-box;
-	display: flex;
+    display: flex;
     align-items: center;
-    padding: 5px;
-    border: 1px solid #2271b1;
-    border-radius: 3px;
-    background: #f6f7f7;
-    text-decoration: none !important;
+    padding: 10px;
+    margin: 0 0 10px;
 }
 
-#cgrid-credits a:first-child {
-	margin-bottom: 10px;
-}
-
-#cgrid-credits a:hover {
-    background: #f0f0f1;
-    border-color: #0a4b78;
-    color: #0a4b78;
+#cgrid-credits a:last-child {
+    margin-bottom: 0px;
 }
 
 #cgrid-credits a img {
-	width: 50px;
-	margin-right: 10px;
+    width: 40px;
+    margin-right: 15px;
+    border-radius: 5px;
 }
 
 /* Others */

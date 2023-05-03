@@ -192,6 +192,11 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	if ($cgrid_layout == "fitrows") $cgrid_layout = "fitRows";
 	
 	$script = "<script>
+	
+	jQuery(window).load(function() {
+		var grid = jQuery('#cinza-grid-".$grid_id."').isotope();
+	});
+	
 	jQuery(document).ready(function($) {
 		
 	    var grid = $('#cinza-grid-".$grid_id."').isotope
@@ -345,7 +350,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 			$grid_item = $cgrid_skin['cgrid_skin_content'];
 			$filter_classes = "";
 						
-			// Replace date meta with custom format
+			// Replace %date('l F j, Y')%	
 			while(strpos($grid_item, '%date(') !== false){
 				//echo "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
 				
@@ -371,7 +376,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 				//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";
 			}
 			
-			// Replace metafiled meta
+			// Replace %meta('field_name')%	
 			while(strpos($grid_item, '%meta(') !== false){
 				//$debug .= "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
 				
@@ -399,7 +404,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 			
 			$filter_classes .= filter_meta_replace($post, $filters_temp);
 			
-			// Replace taxonomy meta (without link and without separator)
+			// Replace %tax('taxonomy_name')%
 			while(strpos($grid_item, '%tax(') !== false){
 				//$debug .= "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
 				
@@ -438,7 +443,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 			
 			$filter_classes .= filter_tax_replace($post, $filters_temp);
 			
-			// Replace taxonomy meta (without link and with separator)
+			// Replace %taxsep('taxonomy_name')%
 			while(strpos($grid_item, '%taxsep(') !== false){
 				//$debug .= "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
 				
@@ -475,7 +480,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 				}
 			}
 			
-			// Replace taxonomy meta (with link and with separator)
+			// Replace %taxurl('taxonomy_name')%
 			while(strpos($grid_item, '%taxurl(') !== false){
 				//$debug .= "<strong>grid_item (before): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br />";
 				
@@ -512,6 +517,24 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 				}
 			}
 			
+			// Replace %img('img_size')%
+			$pattern_imgsize = "/%img\('([^']+)'\)%/";
+			if (preg_match($pattern_imgsize, $grid_item, $matches)) {
+				$grid_item = preg_replace_callback($pattern_imgsize, function($matches) use ($post) {
+				    $size = $matches[1];
+				    return get_the_post_thumbnail($post->ID, $size);
+				}, $grid_item, -1);
+			}
+			
+			// Replace %imgurl('img_size')%
+			$pattern_imgsize = "/%imgurl\('([^']+)'\)%/";
+			if (preg_match($pattern_imgsize, $grid_item, $matches)) {
+				$grid_item = preg_replace_callback($pattern_imgsize, function($matches) use ($post) {
+				    $size = $matches[1];
+				    return get_the_post_thumbnail_url($post->ID, $size);
+				}, $grid_item, -1);
+			}
+			
 		    $code1 = array(
 		    	'%title%', 
 		    	'%url%',
@@ -527,8 +550,8 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 				get_permalink($post->ID), 
 				$post->post_name,
 		    	get_the_date('F j, Y', $post->ID),
-		    	get_the_post_thumbnail($post->ID),
-		    	get_the_post_thumbnail_url($post->ID),
+		    	get_the_post_thumbnail($post->ID,'full'),
+		    	get_the_post_thumbnail_url($post->ID,'full'),
 	    	    wpautop($post->post_content)
 		    );
 		    
@@ -599,6 +622,7 @@ function css_breakpoint($grid_id, $breakpoint, $col, $full_width, $height, $spac
 				}
 				#cinza-grid-".$grid_id." .cinza-grid-item {
 					width: 100%; 
+					min-height: ". $height ."px;
 					margin: 0px 0px ". $space ."px 0px;
 				}
 				#cinza-grid-".$grid_id." .cinza-grid-item:last-child {
@@ -624,10 +648,11 @@ function css_breakpoint($grid_id, $breakpoint, $col, $full_width, $height, $spac
 			    $style .= "
 				#cinza-grid-".$grid_id." {
 					width: 100%; 
-					margin: 0px; a: 0;
+					margin: 0px;
 				}
 				#cinza-grid-".$grid_id." .cinza-grid-item {
 					width: 100%; 
+					min-height: ". $height ."px;
 					margin: 0px 0px ". $space ."px 0px;
 				}
 				#cinza-grid-".$grid_id." .cinza-grid-item:last-child {

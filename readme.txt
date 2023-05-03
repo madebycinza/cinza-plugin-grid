@@ -2,9 +2,9 @@
 Contributors: madebycinza, razorfrog
 Tags: grid, post grid, display post, metafizzy, isotope
 Requires at least: 5.2
-Tested up to: 6.1.1
+Tested up to: 6.2
 Requires PHP: 7.2
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,6 +23,16 @@ Upload the Cinza Grid plugin to your WordPress site, activate it, and start crea
 2. Grid skin settings
 
 == Changelog ==
+
+= 1.1.1 =
+*Release Date - 3rd May, 2023*
+
+* Added %img('size')% and %imgurl('size')% to skin
+* Updated frontend style to fix mobile and one column layout
+* Updated frontend script to fix isotope trigger
+* Updated backend style and made accessibility improvements
+* Convert backend checkboxes into toggles
+* WP 6.2 compatibility update
 
 = 1.1.0 =
 *Release Date - 27th January, 2023*
