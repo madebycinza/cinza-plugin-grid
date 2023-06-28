@@ -171,7 +171,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 			foreach ($filter_lines as $filter_line) {
 				if(!empty($filter_line)) {
 					$filter_atts = explode ("/", $filter_line); 
-					$filters .= '<div class="cinza-grid-button-group" data-filter-group="'. trim(strtolower($filter_atts[1])) .'">';
+					$filters .= '<div class="cinza-grid-button-group" data-filter-group="'. str_replace(" ", "-", trim(strtolower($filter_atts[1]))) .'">';
 						
 						// First button
 						$filters .= '<button class="button is-checked" data-filter="*">'. trim($filter_atts[1]) .'</button>';
@@ -402,7 +402,11 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 				//$debug .= "<br /><strong>grid_item (after): </strong><br />" . nl2br(htmlentities($grid_item)) . "<br /><hr />";					
 			}
 			
-			$filter_classes .= filter_meta_replace($post, $filters_temp);
+			if(!empty($filters_temp)) {
+				foreach ($filter_lines as $filter_line) {
+					$filter_classes .= filter_meta_replace($post, $filter_line);
+				}	
+			}
 			
 			// Replace %tax('taxonomy_name')%
 			while(strpos($grid_item, '%tax(') !== false){
@@ -441,7 +445,11 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 				}
 			}
 			
-			$filter_classes .= filter_tax_replace($post, $filters_temp);
+			if(!empty($filters_temp)) {
+				foreach ($filter_lines as $filter_line) {
+					$filter_classes .= filter_tax_replace($post, $filter_line);
+				}	
+			}
 			
 			// Replace %taxsep('taxonomy_name')%
 			while(strpos($grid_item, '%taxsep(') !== false){
