@@ -170,16 +170,22 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 			
 			foreach ($filter_lines as $filter_line) {
 				if(!empty($filter_line)) {
-					$filter_atts = explode ("/", $filter_line); 
-					$filters .= '<div class="cinza-grid-button-group" data-filter-group="'. str_replace(" ", "-", trim(strtolower($filter_atts[1]))) .'">';
+					
+					$filter_first_split = explode('/', $filter_line, 2);
+					$filter_second_split = explode('/', $filter_first_split[1], 2);
+					$filter_substring1 = $filter_first_split[0];
+					$filter_substring2 = $filter_second_split[0];
+					$filter_substring3 = $filter_second_split[1];
+					
+					$filters .= '<div class="cinza-grid-button-group" data-filter-group="'. str_replace(" ", "-", trim(strtolower($filter_substring2))) .'">';
 						
 						// First button
-						$filters .= '<button class="button is-checked" data-filter="*">'. trim($filter_atts[1]) .'</button>';
+						$filters .= '<button class="button is-checked" data-filter="*">'. trim($filter_substring2) .'</button>';
 						
 						// All other buttons
-						$filter_buttons = explode (",", $filter_atts[2]); 
+						$filter_buttons = explode (",", $filter_substring3); 
 						foreach ($filter_buttons as $filter_button) {
-							$characters = array("&amp;", " ", "---");
+							$characters = array("&amp;", " ", "---", "/");
 							$encoded_classes = str_replace($characters, '-', trim(strtolower($filter_button)));
 							$filters .= '<button class="button" id="'. $encoded_classes .'" data-filter=".'. $encoded_classes .'">'. trim($filter_button) .'</button>';	
 						}
@@ -563,7 +569,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	    	    wpautop($post->post_content)
 		    );
 		    
-			$characters = array("&amp;", "---");
+			$characters = array("&amp;", "---", "/");
 			$encoded_classes = str_replace($characters, '-', strtolower($filter_classes));
 			$grid .= '<div class="cinza-grid-item cinza-grid-'. $post->ID . $encoded_classes.'">'. str_replace($code1, $code2, $grid_item) .'</div>';
 		}
