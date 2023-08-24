@@ -557,6 +557,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 		    	'%img%',
 		    	'%imgurl%',
 		    	'%content%',
+		    	'%excerpt%',
 		    );
 		    
 		    $code2 = array(
@@ -566,7 +567,8 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 		    	get_the_date('F j, Y', $post->ID),
 		    	get_the_post_thumbnail($post->ID,'full'),
 		    	get_the_post_thumbnail_url($post->ID,'full'),
-	    	    wpautop($post->post_content)
+	    	    wpautop($post->post_content),
+	    	    get_the_excerpt($post->ID),
 		    );
 		    
 			$characters = array("&amp;", "---", "/");

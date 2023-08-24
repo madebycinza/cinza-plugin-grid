@@ -539,6 +539,10 @@ function cgrid_meta_box_skin() {
 							<td><em>Returns post content</em></td>
 						</tr>
 						<tr>
+							<td><code>%excerpt%</code></td>
+							<td><em>Returns post excerpt</em></td>
+						</tr>
+						<tr>
 							<td><code>%date%</code></td>
 							<td><em>Returns date in the default format</em></td>
 						</tr>
@@ -714,7 +718,7 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	update_post_meta($post_id, '_cgrid_options', $new);
 	
 	// Save _cgrid_skin
-	$cgrid_skin_content = isset($_POST['cgrid_skin_content']) ? wp_filter_post_kses($_POST['cgrid_skin_content']) : '';
+	$cgrid_skin_content = isset($_POST['cgrid_skin_content']) ? ($_POST['cgrid_skin_content']) : '';
 
 	$new = array();
 	$new['cgrid_skin_content'] = $cgrid_skin_content;
