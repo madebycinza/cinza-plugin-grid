@@ -266,6 +266,7 @@ function cgrid_meta_box_options( $post ) {
 						<option value="modified" <?php if(isset($temp_orderby) && ($temp_orderby == 'modified'))  echo 'selected="selected"'; ?>>Modified</option>
 						<option value="title" <?php if(isset($temp_orderby) && ($temp_orderby == 'title'))  echo 'selected="selected"'; ?>>Title</option>
 						<option value="meta_value" <?php if(isset($temp_orderby) && ($temp_orderby == 'meta_value'))  echo 'selected="selected"'; ?>>Meta Field</option>
+						<option value="rand" <?php if(isset($temp_orderby) && ($temp_orderby == 'rand'))  echo 'selected="selected"'; ?>>Random</option>
 					</select>
 					<input type="text" name="cgrid_orderby_meta" id="cgrid_orderby_meta" placeholder="field_name" value="<?php echo esc_attr($temp_orderby_meta); ?>" class="meta-disabled" disabled />
                 </td>
