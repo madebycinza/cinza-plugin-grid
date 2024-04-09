@@ -177,6 +177,7 @@ function cgrid_meta_box_options( $post ) {
 	$temp_layout = isset($cgrid_options['cgrid_layout']) ? esc_attr($cgrid_options['cgrid_layout']) : 'fitRows';
 	$temp_full_width = isset($cgrid_options['cgrid_full_width']) ? esc_attr($cgrid_options['cgrid_full_width']) : '0';
 	$temp_query_string = isset($cgrid_options['cgrid_query_string']) ? esc_attr($cgrid_options['cgrid_query_string']) : '0';
+	$temp_max_filter = isset($cgrid_options['cgrid_max_filter']) ? esc_attr($cgrid_options['cgrid_max_filter']) : '-1';
 	
 	$temp_breakpoint_1 = 1;
 	$temp_columns_1 = isset($cgrid_options['cgrid_columns_1']) ? esc_attr($cgrid_options['cgrid_columns_1']) : '1';
@@ -452,6 +453,15 @@ function cgrid_meta_box_options( $post ) {
 					<input type="checkbox" name="cgrid_query_string" id="cgrid_query_string" class="widefat cgrid-query-string" value="1" <?php checked('1', $temp_query_string); ?> /> <label for="cgrid_query_string">Enable query string update in real time when clicking on filter buttons.</label>
 				</td>
 			</tr>
+			<tr>
+				<td class="cgrid-options col-1">
+					<label for="cgrid_max_filter">Limit items on filter</label>
+				</td>
+				<td class="cgrid-options col-2">
+					<input type="number" name="cgrid_max_filter" id="cgrid_max_filter" value="<?php echo esc_attr($temp_max_filter); ?>" /> <label for="cgrid_max_filter" style="margin-left: 15px;">WARNING: Multiple filters might cause the grid animation to glitch.</label>
+				</td>
+				</td>
+			</tr>
 			<tr class="tr-separator">
 				<td colspan="4"></td>
 			</tr>
@@ -652,6 +662,7 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	$cgrid_layout	 		= isset($_POST['cgrid_layout']) ? sanitize_key($_POST['cgrid_layout']) : '';
 	$cgrid_full_width 		= isset($_POST['cgrid_full_width']) ? sanitize_key($_POST['cgrid_full_width']) : '';
 	$cgrid_query_string 	= isset($_POST['cgrid_query_string']) ? sanitize_key($_POST['cgrid_query_string']) : '';
+	$cgrid_max_filter 		= isset($_POST['cgrid_max_filter']) ? wp_filter_post_kses($_POST['cgrid_max_filter']) : '';
 	
 	$cgrid_columns_1 		= isset($_POST['cgrid_columns_1']) ? sanitize_text_field($_POST['cgrid_columns_1']) : '';
 	$cgrid_height_1 		= isset($_POST['cgrid_height_1']) ? sanitize_text_field($_POST['cgrid_height_1']) : '';
@@ -691,6 +702,7 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	$new['cgrid_layout'] = empty($cgrid_layout) ? 'fitRows' : wp_strip_all_tags($cgrid_layout);
 	$new['cgrid_full_width'] = $cgrid_full_width ? '1' : '0';
 	$new['cgrid_query_string'] = $cgrid_query_string ? '1' : '0';
+	$new['cgrid_max_filter'] = empty($cgrid_max_filter) ? '-1' : wp_strip_all_tags($cgrid_max_filter);
 	
 	$new['cgrid_columns_1'] = empty($cgrid_columns_1) ? '1' : wp_filter_post_kses($cgrid_columns_1);
 	$new['cgrid_height_1'] = empty($cgrid_height_1) ? '0' : wp_filter_post_kses($cgrid_height_1);

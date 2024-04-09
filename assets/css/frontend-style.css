@@ -27,3 +27,7 @@
 	padding: 20px;
 	background: #f1f1f1;
 }
+
+.cinza-grid-item.filter-limit {
+	display: none !important;
+}

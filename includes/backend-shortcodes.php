@@ -51,6 +51,7 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	$cgrid_layout = isset($cgrid_options['cgrid_layout']) ? esc_attr($cgrid_options['cgrid_layout']) : 'fitRows';
 	$cgrid_full_width = isset($cgrid_options['cgrid_full_width']) ? esc_attr($cgrid_options['cgrid_full_width']) : '0';
 	$cgrid_query_string = isset($cgrid_options['cgrid_query_string']) ? esc_attr($cgrid_options['cgrid_query_string']) : '0';
+	$cgrid_max_filter = isset($cgrid_options['cgrid_max_filter']) ? esc_attr($cgrid_options['cgrid_max_filter']) : '-1';
 
 	$cgrid_breakpoint_1 = 1;
 	$cgrid_columns_1 = isset($cgrid_options['cgrid_columns_1']) ? esc_attr($cgrid_options['cgrid_columns_1']) : '1';
@@ -233,8 +234,8 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 		    });			    
 		}
 		
-	    if( '".$filters."' != '' ) 
-	    {
+		if( '".$filters."' != '' ) 
+		{
 			// store filter for each group
 			var filters = {};
 			var filterButtonGroup = $('#cinza-grid-".$grid_id."-filters');
@@ -252,16 +253,27 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 				
 				// combine filters
 				var filterValue = concatValues( filters );
+
+				// limit number if items filtered
+				if(".intval($cgrid_max_filter)." > 0) {
+				    // Set max number of items visible when filter is active
+				    var filterSelector = filterValue.replace(/\*/g, '');
+				    var items = $('#cinza-grid-".$grid_id." .cinza-grid-item').removeClass('filter-limit');
+	
+				    if(filterSelector) {
+				        var filteredItems = items.filter(filterSelector);
+				        filteredItems.slice(".intval($cgrid_max_filter).").addClass('filter-limit');
+				    }					
+				}
 				
-				// set filter for Isotope
+				// set filter for Isotope, which triggers the script for layout
 				grid.isotope({ filter: filterValue });
 				
 				// change query string in real time
-				if( ".$cgrid_query_string." == 1 ) 
-				{
+				if( ".$cgrid_query_string." == 1 ) {
 					location.hash = 'filter=' + encodeURIComponent( filterValue );
 				}
-			});		
+			});	
 			
 			// change is-checked class on buttons
 			$('.cinza-grid-button-group').each( function( i, buttonGroup ) 

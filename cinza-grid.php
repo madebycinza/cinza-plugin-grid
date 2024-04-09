@@ -4,7 +4,7 @@
  * Plugin Name:       Cinza Grid
  * Plugin URI:        https://cinza.io/plugin/cinza-grid/
  * Description:       A minimal grid plugin.
- * Version:           1.1.8
+ * Version:           1.1.9
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Cinza Web Design
@@ -26,8 +26,8 @@ function cgrid_scripts_frontend_init( $hook ) {
 	if ( is_admin() ) return;
 	
     // CSS
-    wp_register_style('animate', plugins_url('/assets/css/animate.min.css', __FILE__), array(), '4.1.1', false);
-    wp_register_style('cgrid-frontend', plugins_url('/assets/css/frontend-style.css', __FILE__), array(), '1.1.1', false);
+    wp_register_style('animate', plugins_url('/assets/css/animate.min.css', __FILE__), array(), '4.1.2', false);
+    wp_register_style('cgrid-frontend', plugins_url('/assets/css/frontend-style.css', __FILE__), array(), '1.2.0', false);
 
     // JS
     wp_register_script('isotope', plugins_url('/assets/js/isotope.pkgd.min.js', __FILE__), array('jquery'), '2.2.2', false);
