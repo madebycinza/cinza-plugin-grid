@@ -1,5 +1,5 @@
 <?php
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Register CPT: cgrid
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ function cgrid_register_post_type() {
 		'item_updated'             => esc_html__( 'Grid updated', 'your-textdomain' ),
 		'text_domain'              => esc_html__( 'your-textdomain', 'your-textdomain' ),
 	];
-	
+
 	$args = [
 	    'label'               => esc_html__( 'Grids', 'your-textdomain' ),
 	    'labels'              => $labels,
@@ -94,7 +94,7 @@ function add_cgrid_columns ( $columns ) {
 	unset($columns['rank_math_title']);
 	unset($columns['rank_math_description']);
 
-	return array_merge ( $columns, array ( 
+	return array_merge ( $columns, array (
 		'title' => __ ('Title'),
 		'shortcode' => __ ( 'Shortcode' ),
 		'date' => __('Date')
@@ -112,7 +112,7 @@ function cgrid_post_content ( $content ) {
 // Remove UI for Custom Fields metabox
 add_action( 'admin_head' , 'cgrid_remove_post_custom_fields' );
 function cgrid_remove_post_custom_fields() {
-    remove_meta_box( 'postcustom' , 'cinza_grid' , 'normal' ); 
+    remove_meta_box( 'postcustom' , 'cinza_grid' , 'normal' );
 }
 
 // Remove CPT from SEO sitemap and set robots to noindex nofollow (for Rank Math SEO plugin)
@@ -124,7 +124,7 @@ if ( in_array( 'seo-by-rank-math/rank-math.php', apply_filters( 'active_plugins'
 	        $exclude = true;
 	    }
 	    return $exclude;
-	}, 10, 2);	
+	}, 10, 2);
 
 	// https://support.rankmath.com/ticket/cpt-noindex/
 	add_filter( 'rank_math/frontend/robots', function( $robots ) {
@@ -151,7 +151,7 @@ function cgrid_add_fields_meta_boxes() {
 	add_meta_box('cgrid-shortcode', 'Shortcode', 'cgrid_meta_box_shortcode', 'cinza_grid', 'side', 'default');
 	add_meta_box('cgrid-documentation', 'Documentation', 'cgrid_meta_box_doc', 'cinza_grid', 'side', 'default');
 	add_meta_box('cgrid-credits', 'Developers', 'cgrid_meta_box_credits', 'cinza_grid', 'side', 'default');
-	remove_meta_box( 'rank_math_metabox' , 'cinza_grid' , 'normal' ); 
+	remove_meta_box( 'rank_math_metabox' , 'cinza_grid' , 'normal' );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,7 +162,7 @@ function cgrid_meta_box_options( $post ) {
 	global $post;
     $cgrid_options = get_post_meta( $post->ID, '_cgrid_options', true );
 	wp_nonce_field( 'cgrid_meta_box_nonce', 'cgrid_meta_box_nonce' );
-	
+
 	// Set default values
 	$temp_posttype = isset($cgrid_options['cgrid_posttype']) ? esc_attr($cgrid_options['cgrid_posttype']) : 'post';
 	$temp_orderby = isset($cgrid_options['cgrid_orderby']) ? esc_attr($cgrid_options['cgrid_orderby']) : 'date';
@@ -173,32 +173,32 @@ function cgrid_meta_box_options( $post ) {
 	$temp_tax_terms = isset($cgrid_options['cgrid_tax_terms']) ? esc_attr($cgrid_options['cgrid_tax_terms']) : '';
 	$temp_sorting = isset($cgrid_options['cgrid_sorting']) ? esc_attr($cgrid_options['cgrid_sorting']) : '';
 	$temp_filters = isset($cgrid_options['cgrid_filters']) ? esc_attr($cgrid_options['cgrid_filters']) : '';
-	
+
 	$temp_layout = isset($cgrid_options['cgrid_layout']) ? esc_attr($cgrid_options['cgrid_layout']) : 'fitRows';
 	$temp_full_width = isset($cgrid_options['cgrid_full_width']) ? esc_attr($cgrid_options['cgrid_full_width']) : '0';
 	$temp_query_string = isset($cgrid_options['cgrid_query_string']) ? esc_attr($cgrid_options['cgrid_query_string']) : '0';
 	$temp_max_filter = isset($cgrid_options['cgrid_max_filter']) ? esc_attr($cgrid_options['cgrid_max_filter']) : '-1';
-	
+
 	$temp_breakpoint_1 = 1;
 	$temp_columns_1 = isset($cgrid_options['cgrid_columns_1']) ? esc_attr($cgrid_options['cgrid_columns_1']) : '1';
 	$temp_height_1 = isset($cgrid_options['cgrid_height_1']) ? esc_attr($cgrid_options['cgrid_height_1']) : '0';
 	$temp_spacing_1 = isset($cgrid_options['cgrid_spacing_1']) ? esc_attr($cgrid_options['cgrid_spacing_1']) : '20';
-	
+
 	$temp_breakpoint_2 = isset($cgrid_options['cgrid_breakpoint_2']) ? esc_attr($cgrid_options['cgrid_breakpoint_2']) : '500';
 	$temp_columns_2 = isset($cgrid_options['cgrid_columns_2']) ? esc_attr($cgrid_options['cgrid_columns_2']) : '2';
 	$temp_height_2 = isset($cgrid_options['cgrid_height_2']) ? esc_attr($cgrid_options['cgrid_height_2']) : '0';
 	$temp_spacing_2 = isset($cgrid_options['cgrid_spacing_2']) ? esc_attr($cgrid_options['cgrid_spacing_2']) : '20';
-	
+
 	$temp_breakpoint_3 = isset($cgrid_options['cgrid_breakpoint_3']) ? esc_attr($cgrid_options['cgrid_breakpoint_3']) : '700';
 	$temp_columns_3 = isset($cgrid_options['cgrid_columns_3']) ? esc_attr($cgrid_options['cgrid_columns_3']) : '3';
 	$temp_height_3 = isset($cgrid_options['cgrid_height_3']) ? esc_attr($cgrid_options['cgrid_height_3']) : '0';
 	$temp_spacing_3 = isset($cgrid_options['cgrid_spacing_3']) ? esc_attr($cgrid_options['cgrid_spacing_3']) : '20';
-	
+
 	$temp_breakpoint_4 = isset($cgrid_options['cgrid_breakpoint_4']) ? esc_attr($cgrid_options['cgrid_breakpoint_4']) : '900';
 	$temp_columns_4 = isset($cgrid_options['cgrid_columns_4']) ? esc_attr($cgrid_options['cgrid_columns_4']) : '4';
 	$temp_height_4 = isset($cgrid_options['cgrid_height_4']) ? esc_attr($cgrid_options['cgrid_height_4']) : '0';
 	$temp_spacing_4 = isset($cgrid_options['cgrid_spacing_4']) ? esc_attr($cgrid_options['cgrid_spacing_4']) : '20';
-	
+
 	$temp_breakpoint_5 = isset($cgrid_options['cgrid_breakpoint_5']) ? esc_attr($cgrid_options['cgrid_breakpoint_5']) : '1200';
 	$temp_columns_5 = isset($cgrid_options['cgrid_columns_5']) ? esc_attr($cgrid_options['cgrid_columns_5']) : '5';
 	$temp_height_5 = isset($cgrid_options['cgrid_height_5']) ? esc_attr($cgrid_options['cgrid_height_5']) : '0';
@@ -219,20 +219,20 @@ function cgrid_meta_box_options( $post ) {
                     <label for="cgrid_posttype">Post Type</label>
 				</td>
 				<td class="cgrid-options col-2"><?php
-					
+
 					// Get a list of all registered post type objects
 					// https://developer.wordpress.org/reference/functions/get_post_types/
 					$args = array(
 					   'public' => true,
 					   '_builtin' => false,
 					);
-					  
+
 					$output = 'names'; // 'names' or 'objects' (default: 'names')
 					$operator = 'and'; // 'and' or 'or' (default: 'and')
-					
+
 					$post_types = get_post_types( $args, $output, $operator );
 					array_unshift($post_types , 'post');
-					  
+
 					if ( $post_types ) { // If there are any custom public post types.
 					    echo '<select name="cgrid_posttype" id="cgrid_posttype">';
 					    foreach ( $post_types  as $post_type ) {
@@ -242,9 +242,9 @@ function cgrid_meta_box_options( $post ) {
 							    </option><?php
 					    	}
 					    }
-					    echo '</select>'; 
+					    echo '</select>';
 					}?>
-					
+
                 </td>
             </tr>
 			<tr>
@@ -301,7 +301,7 @@ function cgrid_meta_box_options( $post ) {
             </tr>
 		</tbody>
 	</table>
-	
+
 	<table id="cgrid-optionset" width="100%">
 		<thead>
 			<tr>
@@ -397,7 +397,7 @@ function cgrid_meta_box_options( $post ) {
             </tr>
 		</tbody>
 	</table>
-		
+
 	<table id="cgrid-optionset" width="100%">
 		<thead>
 			<tr>
@@ -428,7 +428,7 @@ function cgrid_meta_box_options( $post ) {
             </tr>
 		</tbody>
 	</table>
-	
+
 	<table id="cgrid-optionset" width="100%">
 		<thead>
 			<tr>
@@ -471,19 +471,19 @@ function cgrid_meta_box_options( $post ) {
 					<ul>
 						<li>Filters only work with <code>%meta('field_name')%</code> and <code>%tax('taxonomy_name')%</code>.</li>
 						<li>To filter by the 'color' meta field, with the default button called "All Colors" and filters for the colors Blue, Red and Yellow, you should enter the following in the Filter textarea:</li>
-						<li><code>%meta('color')% / All Colors / Blue, Red, Yellow</code></li>						
+						<li><code>%meta('color')% / All Colors / Blue, Red, Yellow</code></li>
 					</ul>
 				</td>
             </tr>
 		</tbody>
 	</table>
-	
+
 	<script>
 		sortByMetaField();
 		function sortByMetaField(sender) {
 			let val = document.getElementById("cgrid_orderby").value;
 			if (val == "meta_value") {
-				jQuery("#cgrid_orderby_meta").removeClass("meta-disabled");	
+				jQuery("#cgrid_orderby_meta").removeClass("meta-disabled");
 				jQuery("#cgrid_orderby_meta").prop( "disabled", false );
 			} else {
 				jQuery("#cgrid_orderby_meta").addClass("meta-disabled");
@@ -505,7 +505,7 @@ function cgrid_meta_box_skin() {
 
 	// Set default values
 	$temp_skin_content = '';
-	
+
 	// Get saved values
 	if ( !empty($cgrid_skin) ) {
 		$temp_skin_content = esc_attr($cgrid_skin['cgrid_skin_content']);
@@ -516,9 +516,9 @@ function cgrid_meta_box_skin() {
 		<tbody>
 			<tr class="grid-skin">
 				<td class="cgrid-content">
-					<label>Enter HTML and PHP code template for grid items</label>
+					<label>Enter the code template for grid items. This field supports HTML, PHP shortcodes, and the custom meta tags listed below.</label>
 					<textarea type="text" class="widefat cgrid-content" name="cgrid_skin_content"><?php echo esc_html($temp_skin_content); ?></textarea>
-					
+
 					<p><strong>Supported meta tags:</strong></p>
 					<table class="cgrid-skin-tags">
 						<tr>
@@ -577,8 +577,12 @@ function cgrid_meta_box_skin() {
 							<td><code>%meta('field_name')%</code></td>
 							<td><em>Returns meta data</em></td>
 						</tr>
+						<tr>
+							<td><code>%[shortcode]%</code></td>
+							<td><em>Returns shortcode output. Automatically includes the post ID as a parameter. Also accepts additional parameters (e.g., %[shortcode category=“name”]%), but not other meta tags as parameters.</em></td>
+						</tr>
 					</table>
-					
+
 				</td>
 			</tr>
 		</tbody>
@@ -593,7 +597,7 @@ function cgrid_meta_box_skin() {
 function cgrid_meta_box_shortcode( $post ) {
     $grid_SC = '[cinzagrid id=&quot;'. get_the_ID() .'&quot;]';
     $grid_ID = 'cinza-grid-' . get_the_ID();
-    
+
     ?>
     <div class="cgrid_shortcode_copy">
         <input type="text" value="<?php echo $grid_SC; ?>" class="cgrid_shortcode_copy_input" id="<?php echo $grid_ID; ?>" readonly />
@@ -618,7 +622,7 @@ function cgrid_meta_box_credits( $post ) {
 	$metafizzy_logo = plugin_dir_url( dirname( __FILE__ ) ) . 'assets/images/metafizzy-icon.png';
 	$cinza_logo = plugin_dir_url( dirname( __FILE__ ) ) . 'assets/images/cinza-icon-pink.png';
 	$razorfrog_logo = plugin_dir_url( dirname( __FILE__ ) ) . 'assets/images/razorfrog-icon-turquoise.png';
-	
+
 	?><a href="https://metafizzy.co/" class="button" target="_blank">
 		<img src="<?php echo $metafizzy_logo; ?>" />
 		<span>Metafizzy</span>
@@ -641,10 +645,10 @@ add_action('save_post', 'cgrid_save_fields_meta_boxes');
 function cgrid_save_fields_meta_boxes($post_id) {
 	if ( ! isset( $_POST['cgrid_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['cgrid_meta_box_nonce'], 'cgrid_meta_box_nonce' ) )
 		return;
-	
+
 	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 		return;
-	
+
 	if (!current_user_can('edit_post', $post_id))
 		return;
 
@@ -658,31 +662,31 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	$cgrid_tax_terms 		= isset($_POST['cgrid_tax_terms']) ? wp_filter_post_kses($_POST['cgrid_tax_terms']) : '';
 	$cgrid_sorting 			= isset($_POST['cgrid_sorting']) ? wp_filter_post_kses($_POST['cgrid_sorting']) : '';
 	$cgrid_filters 			= isset($_POST['cgrid_filters']) ? wp_filter_post_kses($_POST['cgrid_filters']) : '';
-	
+
 	$cgrid_layout	 		= isset($_POST['cgrid_layout']) ? sanitize_key($_POST['cgrid_layout']) : '';
 	$cgrid_full_width 		= isset($_POST['cgrid_full_width']) ? sanitize_key($_POST['cgrid_full_width']) : '';
 	$cgrid_query_string 	= isset($_POST['cgrid_query_string']) ? sanitize_key($_POST['cgrid_query_string']) : '';
 	$cgrid_max_filter 		= isset($_POST['cgrid_max_filter']) ? wp_filter_post_kses($_POST['cgrid_max_filter']) : '';
-	
+
 	$cgrid_columns_1 		= isset($_POST['cgrid_columns_1']) ? sanitize_text_field($_POST['cgrid_columns_1']) : '';
 	$cgrid_height_1 		= isset($_POST['cgrid_height_1']) ? sanitize_text_field($_POST['cgrid_height_1']) : '';
 	$cgrid_spacing_1 		= isset($_POST['cgrid_spacing_1']) ? sanitize_text_field($_POST['cgrid_spacing_1']) : '';
-	
+
 	$cgrid_breakpoint_2 	= isset($_POST['cgrid_breakpoint_2']) ? sanitize_text_field($_POST['cgrid_breakpoint_2']) : '';
 	$cgrid_columns_2 		= isset($_POST['cgrid_columns_2']) ? sanitize_text_field($_POST['cgrid_columns_2']) : '';
 	$cgrid_height_2 		= isset($_POST['cgrid_height_2']) ? sanitize_text_field($_POST['cgrid_height_2']) : '';
 	$cgrid_spacing_2 		= isset($_POST['cgrid_spacing_2']) ? sanitize_text_field($_POST['cgrid_spacing_2']) : '';
-	
+
 	$cgrid_breakpoint_3 	= isset($_POST['cgrid_breakpoint_3']) ? sanitize_text_field($_POST['cgrid_breakpoint_3']) : '';
 	$cgrid_columns_3 		= isset($_POST['cgrid_columns_3']) ? sanitize_text_field($_POST['cgrid_columns_3']) : '';
 	$cgrid_height_3 		= isset($_POST['cgrid_height_3']) ? sanitize_text_field($_POST['cgrid_height_3']) : '';
 	$cgrid_spacing_3 		= isset($_POST['cgrid_spacing_3']) ? sanitize_text_field($_POST['cgrid_spacing_3']) : '';
-	
+
 	$cgrid_breakpoint_4 	= isset($_POST['cgrid_breakpoint_4']) ? sanitize_text_field($_POST['cgrid_breakpoint_4']) : '';
 	$cgrid_columns_4 		= isset($_POST['cgrid_columns_4']) ? sanitize_text_field($_POST['cgrid_columns_4']) : '';
 	$cgrid_height_4 		= isset($_POST['cgrid_height_4']) ? sanitize_text_field($_POST['cgrid_height_4']) : '';
 	$cgrid_spacing_4 		= isset($_POST['cgrid_spacing_4']) ? sanitize_text_field($_POST['cgrid_spacing_4']) : '';
-	
+
 	$cgrid_breakpoint_5 	= isset($_POST['cgrid_breakpoint_5']) ? sanitize_text_field($_POST['cgrid_breakpoint_5']) : '';
 	$cgrid_columns_5 		= isset($_POST['cgrid_columns_5']) ? sanitize_text_field($_POST['cgrid_columns_5']) : '';
 	$cgrid_height_5 		= isset($_POST['cgrid_height_5']) ? sanitize_text_field($_POST['cgrid_height_5']) : '';
@@ -698,38 +702,38 @@ function cgrid_save_fields_meta_boxes($post_id) {
 	$new['cgrid_tax_terms'] = empty($cgrid_tax_terms) ? '' : wp_strip_all_tags($cgrid_tax_terms);
 	$new['cgrid_sorting'] = empty($cgrid_sorting) ? '' : wp_filter_post_kses($cgrid_sorting);
 	$new['cgrid_filters'] = empty($cgrid_filters) ? '' : wp_filter_post_kses($cgrid_filters);
-	
+
 	$new['cgrid_layout'] = empty($cgrid_layout) ? 'fitRows' : wp_strip_all_tags($cgrid_layout);
 	$new['cgrid_full_width'] = $cgrid_full_width ? '1' : '0';
 	$new['cgrid_query_string'] = $cgrid_query_string ? '1' : '0';
 	$new['cgrid_max_filter'] = empty($cgrid_max_filter) ? '-1' : wp_strip_all_tags($cgrid_max_filter);
-	
+
 	$new['cgrid_columns_1'] = empty($cgrid_columns_1) ? '1' : wp_filter_post_kses($cgrid_columns_1);
 	$new['cgrid_height_1'] = empty($cgrid_height_1) ? '0' : wp_filter_post_kses($cgrid_height_1);
 	$new['cgrid_spacing_1'] = empty($cgrid_spacing_1) ? '0' : wp_filter_post_kses($cgrid_spacing_1);
-	
+
 	$new['cgrid_breakpoint_2'] = empty($cgrid_breakpoint_2) ? '1' : wp_filter_post_kses($cgrid_breakpoint_2);
 	$new['cgrid_columns_2'] = empty($cgrid_columns_2) ? '1' : wp_filter_post_kses($cgrid_columns_2);
 	$new['cgrid_height_2'] = empty($cgrid_height_2) ? '0' : wp_filter_post_kses($cgrid_height_2);
 	$new['cgrid_spacing_2'] = empty($cgrid_spacing_2) ? '0' : wp_filter_post_kses($cgrid_spacing_2);
-	
+
 	$new['cgrid_breakpoint_3'] = empty($cgrid_breakpoint_3) ? '1' : wp_filter_post_kses($cgrid_breakpoint_3);
 	$new['cgrid_columns_3'] = empty($cgrid_columns_3) ? '1' : wp_filter_post_kses($cgrid_columns_3);
 	$new['cgrid_height_3'] = empty($cgrid_height_3) ? '0' : wp_filter_post_kses($cgrid_height_3);
 	$new['cgrid_spacing_3'] = empty($cgrid_spacing_3) ? '0' : wp_filter_post_kses($cgrid_spacing_3);
-	
+
 	$new['cgrid_breakpoint_4'] = empty($cgrid_breakpoint_4) ? '1' : wp_filter_post_kses($cgrid_breakpoint_4);
 	$new['cgrid_columns_4'] = empty($cgrid_columns_4) ? '1' : wp_filter_post_kses($cgrid_columns_4);
 	$new['cgrid_height_4'] = empty($cgrid_height_4) ? '0' : wp_filter_post_kses($cgrid_height_4);
 	$new['cgrid_spacing_4'] = empty($cgrid_spacing_4) ? '0' : wp_filter_post_kses($cgrid_spacing_4);
-	
+
 	$new['cgrid_breakpoint_5'] = empty($cgrid_breakpoint_5) ? '1' : wp_filter_post_kses($cgrid_breakpoint_5);
 	$new['cgrid_columns_5'] = empty($cgrid_columns_5) ? '1' : wp_filter_post_kses($cgrid_columns_5);
 	$new['cgrid_height_5'] = empty($cgrid_height_5) ? '0' : wp_filter_post_kses($cgrid_height_5);
-	$new['cgrid_spacing_5'] = empty($cgrid_spacing_5) ? '0' : wp_filter_post_kses($cgrid_spacing_5); 
+	$new['cgrid_spacing_5'] = empty($cgrid_spacing_5) ? '0' : wp_filter_post_kses($cgrid_spacing_5);
 
 	update_post_meta($post_id, '_cgrid_options', $new);
-	
+
 	// Save _cgrid_skin
 	$cgrid_skin_content = isset($_POST['cgrid_skin_content']) ? ($_POST['cgrid_skin_content']) : '';
 

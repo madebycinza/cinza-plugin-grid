@@ -4,7 +4,7 @@ Tags: grid, post grid, display post, metafizzy, isotope
 Requires at least: 5.2
 Tested up to: 6.5
 Requires PHP: 7.2
-Stable tag: 1.1.9
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,6 +23,12 @@ Upload the Cinza Grid plugin to your WordPress site, activate it, and start crea
 2. Grid skin settings
 
 == Changelog ==
+
+= 1.2.0 =
+*Release Date - 22nd May, 2024*
+
+* Added '%[shortcode]%' meta
+* Optimized all skin meta tags functions
 
 = 1.1.9 =
 *Release Date - 8th April, 2024*
@@ -130,10 +136,10 @@ Upload the Cinza Grid plugin to your WordPress site, activate it, and start crea
 *Release Date - 15th July, 2022*
 
 * Fixed dynamic frontend style
-* Fixed JavaScript console errors 
+* Fixed JavaScript console errors
 * Fixed filter tags for grid items
 * Fixed filter_meta_replace and filter_tax_replace
-* Removed duplicated Metafizzy script 
+* Removed duplicated Metafizzy script
 * Removed skin debug strings for WP Queries
 
 = 1.0.3 =
@@ -151,9 +157,9 @@ Upload the Cinza Grid plugin to your WordPress site, activate it, and start crea
 *Release Date - 13th July, 2022*
 
 * Added new settings for breakpoints, columns, min-height and spacing
-* Updated backend and frontend style 
+* Updated backend and frontend style
 * Fixed single grid item CSS class
-* Fixed skin meta tag function 
+* Fixed skin meta tag function
 
 = 1.0.0 =
 *Release Date - 29th June, 2022*
@@ -161,8 +167,8 @@ Upload the Cinza Grid plugin to your WordPress site, activate it, and start crea
 * Version 1.0.0 is finally ready!
 * Works with any post type and order
 * Custom skin setup for easy use of post details: title, url, thumbnail (image or url), date (any format), taxonomy (plaint text, with link and/or separator), any meta fields
-* Sort buttons, sorting by any the CSS class of the specified element entered in the skin 
-* Filter buttons, filtering by the content of the specified element entered in the skin 
+* Sort buttons, sorting by any the CSS class of the specified element entered in the skin
+* Filter buttons, filtering by the content of the specified element entered in the skin
 
 = 0.0.6 =
 *Release Date - 1st June, 2022*
