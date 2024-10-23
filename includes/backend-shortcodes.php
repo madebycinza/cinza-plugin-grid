@@ -156,17 +156,28 @@ function cgrid_shortcode( $atts = [], $content = null, $tag = 'cinzagrid' ) {
 	if(!empty($cgrid_sorting)) {
 		$sorts .= '<div id="cinza-grid-'.$grid_id.'-sorts" class="cinza-grid-button-group">';
 			$sort_lines = preg_split("/\r\n|\n|\r/", $cgrid_sorting);
+			$sorts_btns_temp = '';
+			$original_order_flag = false;
 
-			// First button
-			$sorts .= '<button class="button is-checked" data-sort-by="original-order">Default</button>';
-
-			// All other buttons
 			foreach ($sort_lines as $sort_line) {
 				if(!empty($sort_line)) {
 					$sort_atts = explode ("/", $sort_line);
-					$sorts .= '<button class="button" data-sort-by="'. trim($sort_atts[0]) .'">'. trim($sort_atts[1]) .'</button>';
-					$sorts_data .= '\'' . trim($sort_atts[0]) . '\': ' . '\'.' . trim($sort_atts[0]) . '\', ';
+
+					if(trim($sort_atts[0]) == 'default') {
+						$sorts_btns_temp .= '<button class="button is-checked" data-sort-by="original-order">'. trim($sort_atts[1]) .'</button>';;
+						$sorts_data .= '';
+						$original_order_flag = true;
+					} else {
+						$sorts_btns_temp .= '<button class="button" data-sort-by="'. trim($sort_atts[0]) .'">'. trim($sort_atts[1]) .'</button>';
+						$sorts_data .= '\'' . trim($sort_atts[0]) . '\': ' . '\'.' . trim($sort_atts[0]) . '\', ';
+					}
 				}
+			}
+
+			if($original_order_flag == false) {
+				$sorts .= '<button class="button is-checked" data-sort-by="original-order">Default</button>' . $sorts_btns_temp;
+			} else {
+				$sorts .= $sorts_btns_temp;
 			}
 		$sorts .= '</div>';
 	}
@@ -564,9 +575,6 @@ function css_breakpoint($grid_id, $breakpoint, $col, $full_width, $height, $spac
 					width: 100%;
 					min-height: ". $height ."px;
 					margin: 0px 0px ". $space ."px 0px;
-				}
-				#cinza-grid-".$grid_id." .cinza-grid-item:last-child {
-					margin-bottom: 0px;
 				}";
 		    } else {
 		        $style .=  "
@@ -594,9 +602,6 @@ function css_breakpoint($grid_id, $breakpoint, $col, $full_width, $height, $spac
 					width: 100%;
 					min-height: ". $height ."px;
 					margin: 0px 0px ". $space ."px 0px;
-				}
-				#cinza-grid-".$grid_id." .cinza-grid-item:last-child {
-					margin-bottom: 0px;
 				}";
 		    } else {
 		        $style .=  "

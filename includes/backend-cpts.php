@@ -383,12 +383,9 @@ function cgrid_meta_box_options( $post ) {
 					</table>
 				</td>
 			</tr>
-			<tr class="tr-separator">
-				<td colspan="4"></td>
-			</tr>
 			<tr>
 				<td class="cgrid-options" colspan="4">
-					<p><strong>Notes:</strong></p>
+					<p><strong>Instructions:</strong></p>
 					<ul>
 						<li>Breakpoints must be in ascending order.</li>
 						<li>Disable <em>Items min-height</em> by setting the value to zero.</li>
@@ -413,16 +410,14 @@ function cgrid_meta_box_options( $post ) {
 					<p>Format: <code>class / label</code> (one per line)</p>
 					<textarea type="text" class="widefat cgrid-content" name="cgrid_sorting"><?php echo esc_html($temp_sorting); ?></textarea>
 				</td>
-            </tr>
-			<tr class="tr-separator">
-				<td colspan="4"></td>
-			</tr>
+      </tr>
 			<tr>
 				<td class="cgrid-options" colspan="4">
-					<p><strong>Notes:</strong></p>
+					<p><strong>Instructions:</strong></p>
 					<ul>
-						<li>To sort by the 'color' meta field when you have the following element skin: <code>&lt;div class=&quot;element-color&quot;&gt;Red&lt;/div&gt;</code></li>
-						<li>You should enter the following in the Sorting textarea: <code>element-color / Color</code></li>
+						<li>The sorting function sorts the grid based on the content of the element with the CSS class you choose.</li>
+						<li>Example: If you have this in your skin: <code>&lt;div class=&quot;element-color&quot;&gt;%meta('color')%&lt;/div&gt;</code>, you would sort like this: <code>element-color / Color</code>.</li>
+						<li>To change the default button label, use the word 'default' where you would normally put the CSS class name, like this: <code>default / Custom Button Label</code>.</li>
 					</ul>
 				</td>
             </tr>
